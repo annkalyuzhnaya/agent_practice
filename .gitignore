@@ -1,0 +1,14 @@
+# Личные данные шины не уходят в репозиторий. Уберите строки ниже, только если репозиторий приватный
+# и вы осознанно хотите синхронизировать шину через git.
+hub/*
+!hub/profile.md
+!hub/tasks.md
+!hub/calendar.md
+!hub/journal.md
+
+.cache/
+__pycache__/
+~$*
+.secrets/
+.install-target
+
