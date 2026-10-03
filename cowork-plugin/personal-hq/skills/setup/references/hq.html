@@ -23,9 +23,6 @@ body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,-ap
 .wrap{max-width:860px;margin:0 auto;padding:20px 16px 64px}
 header h1{font-size:22px;margin:0 0 2px;letter-spacing:-.01em}
 .sub{color:var(--muted);font-size:13px}
-.headline{margin:14px 0 0;padding:12px 14px;background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:var(--radius)}
-.headline h2{margin:0 0 6px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
-.headline ul{margin:0;padding-left:18px}
 .tabs{display:flex;gap:6px;margin:18px -16px 14px;padding:0 16px;overflow-x:auto;scrollbar-width:none}
 .tabs::-webkit-scrollbar{display:none}
 .tab{flex:none;border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:7px 12px;border-radius:999px;font:inherit;cursor:pointer;white-space:nowrap}
@@ -88,7 +85,6 @@ dialog input,dialog select,dialog textarea{width:100%}
   <header>
     <h1>Доска ассистента</h1>
     <div class="sub" id="sync">Загружаю данные…</div>
-    <div class="headline" id="headline" hidden></div>
   </header>
   <div class="tabs" role="tablist" id="tabs"></div>
   <main id="panel"></main>
@@ -120,7 +116,7 @@ dialog input,dialog select,dialog textarea{width:100%}
   var S={tasks:[],mail:[],meetings:[],digest:[],routines:[],meta:null,tab:"tasks",filter:"active",mailFilter:"wait",db:null,canWrite:true,loaded:{},error:""};
   var busy={},deferred=false,editing=null;
   // почта: несохранённые правки ответов и раскрытые поля ответа — переживают перерисовку
-  var edits={},openReply={};
+  var edits={},openReply={},confirmSend={};
   try{var t=localStorage.getItem("hq-tab");if(t&&TABS.some(function(x){return x[0]===t}))S.tab=t}catch(e){}
 
   function $(id){return document.getElementById(id)}
@@ -184,7 +180,7 @@ dialog input,dialog select,dialog textarea{width:100%}
   }
 
   function renderHeader(){
-    var m=S.meta,sync=$("sync"),hl=$("headline");
+    var m=S.meta,sync=$("sync");
     if(S.error){sync.textContent=S.error}
     else if(!S.db){sync.textContent="Загружаю данные…"}
     else{
@@ -194,12 +190,6 @@ dialog input,dialog select,dialog textarea{width:100%}
       if(m&&typeof m.savedMin==="number"&&m.savedMin>0)parts.push("сэкономлено ~"+(m.savedMin>=90?Math.round(m.savedMin/60)+" ч":m.savedMin+" мин"));
       if(!S.canWrite)parts.push("только чтение");
       sync.textContent=parts.join(" · ");
-    }
-    var lines=m&&Array.isArray(m.headline)?m.headline.filter(function(x){return str(x)}):[];
-    hl.hidden=!lines.length;hl.textContent="";
-    if(lines.length){
-      hl.appendChild(h("h2",{text:"Главное за 30 секунд"+(m.planDate?" · "+human(dueDate(m.planDate)):"")}));
-      var ul=h("ul");lines.slice(0,5).forEach(function(x){ul.appendChild(h("li",{text:str(x)}))});hl.appendChild(ul);
     }
   }
 
@@ -262,7 +252,7 @@ dialog input,dialog select,dialog textarea{width:100%}
 
   // почта: wait — ждёт ответа владельца, none — ответ не предполагается, done — обработано
   function mailState(m){
-    if(m.status==="approved"||m.status==="done"||m.status==="ignored")return "done";
+    if(m.status==="approved"||m.status==="done"||m.status==="sent"||m.status==="ignored")return "done";
     return m.reply==="needed"||openReply[m.id]?"wait":"none";
   }
   function renderMail(p){
@@ -278,7 +268,18 @@ dialog input,dialog select,dialog textarea{width:100%}
       .sort(function(a,b){return str(b.date).localeCompare(str(a.date))||str(a.from).localeCompare(str(b.from))});
     if(!list.length){p.appendChild(empty(S.mailFilter==="wait"?"Писем, ждущих вашего ответа, нет.":"В этом фильтре пусто."));return}
     list.forEach(function(m){p.appendChild(mailCard(m))});
-    p.appendChild(h("div",{class:"note",text:"Утверждённый ответ Ассистент положит в черновики почты при следующем разговоре или запуске по расписанию. Отправляете письмо вы сами."}));
+    p.appendChild(h("div",{class:"note",text:"«Отправить» — Ассистент отправит ответ от вашего имени при следующем разговоре или запуске по расписанию; нужно сразу — нажмите на письме «Отправить сейчас» (работает, когда доска открыта рядом с разговором с Ассистентом). «В черновик» — положит ответ в черновики почты, отправите сами."}));
+  }
+  // срочная отправка: просим Ассистента в разговоре рядом с доской сверить её сейчас; что отправлять, он берёт из данных доски
+  function canAsk(){return !!S.room&&S.ask!=="off"&&S.ask!=="unsupported"}
+  function askSync(m){
+    var offline="Ассистент сейчас не на связи. Откройте доску рядом с разговором с Ассистентом или напишите ему «сверь доску»";
+    var p;
+    // вызов — прямо из нажатия, без ожиданий до него
+    try{p=S.room.sendToClaudeSession({label:"Срочная отправка письма",request:"sync_board",mail:String(m.id)},{deliver:"send",
+      onStatus:function(s){if(s&&s.state==="failed")toast(offline)}})}catch(e){toast(offline);return}
+    Promise.resolve(p).then(function(){toast("Запрос передан Ассистенту — подтвердите его в разговоре")},
+      function(e){toast(e&&e.code==="rate_limited"?"Слишком часто — повторите через минуту":offline)});
   }
   function mailCard(m){
     var st=mailState(m),d=dueDate(m.date),url=safeUrl(m.url);
@@ -290,7 +291,8 @@ dialog input,dialog select,dialog textarea{width:100%}
     if(str(m.to))tags.appendChild(h("span",{class:"tag",text:str(m.to)}));
     if(str(m.task))tags.appendChild(h("span",{class:"tag",text:"есть задача "+str(m.task)}));
     if(m.reply!=="needed"&&st==="none")tags.appendChild(h("span",{class:"tag warn",text:"ответ не предполагается"}));
-    if(m.status==="approved")tags.appendChild(h("span",{class:"tag warn",text:"ответ утверждён — ждёт ассистента"}));
+    if(m.status==="approved")tags.appendChild(h("span",{class:"tag warn",text:m.action==="send"?"к отправке — ждёт ассистента":"в черновик — ждёт ассистента"}));
+    if(m.status==="sent")tags.appendChild(h("span",{class:"tag",text:"отправлено"}));
     if(m.status==="done")tags.appendChild(h("span",{class:"tag",text:"ответ в черновиках почты"}));
     if(m.status==="ignored")tags.appendChild(h("span",{class:"tag",text:"игнорировать"}));
     if(tags.firstChild)c.appendChild(tags);
@@ -309,10 +311,18 @@ dialog input,dialog select,dialog textarea{width:100%}
         c.appendChild(vb);
       }
       c.appendChild(ta);
+      var approve=function(action){
+        write("mail",m.id,{answer:ta.value.trim(),action:action,status:"approved"}).then(function(ok){delete confirmSend[m.id];if(ok){delete edits[m.id];delete openReply[m.id]}else render(true)})};
+      ta.addEventListener("input",function(){if(confirmSend[m.id]){delete confirmSend[m.id]}});
       c.appendChild(h("div",{class:"actions"},
         h("button",{class:"btn small",disabled:!S.canWrite,onclick:function(){
-          var v=ta.value.trim();if(!v){toast("Ответ пустой — напишите текст или нажмите «Игнорировать»");return}
-          write("mail",m.id,{answer:v,status:"approved"}).then(function(ok){if(ok){delete edits[m.id];delete openReply[m.id]}})}},"Утвердить ответ"),
+          if(!ta.value.trim()){toast("Ответ пустой — напишите текст или нажмите «Игнорировать»");return}
+          // отправка необратима — второй клик подтверждает
+          if(!confirmSend[m.id]){confirmSend[m.id]=true;render(true);return}
+          approve("send")}},confirmSend[m.id]?"Подтвердить отправку":"Отправить"),
+        h("button",{class:"btn small ghost",disabled:!S.canWrite,onclick:function(){
+          if(!ta.value.trim()){toast("Ответ пустой — напишите текст или нажмите «Игнорировать»");return}
+          approve("draft")}},"В черновик"),
         m.reply==="needed"
           ?h("button",{class:"btn small ghost",disabled:!S.canWrite,onclick:function(){write("mail",m.id,{status:"ignored"}).then(function(ok){if(ok)delete edits[m.id]})}},"Игнорировать")
           :h("button",{class:"btn small ghost",onclick:function(){delete openReply[m.id];delete edits[m.id];render(true)}},"Не отвечать")));
@@ -321,7 +331,9 @@ dialog input,dialog select,dialog textarea{width:100%}
         h("button",{class:"btn small ghost",disabled:!S.canWrite,onclick:function(){openReply[m.id]=true;S.mailFilter=S.mailFilter==="none"?"wait":S.mailFilter;render(true)}},"Всё же ответить")));
     }else{
       if(str(m.answer)&&m.status!=="ignored")c.appendChild(h("details",null,h("summary",{text:"Текст ответа"}),h("div",{class:"pre",text:str(m.answer)})));
-      if(m.status==="approved")c.appendChild(h("div",{class:"actions"},h("button",{class:"btn small ghost",disabled:!S.canWrite,onclick:function(){edits[m.id]=str(m.answer);openReply[m.id]=true;write("mail",m.id,{status:"new"})}},"Изменить ответ")));
+      if(m.status==="approved")c.appendChild(h("div",{class:"actions"},
+        m.action==="send"&&canAsk()?h("button",{class:"btn small",disabled:!S.canWrite,title:"Попросить Ассистента сверить доску и отправить письмо прямо сейчас",onclick:function(){askSync(m)}},"Отправить сейчас"):null,
+        h("button",{class:"btn small ghost",disabled:!S.canWrite,onclick:function(){edits[m.id]=str(m.answer);openReply[m.id]=true;write("mail",m.id,{status:"new",action:""})}},m.action==="send"?"Отменить отправку":"Изменить ответ")));
       if(m.status==="ignored")c.appendChild(h("div",{class:"actions"},h("button",{class:"btn small ghost",disabled:!S.canWrite,onclick:function(){write("mail",m.id,{status:"new"})}},"Вернуть")));
     }
     return c;
@@ -432,5 +444,11 @@ dialog input,dialog select,dialog textarea{width:100%}
     if(user)Promise.resolve(user.can("data.write")).then(function(v){if(v===false){S.canWrite=false;render(true)}},function(){});
     render(true);
   });
+  // связь с разговором рядом с доской — только для кнопки «Отправить сейчас»; без неё доска работает как раньше
+  if(window.claude)Promise.resolve(window.claude.use("room")).then(function(room){
+    if(!room||typeof room.sendToClaudeSession!=="function")return;
+    S.room=room;render();
+    if(typeof room.canSendToClaudeSession==="function")room.canSendToClaudeSession().then(function(v){S.ask=v;render()},function(){S.ask="off";render()});
+  },function(){});
 })();
 </script>
