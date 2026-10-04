@@ -1,0 +1,27 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python tools/setup.py:*)",
+      "Bash(python tools/demo.py:*)",
+      "Bash(python tools/seen.py:*)",
+      "Bash(python tools/fetch_feeds.py:*)",
+      "Bash(python tools/issue.py:*)",
+      "Bash(python tools/feedback.py:*)",
+      "Bash(python tools/evals.py:*)",
+      "Bash(python tools/tg_bridge.py init)",
+      "Bash(python tools/tg_bridge.py check)",
+      "Bash(python tools/tg_bridge.py whoami)",
+      "Bash(python tools/tg_bridge.py pull:*)",
+      "Bash(python tools/tg_bridge.py top3 --dry-run:*)",
+      "Bash(python tools/tg_bridge.py send --chat me:*)",
+      "WebSearch",
+      "WebFetch"
+    ],
+    "deny": [
+      "Read(./hub/.secrets/**)"
+    ]
+  },
+  "env": {
+    "PYTHONIOENCODING": "utf-8"
+  }
+}

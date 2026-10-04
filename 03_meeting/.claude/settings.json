@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python tools/meetings.py:*)",
+      "Bash(python tools/setup.py:*)",
+      "Bash(python tools/demo.py:*)",
+      "Bash(python tools/build.py:*)",
+      "Bash(python tools/tg_bridge.py check:*)",
+      "Bash(python tools/tg_bridge.py whoami:*)",
+      "Bash(python tools/tg_bridge.py pull:*)",
+      "Bash(python tools/tg_bridge.py send --chat me:*)",
+      "WebSearch"
+    ],
+    "deny": [
+      "Read(./hub/.secrets/**)"
+    ]
+  },
+  "env": {
+    "PYTHONIOENCODING": "utf-8"
+  }
+}

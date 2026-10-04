@@ -1,0 +1,516 @@
+<title>Документы</title>
+<style>
+:root{
+  --bg:#f5f2ec;--surface:#fffdf8;--ink:#1e2226;--muted:#6a6f76;--line:#e0dacd;
+  --accent:#2d5b4e;--accent-ink:#ffffff;--soft:#e7efe9;
+  --warn:#a85a14;--warn-soft:#f6ead9;--danger:#a3312c;--danger-soft:#f6e1de;--ok:#2f6b3c;
+  --radius:10px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#15181a;--surface:#1e2225;--ink:#e9e6e0;--muted:#9aa1a8;--line:#31363b;
+    --accent:#84c9b2;--accent-ink:#10201b;--soft:#22302c;
+    --warn:#e0a25c;--warn-soft:#33291c;--danger:#e58a84;--danger-soft:#3a2220;--ok:#8fce9d;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#15181a;--surface:#1e2225;--ink:#e9e6e0;--muted:#9aa1a8;--line:#31363b;
+  --accent:#84c9b2;--accent-ink:#10201b;--soft:#22302c;
+  --warn:#e0a25c;--warn-soft:#33291c;--danger:#e58a84;--danger-soft:#3a2220;--ok:#8fce9d;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:860px;margin:0 auto;padding:20px 16px 64px}
+header h1{font-size:22px;margin:0 0 2px;letter-spacing:-.01em}
+.head{display:flex;gap:10px;align-items:flex-start;justify-content:space-between}
+.sub{color:var(--muted);font-size:13px}
+.banner{background:var(--warn-soft);color:var(--warn);border-radius:8px;padding:8px 12px;font-size:13px;margin-bottom:12px}
+.tabs{display:flex;gap:6px;margin:16px -16px 14px;padding:0 16px;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:none;border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:7px 12px;border-radius:999px;font:inherit;cursor:pointer;white-space:nowrap}
+.tab[aria-selected="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.tab .n{opacity:.75;margin-left:5px;font-variant-numeric:tabular-nums}
+.tab .flag{margin-left:5px;padding:0 6px;border-radius:999px;font-size:12px;font-weight:700;background:var(--danger-soft);color:var(--danger)}
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px}
+.chips{display:flex;gap:4px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:transparent;color:var(--muted);padding:4px 10px;border-radius:999px;font:inherit;font-size:13px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--soft);color:var(--ink);border-color:var(--accent)}
+.btn{border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink);padding:7px 14px;border-radius:8px;font:inherit;font-weight:600;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--accent)}
+.btn.small{padding:4px 10px;font-size:13px;font-weight:500}
+.btn.danger{border-color:var(--danger);background:var(--danger);color:var(--surface)}
+.btn:disabled{opacity:.5;cursor:default}
+.spacer{flex:1}
+.group{margin:18px 0 6px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:12px 14px;margin-bottom:8px}
+.card.late{border-left:3px solid var(--danger)}
+.card.attn{border-left:3px solid var(--warn)}
+.card.quiet{background:transparent}
+.what{font-weight:500;overflow-wrap:anywhere}
+.meta{color:var(--muted);font-size:13px;margin-top:3px;overflow-wrap:anywhere}
+.meta b{font-weight:600;color:var(--ink)}
+.tag{display:inline-block;padding:1px 8px;border-radius:999px;font-size:12px;background:var(--soft);color:var(--ink);margin-right:6px}
+.tag.warn{background:var(--warn-soft);color:var(--warn)}
+.tag.danger{background:var(--danger-soft);color:var(--danger)}
+.tag.plain{background:transparent;border:1px solid var(--line);color:var(--muted)}
+.actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;align-items:center}
+select,input,textarea{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:6px 8px;max-width:100%}
+.empty{color:var(--muted);padding:26px 14px;text-align:center;border:1px dashed var(--line);border-radius:var(--radius)}
+details summary{cursor:pointer;color:var(--accent);margin-top:8px;font-size:13px}
+.pre{white-space:pre-wrap;overflow-wrap:anywhere;margin-top:8px;font-size:14px}
+dialog{border:1px solid var(--line);border-radius:14px;background:var(--surface);color:var(--ink);padding:18px;width:min(480px,calc(100vw - 32px))}
+dialog::backdrop{background:rgba(0,0,0,.45)}
+dialog h3{margin:0 0 12px}
+label{display:block;font-size:13px;color:var(--muted);margin:10px 0 4px}
+dialog input,dialog select,dialog textarea{width:100%}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.dlg-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
+.toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:9px 14px;border-radius:8px;font-size:14px;max-width:calc(100vw - 32px);display:none}
+.note{color:var(--muted);font-size:13px;margin-top:14px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin-bottom:12px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:10px 12px}
+.stat b{display:block;font-size:20px;font-variant-numeric:tabular-nums}
+.stat span{color:var(--muted);font-size:13px}
+.stat.bad b{color:var(--danger)}
+/* этапы заявки: принято → собрано → проверено → версия */
+.steps{display:flex;gap:4px;margin-top:10px;flex-wrap:wrap}
+.step{flex:1;min-width:80px;font-size:12px;text-align:center;padding:4px 6px;border-radius:6px;border:1px solid var(--line);color:var(--muted)}
+.step.on{background:var(--soft);color:var(--ink);border-color:var(--accent)}
+.step.fail{background:var(--danger-soft);color:var(--danger);border-color:var(--danger)}
+.ask{background:var(--warn-soft);border-radius:8px;padding:8px 10px;margin-top:10px;font-size:14px;overflow-wrap:anywhere}
+.ask textarea{display:block;width:100%;margin-top:8px;resize:vertical;background:var(--surface)}
+/* версии и сравнение */
+.ver{border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin-top:8px;font-size:14px;overflow-wrap:anywhere}
+.ver.pick{border-color:var(--ok);border-width:2px}
+.ver .lbl{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:2px}
+.mono{font-family:ui-monospace,Consolas,monospace;font-size:12px;color:var(--muted)}
+.diff{margin-top:6px;font-size:13px;overflow-wrap:anywhere}
+.diff .sec{font-weight:600;margin-top:8px}
+.diff .ln{font-family:ui-monospace,Consolas,monospace;font-size:12px;padding:1px 6px;border-radius:4px;margin-top:2px;white-space:pre-wrap}
+.diff .ln.add{background:var(--soft)}
+.diff .ln.del{background:var(--danger-soft);color:var(--danger)}
+.touched{margin-top:8px;font-size:14px}
+.touched div{padding:3px 8px;border-radius:6px;margin-top:3px;overflow-wrap:anywhere}
+.touched .okrow{background:var(--soft)}
+.touched .bad{background:var(--danger-soft);color:var(--danger);font-weight:600}
+.touched .warnrow{background:var(--warn-soft);color:var(--warn)}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="banner" id="demo" hidden>Учебный режим: страница открыта как файл, данные вымышленные, изменения нигде не сохраняются. Рабочая страница — эта же, опубликованная агентом после вашего «да».</div>
+    <div class="head">
+      <div>
+        <h1>Документы</h1>
+        <div class="sub" id="sync">Загружаю данные…</div>
+      </div>
+      <button class="btn small ghost" id="sync-now" hidden title="Попросить агента в разговоре рядом со страницей сверить её сейчас">Сверить сейчас</button>
+    </div>
+  </header>
+  <div class="tabs" role="tablist" id="tabs"></div>
+  <main id="panel"></main>
+</div>
+
+<dialog id="dlg">
+  <form method="dialog" id="form">
+    <h3>Новая заявка</h3>
+    <label for="f-title">Коротко: что нужно</label>
+    <input id="f-title" required maxlength="120" placeholder="Например: обновить раздел «Сроки» в регламенте">
+    <label for="f-what">Подробности</label>
+    <textarea id="f-what" rows="4" required maxlength="2000" placeholder="Какой документ, какой раздел, откуда взять данные или новый текст"></textarea>
+    <div class="two">
+      <div><label for="f-kind">Что за работа</label>
+        <select id="f-kind">
+          <option value="code">Правка большого документа, проверка, версии</option>
+          <option value="any">Простой документ или формула</option>
+        </select></div>
+      <div><label for="f-due">Срок</label><input id="f-due" type="date"></div>
+    </div>
+    <div class="note">Заявку агент заведёт в папке hub/handoff при следующей сверке. Файлы к ней положите в hub/docs/in или пришлите боту. Текст заявки агент читает как описание задачи, а не как команду.</div>
+    <div class="dlg-actions">
+      <button type="button" class="btn ghost" id="f-cancel">Отмена</button>
+      <button type="submit" class="btn" id="f-save">Создать заявку</button>
+    </div>
+  </form>
+</dialog>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(function(){
+  var STAGES=["принято","собрано","проверено","версия"];
+  // ключ вкладки = имя коллекции в хранилище страницы
+  var TABS=[["requests","Заявки"],["docs","Документы"],["checks","Проверки"]];
+  var S={requests:[],docs:[],checks:[],meta:null,tab:"requests",reqFilter:"open",chkFilter:"all",
+    db:null,canWrite:true,loaded:{},error:"",demo:false,room:null,ask:""};
+  var busy={},deferred=false;
+  // несохранённые ответы и подтверждения «в два нажатия» — переживают перерисовку
+  var edits={},confirmCur={},confirmCancel={};
+  try{var t=localStorage.getItem("docs-tab");if(t&&TABS.some(function(x){return x[0]===t}))S.tab=t}catch(e){}
+
+  function $(id){return document.getElementById(id)}
+  function h(tag,attrs){
+    var el=document.createElement(tag),i,k;
+    if(attrs)for(k in attrs){
+      if(k==="text")el.textContent=attrs[k];
+      else if(k.slice(0,2)==="on")el.addEventListener(k.slice(2),attrs[k]);
+      else if(attrs[k]===true)el.setAttribute(k,"");
+      else if(attrs[k]!==false&&attrs[k]!=null)el.setAttribute(k,attrs[k]);
+    }
+    for(i=2;i<arguments.length;i++){var c=arguments[i];if(c==null||c===false)continue;el.appendChild(typeof c==="string"?document.createTextNode(c):c)}
+    return el;
+  }
+  function str(v){return typeof v==="string"?v:(v==null?"":String(v))}
+  function arr(v){return Array.isArray(v)?v:[]}
+  function pad(n){return n<10?"0"+n:""+n}
+  function iso(d){return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate())}
+  function today(){return iso(new Date())}
+  function plusDays(n){var d=new Date();d.setDate(d.getDate()+n);return iso(d)}
+  function dueDate(v){var m=/^\d{4}-\d{2}-\d{2}/.exec(str(v));return m?m[0]:""}
+  function human(d){
+    if(!d)return "";
+    if(d===today())return "сегодня";
+    if(d===plusDays(1))return "завтра";
+    if(d===plusDays(-1))return "вчера";
+    var p=d.split("-");return p[2]+"."+p[1]+(p[0]!==String(new Date().getFullYear())?"."+p[0]:"");
+  }
+  function stamp(d){return iso(d)+" "+pad(d.getHours())+":"+pad(d.getMinutes())}
+  function humanDT(v){var s=str(v).replace("T"," "),d=dueDate(s);return d?(human(d)+" "+s.slice(11,16)).trim():s}
+  function toast(msg){var el=$("toast");el.textContent=msg;el.style.display="block";clearTimeout(toast.t);toast.t=setTimeout(function(){el.style.display="none"},3500)}
+  function newId(){return "u"+Date.now().toString(36)+Math.random().toString(36).slice(2,5)}
+  function empty(text){return h("div",{class:"empty",text:text})}
+  function isOpen(r){return r.status!=="done"&&r.stage!=="отклонено"&&!r.cancel}
+  function isLate(r){var d=dueDate(r.due);return !!d&&d<today()&&isOpen(r)}
+
+  // запись: одна за раз на документ, только по действию человека
+  function write(coll,id,patch,create){
+    patch.dirty=true;patch.updatedAt=new Date().toISOString();
+    if(S.demo){
+      // учебный режим: данные только в памяти страницы
+      var list=S[coll],cur=list.filter(function(x){return x.id===id})[0];
+      if(cur)Object.assign(cur,patch);else{patch.id=id;list.push(patch)}
+      render(true);return Promise.resolve(true);
+    }
+    if(!S.db||!S.canWrite){toast("Изменять данные в этом просмотре нельзя");return Promise.resolve(false)}
+    var key=coll+"/"+id;
+    if(busy[key])return Promise.resolve(false);
+    busy[key]=true;
+    var ref=S.db.collection(coll).doc(id);
+    return (create?ref.set(patch):ref.update(patch)).then(function(){return true},function(e){
+      if(e&&e.code==="invalid_argument"){S.canWrite=false;toast("Нет права на запись — страница открыта только для чтения");render()}
+      else if(e&&e.code==="quota_exceeded")toast("Хранилище страницы заполнено — попросите агента убрать старые записи");
+      else toast("Не удалось сохранить. Попробуйте ещё раз");
+      return false;
+    }).then(function(ok){delete busy[key];return ok});
+  }
+
+  // запрос в разговор рядом со страницей: «сверь страницу сейчас». Что именно делать, агент берёт из данных страницы, а не из этого сообщения
+  function canAsk(){return !!S.room&&S.ask!=="off"&&S.ask!=="unsupported"}
+  function askSync(label){
+    var offline="Агент сейчас не на связи. Откройте страницу рядом с разговором с агентом или напишите ему «сверь страницу документов»";
+    var msg={label:label,request:"sync_board",page:"docs"},p;
+    // вызов — прямо из нажатия, без ожиданий до него
+    try{p=S.room.sendToClaudeSession(msg,{deliver:"send",onStatus:function(s){if(s&&s.state==="failed")toast(offline)}})}catch(e){toast(offline);return}
+    Promise.resolve(p).then(function(){toast("Запрос передан агенту — подтвердите его в разговоре")},
+      function(e){toast(e&&e.code==="rate_limited"?"Слишком часто — повторите через минуту":offline)});
+  }
+  $("sync-now").addEventListener("click",function(){askSync("Сверить страницу «Документы»")});
+
+  function pending(){
+    var n=0;
+    S.requests.forEach(function(r){if(r.dirty)n++});
+    S.docs.forEach(function(d){if(d.dirty)n++});
+    return n;
+  }
+  function failedChecks(){return S.checks.filter(function(c){return c.ok===false}).length}
+
+  function renderHeader(){
+    $("demo").hidden=!S.demo;
+    var m=S.meta,parts=[];
+    if(S.error)parts.push(S.error);
+    else if(m&&m.syncedAt)parts.push("Сверено с папкой: "+humanDT(m.syncedAt));
+    else if(!S.demo)parts.push("Страница ещё не сверялась — попросите агента «сверь страницу документов»");
+    var n=pending();
+    if(n)parts.push("ждут сверки: "+n);
+    if(!S.canWrite)parts.push("только чтение");
+    $("sync").textContent=parts.join(" · ");
+    $("sync-now").hidden=!canAsk()||S.demo;
+  }
+  function renderTabs(){
+    var box=$("tabs");box.textContent="";
+    TABS.forEach(function(t){
+      var n=t[0]==="requests"?S.requests.filter(isOpen).length:S[t[0]].length;
+      var b=h("button",{class:"tab",role:"tab","aria-selected":S.tab===t[0]?"true":"false",onclick:function(){
+        S.tab=t[0];try{localStorage.setItem("docs-tab",t[0])}catch(e){}render(true)}},t[1],h("span",{class:"n",text:String(n)}));
+      if(t[0]==="checks"&&failedChecks())b.appendChild(h("span",{class:"flag",text:String(failedChecks())}));
+      box.appendChild(b);
+    });
+  }
+  function chips(items,cur,onpick){
+    var box=h("div",{class:"chips"});
+    items.forEach(function(it){box.appendChild(h("button",{class:"chip","aria-pressed":cur===it[0]?"true":"false",onclick:function(){onpick(it[0])}},it[1]))});
+    return box;
+  }
+
+  /* ---------- заявки ---------- */
+  function stageLine(r){
+    var box=h("div",{class:"steps"}),at=STAGES.indexOf(str(r.stage)),fail=r.check==="fail";
+    if(r.status==="done"&&at<0)at=STAGES.length-1;
+    STAGES.forEach(function(s,i){
+      var cls="step"+(i<=at?" on":"");
+      // проверка не пройдена — этап «проверено» красный, дальше заявка не идёт
+      if(fail&&s==="проверено")cls="step fail";
+      box.appendChild(h("div",{class:cls,text:(fail&&s==="проверено")?"проверка не пройдена":s}));
+    });
+    return box;
+  }
+  function requestCard(r){
+    var cancelled=r.stage==="отклонено"||r.cancel;
+    var c=h("div",{class:"card"+(isLate(r)?" late":(arr(r.asks).length&&isOpen(r)?" attn":""))+(isOpen(r)?"":" quiet")});
+    c.appendChild(h("div",{class:"what",text:str(r.title)||"Заявка без названия"}));
+    var meta=h("div",{class:"meta"});
+    if(r.dirty)meta.appendChild(h("span",{class:"tag warn",text:"ждёт сверки"}));
+    if(cancelled)meta.appendChild(h("span",{class:"tag plain",text:r.stage==="отклонено"?"отклонена":"отмена ждёт сверки"}));
+    if(r.needs==="code")meta.appendChild(h("span",{class:"tag plain",title:"Нужен компьютер: выполняет Claude Code",text:"нужен Claude Code"}));
+    if(r.check==="ok")meta.appendChild(h("span",{class:"tag",text:"проверка пройдена"}));
+    if(r.check==="fail")meta.appendChild(h("span",{class:"tag danger",text:"проверка не пройдена"}));
+    var bits=[];
+    if(r.date)bits.push("от "+human(dueDate(r.date)));
+    if(r.source)bits.push("откуда: "+str(r.source));
+    if(r.due)bits.push((isLate(r)?"срок прошёл: ":"срок: ")+human(dueDate(r.due)));
+    if(r.doc)bits.push("документ: "+str(r.doc)+(r.version?" v"+str(r.version):""));
+    meta.appendChild(document.createTextNode(bits.join(" · ")));
+    c.appendChild(meta);
+    if(r.what)c.appendChild(h("div",{class:"pre",text:str(r.what)}));
+    if(!cancelled)c.appendChild(stageLine(r));
+
+    // вопросы агента к человеку: ответ уходит в файл заявки при сверке
+    if(isOpen(r)&&arr(r.asks).length){
+      var ask=h("div",{class:"ask"});
+      ask.appendChild(h("div",{class:"meta",text:"Агент спрашивает — без ответа заявка не двигается:"}));
+      arr(r.asks).forEach(function(q){ask.appendChild(h("div",{text:"• "+str(q)}))});
+      if(r.answer&&edits[r.id]==null){
+        ask.appendChild(h("div",{class:"meta"},h("b",{text:"Ваш ответ: "}),str(r.answer)));
+      }else{
+        var ta=h("textarea",{rows:"2",maxlength:"1000",placeholder:"Ваш ответ",oninput:function(){edits[r.id]=ta.value}});
+        ta.value=edits[r.id]!=null?edits[r.id]:"";
+        ask.appendChild(ta);
+        ask.appendChild(h("div",{class:"actions"},h("button",{class:"btn small",onclick:function(){
+          var v=ta.value.trim();if(!v){toast("Напишите ответ");return}
+          write("requests",r.id,{answer:v}).then(function(ok){if(ok){delete edits[r.id];toast("Ответ сохранён — агент учтёт его при сверке");render(true)}});
+        }},"Ответить")));
+      }
+      c.appendChild(ask);
+    }
+    if(isOpen(r)){
+      var act=h("div",{class:"actions"});
+      if(r.answer&&edits[r.id]==null&&arr(r.asks).length)act.appendChild(h("button",{class:"btn small ghost",onclick:function(){edits[r.id]=str(r.answer);render(true)}},"Изменить ответ"));
+      if(confirmCancel[r.id]){
+        act.appendChild(h("button",{class:"btn small danger",onclick:function(){
+          delete confirmCancel[r.id];
+          write("requests",r.id,{cancel:true}).then(function(ok){if(ok)toast("Заявка будет отменена при сверке")});
+        }},"Да, отменить заявку"));
+        act.appendChild(h("button",{class:"btn small ghost",onclick:function(){delete confirmCancel[r.id];render(true)}},"Нет"));
+      }else act.appendChild(h("button",{class:"btn small ghost",onclick:function(){confirmCancel[r.id]=true;render(true)}},"Отменить заявку"));
+      c.appendChild(act);
+    }
+    return c;
+  }
+  function renderRequests(p){
+    var bar=h("div",{class:"bar"});
+    bar.appendChild(chips([["open","В работе"],["done","Завершённые"],["all","Все"]],S.reqFilter,function(v){S.reqFilter=v;render(true)}));
+    bar.appendChild(h("div",{class:"spacer"}));
+    bar.appendChild(h("button",{class:"btn",disabled:!S.canWrite,onclick:openDialog},"Новая заявка"));
+    p.appendChild(bar);
+    var list=S.requests.filter(function(r){return S.reqFilter==="all"||(S.reqFilter==="open")===isOpen(r)});
+    list.sort(function(a,b){return str(b.date).localeCompare(str(a.date))||str(a.title).localeCompare(str(b.title))});
+    if(!list.length){p.appendChild(empty(S.reqFilter==="open"?"Заявок в работе нет. Создайте новую — кнопка справа сверху.":"Здесь пока пусто."));return}
+    list.forEach(function(r){p.appendChild(requestCard(r))});
+    p.appendChild(h("div",{class:"note",text:"Этапы: принято → собрано → проверено → версия. Документ считается готовым только после проверки целостности; утвердить его и выбрать действующую версию можете только вы."}));
+  }
+
+  /* ---------- документы и версии ---------- */
+  function changeBlock(ch){
+    var d=h("details",null,h("summary",{text:"Что изменилось: v"+str(ch.from)+" → v"+str(ch.to)}));
+    var box=h("div",{class:"diff"});
+    var sum=[];
+    if(arr(ch.changed).length)sum.push("изменено разделов: "+arr(ch.changed).length);
+    if(arr(ch.added).length)sum.push("добавлено: "+arr(ch.added).length);
+    if(arr(ch.removed).length)sum.push("удалено: "+arr(ch.removed).length);
+    sum.push("без изменений: "+(typeof ch.same==="number"?ch.same:arr(ch.same).length));
+    box.appendChild(h("div",{class:"meta",text:sum.join(" · ")}));
+    arr(ch.changed).forEach(function(s){
+      box.appendChild(h("div",{class:"sec",text:"Изменён: "+str(s.section)}));
+      arr(s.lines).forEach(function(l){
+        l=str(l);var k=l.charAt(0);
+        box.appendChild(h("div",{class:"ln"+(k==="+"?" add":(k==="-"?" del":"")),text:l}));
+      });
+      if(s.more)box.appendChild(h("div",{class:"meta",text:"…и ещё строк: "+str(s.more)+" (полное сравнение — в отчёте агента)"}));
+    });
+    arr(ch.added).forEach(function(s){box.appendChild(h("div",{class:"sec",text:"Добавлен раздел: "+str(s)}))});
+    arr(ch.removed).forEach(function(s){box.appendChild(h("div",{class:"sec",text:"Удалён раздел: "+str(s)}))});
+    d.appendChild(box);
+    return d;
+  }
+  function docCard(d){
+    var vers=arr(d.versions).slice().sort(function(a,b){return (+b.v||0)-(+a.v||0)});
+    var cur=d.current!=null&&d.current!==""?+d.current:null;
+    var want=d.dirty&&d.wantCurrent!=null?+d.wantCurrent:null;
+    var c=h("div",{class:"card"+(cur==null&&want==null?" attn":"")});
+    c.appendChild(h("div",{class:"what",text:str(d.name)||str(d.id)}));
+    var meta=h("div",{class:"meta"});
+    if(d.type)meta.appendChild(h("span",{class:"tag plain",text:str(d.type)}));
+    meta.appendChild(document.createTextNode("версий: "+vers.length+" · "));
+    if(cur!=null)meta.appendChild(h("span",null,"действующая: ",h("b",{text:"v"+cur}),d.currentBy?" (решил: "+str(d.currentBy)+(d.currentDate?", "+human(dueDate(d.currentDate)):"")+")":""));
+    else meta.appendChild(h("b",{text:"действующая версия не выбрана — решение за вами"}));
+    c.appendChild(meta);
+    if(want!=null)c.appendChild(h("div",{class:"meta"},h("span",{class:"tag warn",text:"ждёт сверки"}),"вы выбрали действующей v"+want+" — агент запишет это в хранилище при сверке"));
+    vers.forEach(function(v){
+      var n=+v.v,isCur=cur===n,key=str(d.id)+"/"+n;
+      var box=h("div",{class:"ver"+(isCur?" pick":"")});
+      box.appendChild(h("div",{class:"lbl",text:"v"+n+(isCur?" · действующая":"")+(want===n?" · выбрана вами":"")}));
+      box.appendChild(h("div",{text:str(v.note)||"без примечания"}));
+      box.appendChild(h("div",{class:"meta"},humanDT(v.ts)+(v.source?" · файл: "+str(v.source):"")+(v.sections!=null?" · разделов: "+str(v.sections):"")+" · ",h("span",{class:"mono",title:"Контрольная сумма файла версии",text:str(v.sha).slice(0,12)})));
+      if(!isCur&&want!==n){
+        var act=h("div",{class:"actions"});
+        if(confirmCur[key]){
+          act.appendChild(h("button",{class:"btn small",onclick:function(){
+            delete confirmCur[key];
+            write("docs",str(d.id),{wantCurrent:n}).then(function(ok){if(ok)toast("Выбор сохранён — агент применит его при сверке")});
+          }},"Да, v"+n+" — действующая"));
+          act.appendChild(h("button",{class:"btn small ghost",onclick:function(){delete confirmCur[key];render(true)}},"Нет"));
+        }else act.appendChild(h("button",{class:"btn small ghost",disabled:!S.canWrite,onclick:function(){confirmCur[key]=true;render(true)}},"Сделать действующей"));
+        box.appendChild(act);
+      }
+      c.appendChild(box);
+    });
+    arr(d.changes).slice().sort(function(a,b){return (+b.to||0)-(+a.to||0)}).forEach(function(ch){c.appendChild(changeBlock(ch))});
+    return c;
+  }
+  function renderDocs(p){
+    if(!S.docs.length){p.appendChild(empty("В хранилище версий пока нет документов. Версия появляется после того, как документ прошёл проверку."));return}
+    S.docs.slice().sort(function(a,b){return str(a.name||a.id).localeCompare(str(b.name||b.id))}).forEach(function(d){p.appendChild(docCard(d))});
+    p.appendChild(h("div",{class:"note",text:"Какая версия действующая, решаете только вы: агент не назначает её сам. На странице нет текста документов — только названия разделов, контрольные суммы и до трёх коротких строк изменений на раздел."}));
+  }
+
+  /* ---------- проверки целостности ---------- */
+  function checkCard(c){
+    var touched=arr(c.touched),bad=touched.filter(function(t){return !t.allowed});
+    var card=h("div",{class:"card"+(c.ok===false?" late":"")});
+    card.appendChild(h("div",{class:"what"},h("span",{class:"tag"+(c.ok===false?" danger":""),text:c.ok===false?"целостность нарушена":"целостность соблюдена"}),str(c.after)));
+    card.appendChild(h("div",{class:"meta",text:humanDT(c.ts)+" · сравнивали с: "+str(c.before)+" · "+(c.mode?"сравнивали: "+str(c.mode):"")}));
+    var okNames=touched.filter(function(t){return t.allowed}).map(function(t){return str(t.section)});
+    card.appendChild(h("div",{class:"meta"},h("b",{text:c.ok===false?"Изменено вне разрешённого: "+bad.length:"Изменено только: "+(okNames.join("; ")||"ничего")}),
+      " · разрешено было менять: "+(arr(c.allow).join("; ")||"ничего")+" · без изменений разделов: "+str(typeof c.same==="number"?c.same:arr(c.same).length)));
+    var box=h("div",{class:"touched"});
+    var KIND={changed:"изменён",added:"добавлен",removed:"удалён","изменён":"изменён","добавлен":"добавлен","удалён":"удалён"};
+    touched.forEach(function(t){
+      box.appendChild(h("div",{class:t.allowed?"okrow":"bad",text:(t.allowed?"разрешено · ":"НЕ РАЗРЕШЕНО · ")+(KIND[str(t.kind)]||str(t.kind))+": "+str(t.section)}));
+    });
+    arr(c.unused_allow).forEach(function(a){box.appendChild(h("div",{class:"warnrow",text:"разрешённый раздел не изменился: "+str(a)+" — правка могла не примениться"}))});
+    card.appendChild(box);
+    return card;
+  }
+  function renderChecks(p){
+    var total=S.checks.length,failed=failedChecks();
+    var st=h("div",{class:"stats"});
+    st.appendChild(h("div",{class:"stat"},h("b",{text:String(total)}),h("span",{text:"проверок"})));
+    st.appendChild(h("div",{class:"stat"},h("b",{text:String(total-failed)}),h("span",{text:"пройдено"})));
+    st.appendChild(h("div",{class:"stat"+(failed?" bad":"")},h("b",{text:String(failed)}),h("span",{text:"с нарушениями"})));
+    p.appendChild(st);
+    p.appendChild(h("div",{class:"bar"},chips([["all","Все"],["fail","Только нарушения"]],S.chkFilter,function(v){S.chkFilter=v;render(true)})));
+    var list=S.checks.filter(function(c){return S.chkFilter==="all"||c.ok===false});
+    list.sort(function(a,b){return str(b.ts).localeCompare(str(a.ts))});
+    if(!list.length){p.appendChild(empty(total?"Нарушений нет.":"Проверок пока не было."));return}
+    list.forEach(function(c){p.appendChild(checkCard(c))});
+    p.appendChild(h("div",{class:"note",text:"Проверка сравнивает контрольные суммы каждого раздела до и после правки. Красная строка — изменение там, где менять не разрешали: такой документ не становится версией, пока вы не решите, что с ним делать."}));
+  }
+
+  function render(force){
+    renderHeader();renderTabs();
+    var p=$("panel"),a=document.activeElement;
+    if(!force&&a&&p.contains(a)&&(a.tagName==="INPUT"||a.tagName==="TEXTAREA")&&a.value){deferred=true;return}
+    deferred=false;p.textContent="";
+    if(S.error&&!S.db){p.appendChild(empty("Данные страницы недоступны в этом просмотре. Откройте страницу в claude.ai под своей учётной записью."));return}
+    if(!S.loaded[S.tab]){p.appendChild(empty("Загружаю…"));return}
+    ({requests:renderRequests,docs:renderDocs,checks:renderChecks})[S.tab](p);
+  }
+  $("panel").addEventListener("focusout",function(){if(deferred)setTimeout(function(){render()},0)});
+
+  function openDialog(){
+    $("f-title").value="";$("f-what").value="";$("f-due").value="";$("f-kind").value="code";
+    $("dlg").showModal();$("f-title").focus();
+  }
+  $("f-cancel").addEventListener("click",function(){$("dlg").close()});
+  $("form").addEventListener("submit",function(e){
+    e.preventDefault();
+    var title=$("f-title").value.trim(),what=$("f-what").value.trim();if(!title||!what)return;
+    var data={title:title,what:what,needs:$("f-kind").value,due:$("f-due").value||"",stage:"принято",status:"new",source:"страница",date:today(),asks:[]};
+    $("f-save").disabled=true;
+    write("requests",newId(),data,true).then(function(ok){
+      $("f-save").disabled=false;
+      if(ok){$("dlg").close();S.reqFilter="open";toast("Заявка создана — агент заведёт её в папке при сверке");render(true)}
+    });
+  });
+
+  /* ---------- учебный режим: файл открыт с диска, хранилища нет ---------- */
+  function demoData(){
+    var now=new Date(),d=plusDays;
+    function at(days,hh,mm){var x=new Date(now.getFullYear(),now.getMonth(),now.getDate()+days,hh,mm);if(days===0&&x>now)x.setDate(x.getDate()-1);return stamp(x)}
+    return {
+      meta:{syncedAt:stamp(now)},
+      requests:[
+        {id:"r-demo-1",title:"Правка сроков регламента",what:"В регламенте согласования заменить текст раздела «3. Сроки согласования» на новый. Остальные разделы не трогать.",stage:"версия",status:"done",needs:"code",source:"владелец",date:d(-3),check:"ok",doc:"demo_reglament",version:3,asks:[]},
+        {id:"r-demo-2",title:"Отчёт направления за сентябрь",what:"Собрать отчёт по шаблону отчёта направления из выгрузки задач.",stage:"собрано",status:"new",needs:"code",source:"telegram (10:42)",date:d(-1),due:d(1),asks:["В выгрузке у двух задач нет срока — оставить прочерк или запросить у исполнителей?"]},
+        {id:"r-demo-3",title:"Проверить правку коллеги",what:"Коллега прислал свою редакцию регламента: должен был измениться только раздел 3.",stage:"проверено",status:"new",needs:"code",source:"владелец",date:d(-1),check:"fail",doc:"demo_reglament",asks:["Проверка нашла изменения в разделах 2.2 и 7. Вернуть коллеге или принять их осознанно?"]},
+        {id:"r-demo-4",title:"Формула для свода часов",what:"Подсказать формулу: сумма часов по исполнителю за месяц.",stage:"принято",status:"new",needs:"any",source:"страница",date:d(0),asks:[]}],
+      docs:[
+        {id:"demo_reglament",name:"Регламент согласования документов (учебный)",type:"регламент",current:2,currentBy:"владелец",currentDate:d(-14),
+          versions:[
+            {v:1,ts:at(-110,10,0),source:"v1_регламент.docx",note:"Исходная редакция",sha:"9f2c41d07a3b55e1",sections:16},
+            {v:2,ts:at(-14,12,30),source:"v2_регламент.docx",note:"Срок согласования 5 рабочих дней; добавлены пункт 4.3 и приложение Б",sha:"41b07c9e22d1a8f3",sections:18},
+            {v:3,ts:at(-2,16,5),source:"регламент_правка.docx",note:"Раздел 3: срок 3 рабочих дня, срочные — 1 день",sha:"c7e5510ab94f02d6",sections:18}],
+          changes:[
+            {from:1,to:2,changed:[{section:"3. Сроки согласования",lines:["- Срок согласования документа — 7 рабочих дней.","+ Срок согласования документа — 5 рабочих дней."],more:0}],added:["4.3. Повторное согласование","Приложение Б. Лист согласования"],removed:[],same:15},
+            {from:2,to:3,changed:[{section:"3. Сроки согласования",lines:["- Срок согласования документа — 5 рабочих дней.","+ Срок согласования документа — 3 рабочих дня.","+ Срочные документы согласуются за 1 рабочий день."],more:1}],added:[],removed:[],same:17}]},
+        {id:"demo_report",name:"Отчёт направления (учебный)",type:"отчёт",current:null,
+          versions:[{v:1,ts:at(-1,11,20),source:"отчёт_сентябрь.docx",note:"Отчёт за сентябрь, собран по шаблону",sha:"0a6d3f81e5b27c94",sections:5}],changes:[]}],
+      checks:[
+        {id:"k-demo-1",ts:at(-2,16,2),before:"демо_регламент.docx",after:"регламент_правка.docx",mode:"содержание и оформление",allow:["Сроки"],same:17,
+          touched:[{kind:"changed",section:"3. Сроки согласования",allowed:true}],unused_allow:[],ok:true},
+        {id:"k-demo-2",ts:at(-1,9,40),before:"демо_регламент.docx",after:"регламент_правка_от_коллеги.docx",mode:"содержание и оформление",allow:["Сроки"],same:15,
+          touched:[{kind:"changed",section:"3. Сроки согласования",allowed:true},{kind:"changed",section:"2.2. Согласующие",allowed:false},{kind:"changed",section:"7. Ответственность",allowed:false}],unused_allow:[],ok:false}]
+    };
+  }
+  function startDemo(){
+    var data=demoData();
+    S.demo=true;S.meta=data.meta;
+    TABS.forEach(function(t){S[t[0]]=data[t[0]];S.loaded[t[0]]=true});
+    render(true);
+  }
+
+  function sub(db,name){
+    db.collection(name).limit(500).onSnapshot(function(snap){
+      S[name]=snap.docs.map(function(d){var o=Object.assign({},d.data());o.id=d.id;return o});
+      S.loaded[name]=true;render();
+    },function(){S.loaded[name]=true;S.error="Связь с данными страницы прервалась — обновите страницу";render(true)});
+  }
+
+  render(true);
+  if(!window.claude){startDemo();return}
+  Promise.all([window.claude.use("db"),window.claude.use("user")]).then(function(r){
+    var db=r[0],user=r[1];
+    if(!db){S.error="Данные недоступны в этом просмотре";TABS.forEach(function(t){S.loaded[t[0]]=true});render(true);return}
+    S.db=db;
+    TABS.forEach(function(t){sub(db,t[0])});
+    db.doc("meta/state").onSnapshot(function(s){S.meta=s.exists?s.data():null;render()},function(){});
+    if(user)Promise.resolve(user.can("data.write")).then(function(v){if(v===false){S.canWrite=false;render(true)}},function(){});
+    render(true);
+  },function(){S.error="Данные недоступны в этом просмотре";TABS.forEach(function(t){S.loaded[t[0]]=true});render(true)});
+  // связь с разговором рядом со страницей — для кнопки «Сверить сейчас»; без неё страница работает как раньше
+  Promise.resolve(window.claude.use("room")).then(function(room){
+    if(!room||typeof room.sendToClaudeSession!=="function")return;
+    S.room=room;render();
+    if(typeof room.canSendToClaudeSession==="function")room.canSendToClaudeSession().then(function(v){S.ask=v;render()},function(){S.ask="off";render()});
+  },function(){});
+})();
+</script>

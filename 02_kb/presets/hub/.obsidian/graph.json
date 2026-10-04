@@ -1,0 +1,46 @@
+{
+  "colorGroups": [
+    {
+      "query": "path:kb/контрагенты",
+      "color": {
+        "a": 1,
+        "rgb": 2972494
+      }
+    },
+    {
+      "query": "path:kb/решения",
+      "color": {
+        "a": 1,
+        "rgb": 11032084
+      }
+    },
+    {
+      "query": "path:kb/проекты",
+      "color": {
+        "a": 1,
+        "rgb": 3105980
+      }
+    },
+    {
+      "query": "path:kb/справки",
+      "color": {
+        "a": 1,
+        "rgb": 8153791
+      }
+    },
+    {
+      "query": "path:kb/публикации",
+      "color": {
+        "a": 1,
+        "rgb": 10724259
+      }
+    },
+    {
+      "query": "path:memory",
+      "color": {
+        "a": 1,
+        "rgb": 7895160
+      }
+    }
+  ]
+}

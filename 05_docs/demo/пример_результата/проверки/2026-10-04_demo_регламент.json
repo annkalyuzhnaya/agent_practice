@@ -1,0 +1,23 @@
+{
+ "ts": "2026-10-04T03:47:56",
+ "before": "demo_регламент.docx",
+ "after": "2026-10-04_demo_регламент.docx",
+ "before_sha": "44611d392493e25e",
+ "after_sha": "4b3e16052ffa4175",
+ "mode": "содержание и оформление",
+ "allow": [
+  "Сроки"
+ ],
+ "same": 17,
+ "touched": [
+  {
+   "kind": "изменён",
+   "section": "3. Сроки согласования",
+   "allowed": true,
+   "hash_before": "60aa7e417c55af78",
+   "hash_after": "4ea71ab2ba0cf29b"
+  }
+ ],
+ "unused_allow": [],
+ "ok": true
+}

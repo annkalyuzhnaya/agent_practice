@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python tools/parser.py:*)",
+      "Bash(python tools/integrity_diff.py:*)",
+      "Bash(python tools/versions.py:*)",
+      "Bash(python tools/generator.py:*)",
+      "Bash(python tools/kb_index.py:*)",
+      "Bash(python tools/tg_bridge.py send --chat me:*)",
+      "WebSearch"
+    ]
+  },
+  "env": {
+    "PYTHONIOENCODING": "utf-8"
+  }
+}

@@ -1,0 +1,613 @@
+<title>База знаний</title>
+<style>
+:root{
+  --bg:#f5f2ec;--surface:#fffdf8;--ink:#1e2226;--muted:#6a6f76;--line:#e0dacd;
+  --accent:#2d5b4e;--accent-ink:#ffffff;--soft:#e7efe9;
+  --warn:#a85a14;--warn-soft:#f6ead9;--danger:#a3312c;--danger-soft:#f6e1de;--ok:#2f6b3c;
+  --t1:#2d5b4e;--t2:#a85a14;--t3:#3b5f94;--t4:#7a4b8c;--t5:#8a6d1c;--t6:#a3312c;--t0:#6a6f76;
+  --radius:10px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#15181a;--surface:#1e2225;--ink:#e9e6e0;--muted:#9aa1a8;--line:#31363b;
+    --accent:#84c9b2;--accent-ink:#10201b;--soft:#22302c;
+    --warn:#e0a25c;--warn-soft:#33291c;--danger:#e58a84;--danger-soft:#3a2220;--ok:#8fce9d;
+    --t1:#84c9b2;--t2:#e0a25c;--t3:#8fb2e6;--t4:#c59ad6;--t5:#d8c06a;--t6:#e58a84;--t0:#9aa1a8;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#15181a;--surface:#1e2225;--ink:#e9e6e0;--muted:#9aa1a8;--line:#31363b;
+  --accent:#84c9b2;--accent-ink:#10201b;--soft:#22302c;
+  --warn:#e0a25c;--warn-soft:#33291c;--danger:#e58a84;--danger-soft:#3a2220;--ok:#8fce9d;
+  --t1:#84c9b2;--t2:#e0a25c;--t3:#8fb2e6;--t4:#c59ad6;--t5:#d8c06a;--t6:#e58a84;--t0:#9aa1a8;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:860px;margin:0 auto;padding:20px 16px 64px}
+header h1{font-size:22px;margin:0 0 2px;letter-spacing:-.01em}
+.head{display:flex;gap:10px;align-items:flex-start;justify-content:space-between}
+.sub{color:var(--muted);font-size:13px}
+.banner{background:var(--warn-soft);color:var(--warn);border-radius:8px;padding:8px 12px;font-size:13px;margin-bottom:12px}
+.tabs{display:flex;gap:6px;margin:16px -16px 14px;padding:0 16px;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:none;border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:7px 12px;border-radius:999px;font:inherit;cursor:pointer;white-space:nowrap}
+.tab[aria-selected="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.tab .n{opacity:.75;margin-left:5px;font-variant-numeric:tabular-nums}
+.tab .flag{margin-left:5px;padding:0 6px;border-radius:999px;font-size:12px;font-weight:700;background:var(--warn-soft);color:var(--warn)}
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px}
+.chips{display:flex;gap:4px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:transparent;color:var(--muted);padding:4px 10px;border-radius:999px;font:inherit;font-size:13px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--soft);color:var(--ink);border-color:var(--accent)}
+.btn{border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink);padding:7px 14px;border-radius:8px;font:inherit;font-weight:600;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--accent)}
+.btn.small{padding:4px 10px;font-size:13px;font-weight:500}
+.btn:disabled{opacity:.5;cursor:default}
+.group{margin:18px 0 6px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:12px 14px;margin-bottom:8px}
+.card.attn{border-left:3px solid var(--warn)}
+.what{font-weight:500;overflow-wrap:anywhere}
+.meta{color:var(--muted);font-size:13px;margin-top:3px;overflow-wrap:anywhere}
+.meta b{font-weight:600;color:var(--ink)}
+.tag{display:inline-block;padding:1px 8px;border-radius:999px;font-size:12px;background:var(--soft);color:var(--ink);margin-right:6px}
+.tag.warn{background:var(--warn-soft);color:var(--warn)}
+.tag.danger{background:var(--danger-soft);color:var(--danger)}
+.tag.plain{background:transparent;border:1px solid var(--line);color:var(--muted)}
+.actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;align-items:center}
+input,textarea{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:6px 8px;max-width:100%}
+.card textarea{width:100%;font-size:13px;margin-top:10px;min-height:38px;resize:vertical}
+.empty{color:var(--muted);padding:26px 14px;text-align:center;border:1px dashed var(--line);border-radius:var(--radius)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin-bottom:6px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:10px 12px}
+.stat b{display:block;font-size:22px;font-variant-numeric:tabular-nums}
+.stat span{color:var(--muted);font-size:13px}
+.stat.attn b{color:var(--warn)}
+.ver{border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin-top:8px;overflow-wrap:anywhere}
+.ver.pick{border-color:var(--accent);background:var(--soft)}
+.lbl{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px}
+.types{display:grid;gap:6px}
+.trow{display:grid;grid-template-columns:120px 1fr 28px;gap:8px;align-items:center;font-size:13px}
+.trow .track{height:8px;border-radius:999px;background:var(--line);overflow:hidden}
+.trow .fill{height:100%;border-radius:999px}
+.trow .num{text-align:right;font-variant-numeric:tabular-nums;color:var(--muted)}
+.map{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;margin-bottom:8px}
+.map svg{display:block;width:100%;height:auto;touch-action:manipulation}
+.map line{stroke:var(--line);stroke-width:1.2}
+.map line.on{stroke:var(--accent);stroke-width:2}
+.map circle{stroke:var(--surface);stroke-width:2;cursor:pointer}
+.map g.dim{opacity:.28}
+.map g.sel circle{stroke:var(--ink);stroke-width:2.5}
+.map g:focus{outline:none}
+.map g:focus-visible circle{stroke:var(--ink);stroke-width:3}
+.map text{font-size:11px;fill:var(--ink);pointer-events:none;paint-order:stroke;stroke:var(--surface);stroke-width:3px}
+.legend{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:12px;color:var(--muted);margin-bottom:10px}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px;vertical-align:baseline}
+.link{background:none;border:0;padding:0;font:inherit;color:var(--accent);cursor:pointer;text-decoration:underline;text-align:left}
+.pre{white-space:pre-wrap;overflow-wrap:anywhere;margin-top:6px}
+.note{color:var(--muted);font-size:13px;margin:10px 2px}
+.toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:9px 14px;border-radius:8px;font-size:14px;opacity:0;pointer-events:none;transition:opacity .2s;max-width:calc(100vw - 32px)}
+.toast.on{opacity:1}
+@media (max-width:520px){.trow{grid-template-columns:96px 1fr 24px}.map text{font-size:13px}}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="banner" id="demo" hidden>Учебный режим: страница открыта как файл и показывает вымышленные данные. Кнопки работают, но изменения не сохраняются.</div>
+    <div class="head">
+      <div>
+        <h1>База знаний</h1>
+        <div class="sub" id="sync">Загружаю данные…</div>
+      </div>
+      <button class="btn small ghost" id="sync-now" hidden>Сверить сейчас</button>
+    </div>
+  </header>
+  <div class="tabs" role="tablist" id="tabs"></div>
+  <main id="panel"></main>
+</div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(function(){
+"use strict";
+var PAGE_VERSION="1.0.0";
+var COLLS=["notes","inbox","conflicts","qa","care"];
+var TABS=[
+  {id:"overview",name:"Обзор",need:["notes","inbox","conflicts","care"]},
+  {id:"conflicts",name:"Противоречия",need:["conflicts"]},
+  {id:"map",name:"Карта",need:["notes"]},
+  {id:"qa",name:"Вопросы",need:["qa"]},
+  {id:"care",name:"Уход",need:["care"]}
+];
+var S={notes:[],inbox:[],conflicts:[],qa:[],care:[],meta:null,tab:"overview",db:null,canWrite:true,loaded:{},error:"",
+       demo:false,room:null,ask:"",sel:"",mapType:"",qaFilter:"",showClosed:false};
+var busy={},deferred=false,drafts={},layoutCache={key:"",pos:{}};
+try{var t0=localStorage.getItem("kb-tab");if(t0&&TABS.some(function(t){return t.id===t0}))S.tab=t0}catch(e){}
+
+function $(id){return document.getElementById(id)}
+function h(tag,attrs){
+  var el=document.createElement(tag),k;
+  if(attrs)for(k in attrs){
+    var v=attrs[k];
+    if(v===false||v==null)continue;
+    if(k==="text")el.textContent=v;
+    else if(k.slice(0,2)==="on")el.addEventListener(k.slice(2),v);
+    else el.setAttribute(k,v===true?"":v);
+  }
+  for(var i=2;i<arguments.length;i++){
+    var c=arguments[i];
+    if(c==null||c===false)continue;
+    el.appendChild(typeof c==="string"?document.createTextNode(c):c);
+  }
+  return el;
+}
+var SVGNS="http://www.w3.org/2000/svg";
+function sv(tag,attrs){
+  var el=document.createElementNS(SVGNS,tag),k;
+  if(attrs)for(k in attrs){
+    var v=attrs[k];
+    if(v===false||v==null)continue;
+    if(k==="text")el.textContent=v;
+    else if(k.slice(0,2)==="on")el.addEventListener(k.slice(2),v);
+    else el.setAttribute(k,v);
+  }
+  for(var i=2;i<arguments.length;i++)if(arguments[i])el.appendChild(arguments[i]);
+  return el;
+}
+var toastTimer;
+function toast(msg){var t=$("toast");t.textContent=msg;t.classList.add("on");clearTimeout(toastTimer);toastTimer=setTimeout(function(){t.classList.remove("on")},3200)}
+function today(){var d=new Date();function p(n){return (n<10?"0":"")+n}return d.getFullYear()+"-"+p(d.getMonth()+1)+"-"+p(d.getDate())}
+function empty(text){return h("div",{class:"empty",text:text})}
+function byId(arr,id){for(var i=0;i<arr.length;i++)if(arr[i].id===id)return arr[i];return null}
+function isOpen(x){var s=String(x.status||"open").toLowerCase();return s==="open"||s.indexOf("открыт")===0}
+function cut(s,n){s=String(s||"");return s.length>n?s.slice(0,n-1)+"…":s}
+
+/* ---------- запись ---------- */
+function write(coll,id,patch){
+  patch.dirty=true;patch.updatedAt=new Date().toISOString();
+  if(S.demo){var cur=byId(S[coll],id);if(cur)Object.assign(cur,patch);render(true);return Promise.resolve(true)}
+  if(!S.db||!S.canWrite){toast("Изменять данные в этом просмотре нельзя");return Promise.resolve(false)}
+  var key=coll+"/"+id;
+  if(busy[key])return Promise.resolve(false);
+  busy[key]=true;
+  return S.db.collection(coll).doc(id).update(patch).then(function(){return true},function(e){
+    if(e&&e.code==="invalid_argument"){S.canWrite=false;toast("Нет права на запись — страница открыта только для чтения");render(true)}
+    else if(e&&e.code==="quota_exceeded")toast("Хранилище страницы заполнено — попросите ассистента сверить страницу");
+    else toast("Не удалось сохранить. Попробуйте ещё раз");
+    return false;
+  }).then(function(ok){delete busy[key];return ok});
+}
+function canAsk(){return !!S.room&&S.ask!=="off"&&S.ask!=="unsupported"}
+function askSync(){
+  var offline="Разговор с ассистентом сейчас недоступен — напишите в чате «сверь страницу»";
+  if(!canAsk()){toast(offline);return}
+  var msg={label:"Сверить страницу «База знаний»",request:"sync_kb"},p;
+  try{p=S.room.sendToClaudeSession(msg,{deliver:"send",onStatus:function(s){if(s&&s.state==="failed")toast(offline)}})}catch(e){toast(offline);return}
+  Promise.resolve(p).then(function(){toast("Запрос передан ассистенту — подтвердите его в разговоре")},
+    function(e){toast(e&&e.code==="rate_limited"?"Слишком часто — повторите через минуту":offline)});
+}
+
+/* ---------- шапка и вкладки ---------- */
+function renderHeader(){
+  $("demo").hidden=!S.demo;
+  $("sync-now").hidden=!canAsk();
+  var s;
+  if(S.error&&!S.db)s=S.error;
+  else if(S.meta&&S.meta.syncedAt)s="Сверено с ассистентом: "+S.meta.syncedAt;
+  else s="Ассистент ещё не выгружал сюда данные — напишите ему «сверь страницу»";
+  if(!S.canWrite)s+=" · только чтение";
+  $("sync").textContent=s;
+}
+function openConflicts(){return S.conflicts.filter(isOpen)}
+function careTodo(){return S.care.filter(function(x){return !x.decision})}
+function renderTabs(){
+  var box=$("tabs");box.textContent="";
+  TABS.forEach(function(t){
+    var b=h("button",{class:"tab",role:"tab","aria-selected":S.tab===t.id?"true":"false",onclick:function(){
+      S.tab=t.id;try{localStorage.setItem("kb-tab",t.id)}catch(e){}render(true);
+    }},t.name);
+    if(t.id==="conflicts"&&openConflicts().length)b.appendChild(h("span",{class:"flag",text:String(openConflicts().length)}));
+    if(t.id==="care"&&careTodo().length)b.appendChild(h("span",{class:"n",text:String(careTodo().length)}));
+    if(t.id==="qa"&&S.qa.length)b.appendChild(h("span",{class:"n",text:String(S.qa.length)}));
+    if(t.id==="map"&&S.notes.length)b.appendChild(h("span",{class:"n",text:String(S.notes.length)}));
+    box.appendChild(b);
+  });
+}
+
+/* ---------- типы заметок ---------- */
+function typeList(){
+  var seen={},out=[];
+  S.notes.forEach(function(n){var t=n.type||"без типа";if(!seen[t]){seen[t]=0;out.push(t)}seen[t]++});
+  out.sort(function(a,b){return seen[b]-seen[a]||(a<b?-1:1)});
+  return out.map(function(t){return {name:t,n:seen[t]}});
+}
+function typeColor(name){
+  var list=typeList();
+  for(var i=0;i<list.length;i++)if(list[i].name===name)return i<6?"var(--t"+(i+1)+")":"var(--t0)";
+  return "var(--t0)";
+}
+function goNote(id){S.sel=id;S.mapType="";S.tab="map";try{localStorage.setItem("kb-tab","map")}catch(e){}render(true);window.scrollTo(0,0)}
+function noteLine(n){
+  return h("div",{class:"card"},
+    h("div",{class:"what"},h("button",{class:"link",onclick:function(){goNote(n.id)}},n.title||n.file||"Без названия")),
+    h("div",{class:"meta"},h("span",{class:"tag"},n.type||"без типа"),(n.date||"")+(n.file?" · "+n.file:"")),
+    n.summary?h("div",{class:"meta",text:n.summary}):null);
+}
+
+/* ---------- Обзор ---------- */
+function renderOverview(p){
+  var total=S.meta&&S.meta.total!=null?S.meta.total:S.notes.length;
+  var oc=openConflicts().length,ct=careTodo().length;
+  function stat(n,label,attn,tab){
+    var el=h("div",{class:"stat"+(attn&&n?" attn":"")},h("b",{text:String(n)}),h("span",{text:label}));
+    if(tab&&n){el.style.cursor="pointer";el.addEventListener("click",function(){S.tab=tab;render(true)})}
+    return el;
+  }
+  p.appendChild(h("div",{class:"stats"},stat(total,"заметок в базе"),stat(S.inbox.length,"ждут разбора во входящем"),
+    stat(oc,"противоречий ждут решения",true,"conflicts"),stat(ct,"пунктов ухода",false,"care")));
+  if(!S.notes.length&&!S.inbox.length){p.appendChild(empty("База пока пуста. Пришлите ассистенту первый материал или скажите «запомни: …»."));return}
+  var types=typeList(),max=types.length?types[0].n:1;
+  if(types.length){
+    p.appendChild(h("div",{class:"group",text:"Что в базе"}));
+    var box=h("div",{class:"card types"});
+    types.forEach(function(t){
+      var fill=h("div",{class:"fill"});fill.style.width=Math.max(4,Math.round(100*t.n/max))+"%";fill.style.background=typeColor(t.name);
+      box.appendChild(h("div",{class:"trow"},h("span",{text:t.name}),h("div",{class:"track"},fill),h("span",{class:"num",text:String(t.n)})));
+    });
+    p.appendChild(box);
+  }
+  if(S.inbox.length){
+    p.appendChild(h("div",{class:"group",text:"Ждут разбора во входящем"}));
+    S.inbox.forEach(function(x){
+      p.appendChild(h("div",{class:"card"},h("div",{class:"what",text:x.title||x.file||"Без названия"}),
+        h("div",{class:"meta",text:(x.date||"")+(x.file?" · "+x.file:"")})));
+    });
+    p.appendChild(h("div",{class:"note",text:"Чтобы оформить их в заметки, напишите ассистенту «разбери входящее»."}));
+  }
+  var recent=S.notes.slice().sort(function(a,b){return String(b.date||"")<String(a.date||"")?-1:1}).slice(0,6);
+  if(recent.length){
+    p.appendChild(h("div",{class:"group",text:"Последние заметки"}));
+    recent.forEach(function(n){p.appendChild(noteLine(n))});
+  }
+}
+
+/* ---------- Противоречия ---------- */
+var CHOICE={a:"верна версия А",b:"верна версия Б",stale:"обе версии устарели",other:"своё решение"};
+function conflictCard(x){
+  var open=isOpen(x),waiting=!open&&x.dirty;
+  var card=h("div",{class:"card"+(open?" attn":"")});
+  card.appendChild(h("div",{class:"what",text:x.fact||"Расхождение"}));
+  var meta=h("div",{class:"meta"});
+  if(open)meta.appendChild(h("span",{class:"tag warn",text:"ждёт вашего решения"}));
+  else meta.appendChild(h("span",{class:"tag",text:"закрыто: "+(CHOICE[x.choice]||"решение владельца")}));
+  if(waiting)meta.appendChild(h("span",{class:"tag plain",text:"ждёт ассистента"}));
+  meta.appendChild(document.createTextNode("найдено "+(x.date||"")+(x.closed?" · закрыто "+x.closed:"")));
+  card.appendChild(meta);
+  function ver(key,label,text){
+    var mark=(x.newer===key?" · новее":"")+(x.choice===key&&!open?" · выбрано вами":"");
+    return h("div",{class:"ver"+(x.choice===key&&!open?" pick":"")},h("div",{class:"lbl",text:label+mark}),h("div",{text:text||"—"}));
+  }
+  card.appendChild(ver("a","Версия А",x.a));
+  card.appendChild(ver("b","Версия Б",x.b));
+  var hint=x.newerNote||(x.newer&&x.newer!=="a"&&x.newer!=="b"?x.newer:"");
+  if(hint)card.appendChild(h("div",{class:"meta"},h("b",{text:"Что известно о давности: "}),hint));
+  if(!open&&x.note)card.appendChild(h("div",{class:"meta"},h("b",{text:"Ваш комментарий: "}),x.note));
+  if(!S.canWrite)return card;
+  if(open){
+    var ta=h("textarea",{rows:"1",maxlength:"300",placeholder:"Комментарий к решению (необязательно)","aria-label":"Комментарий к решению"});
+    ta.value=drafts[x.id]||"";
+    ta.addEventListener("input",function(){drafts[x.id]=ta.value});
+    card.appendChild(ta);
+    function close(choice){
+      var note=(drafts[x.id]||"").trim().slice(0,300);
+      write("conflicts",x.id,{status:"closed",choice:choice,note:note,closed:today()}).then(function(ok){
+        if(ok){delete drafts[x.id];toast("Решение записано. Ассистент внесёт его в журнал при сверке")}
+      });
+    }
+    card.appendChild(h("div",{class:"actions"},
+      h("button",{class:"btn small",onclick:function(){close("a")}},"Верно А"),
+      h("button",{class:"btn small",onclick:function(){close("b")}},"Верно Б"),
+      h("button",{class:"btn small ghost",onclick:function(){close("stale")}},"Обе устарели")));
+  }else if(waiting){
+    card.appendChild(h("div",{class:"actions"},h("button",{class:"btn small ghost",onclick:function(){
+      write("conflicts",x.id,{status:"open",choice:"",note:"",closed:""});
+    }},"Изменить решение")));
+  }
+  return card;
+}
+function renderConflicts(p){
+  var open=openConflicts(),closed=S.conflicts.filter(function(x){return !isOpen(x)});
+  if(!S.conflicts.length){p.appendChild(empty("Расхождений в базе не найдено. Когда два материала разойдутся в факте, спор появится здесь."));return}
+  p.appendChild(h("div",{class:"note",text:"Какая версия верна, решаете только вы. Ассистент сам споры не закрывает и заметки не исправляет."}));
+  if(open.length){
+    p.appendChild(h("div",{class:"group",text:"Ждут решения"}));
+    open.forEach(function(x){p.appendChild(conflictCard(x))});
+  }else p.appendChild(empty("Открытых противоречий нет."));
+  if(closed.length){
+    p.appendChild(h("div",{class:"group",text:"Закрытые"}));
+    closed.sort(function(a,b){return String(b.closed||"")<String(a.closed||"")?-1:1});
+    closed.forEach(function(x){p.appendChild(conflictCard(x))});
+  }
+}
+
+/* ---------- Карта ---------- */
+var MW=720,MH=460;
+function layout(nodes,edges){
+  var key=nodes.map(function(n){return n.id}).join(",")+"|"+edges.map(function(e){return e[0]+">"+e[1]}).join(",");
+  if(layoutCache.key===key)return layoutCache.pos;
+  var pos={},n=nodes.length,i,j,it;
+  nodes.forEach(function(nd,k){var a=2*Math.PI*k/Math.max(n,1);pos[nd.id]={x:MW/2+Math.cos(a)*MW*0.32,y:MH/2+Math.sin(a)*MH*0.34,dx:0,dy:0}});
+  var area=MW*MH,kk=Math.sqrt(area/Math.max(n,1))*0.55,iter=n>120?60:220;
+  for(it=0;it<iter;it++){
+    var temp=42*(1-it/iter)+1;
+    for(i=0;i<n;i++){var a1=pos[nodes[i].id];a1.dx=0;a1.dy=0}
+    for(i=0;i<n;i++)for(j=i+1;j<n;j++){
+      var p1=pos[nodes[i].id],p2=pos[nodes[j].id],dx=p1.x-p2.x,dy=p1.y-p2.y,d=Math.sqrt(dx*dx+dy*dy)||0.01,f=kk*kk/d;
+      p1.dx+=dx/d*f;p1.dy+=dy/d*f;p2.dx-=dx/d*f;p2.dy-=dy/d*f;
+    }
+    edges.forEach(function(e){
+      var p1=pos[e[0]],p2=pos[e[1]],dx=p1.x-p2.x,dy=p1.y-p2.y,d=Math.sqrt(dx*dx+dy*dy)||0.01,f=d*d/kk;
+      p1.dx-=dx/d*f;p1.dy-=dy/d*f;p2.dx+=dx/d*f;p2.dy+=dy/d*f;
+    });
+    for(i=0;i<n;i++){
+      var q=pos[nodes[i].id];
+      q.dx+=(MW/2-q.x)*0.04;q.dy+=(MH/2-q.y)*0.06;
+      var m=Math.sqrt(q.dx*q.dx+q.dy*q.dy)||0.01,s=Math.min(m,temp);
+      q.x=Math.min(MW-70,Math.max(70,q.x+q.dx/m*s));q.y=Math.min(MH-30,Math.max(24,q.y+q.dy/m*s));
+    }
+  }
+  layoutCache={key:key,pos:pos};
+  return pos;
+}
+function graph(){
+  var ids={},edges=[],seen={},deg={},near={};
+  S.notes.forEach(function(n){ids[n.id]=true;deg[n.id]=0;near[n.id]=[]});
+  S.notes.forEach(function(n){(n.links||[]).forEach(function(t){
+    if(!ids[t]||t===n.id)return;
+    var k=n.id<t?n.id+"|"+t:t+"|"+n.id;
+    if(seen[k])return;seen[k]=true;
+    edges.push([n.id,t]);deg[n.id]++;deg[t]++;near[n.id].push(t);near[t].push(n.id);
+  })});
+  return {edges:edges,deg:deg,near:near};
+}
+function renderMap(p){
+  if(!S.notes.length){p.appendChild(empty("В базе пока нет заметок — карта появится после первого разбора входящего."));return}
+  var g=graph(),types=typeList(),sel=byId(S.notes,S.sel);
+  if(!sel)S.sel="";
+  var chips=h("div",{class:"chips"});
+  function chip(name,label){
+    chips.appendChild(h("button",{class:"chip","aria-pressed":S.mapType===name?"true":"false",onclick:function(){S.mapType=name;render(true)}},label));
+  }
+  chip("","Все");
+  types.forEach(function(t){chip(t.name,t.name+" "+t.n)});
+  p.appendChild(h("div",{class:"bar"},chips));
+  var legend=h("div",{class:"legend"});
+  types.forEach(function(t){var d=h("span",{class:"dot"});d.style.background=typeColor(t.name);legend.appendChild(h("span",null,d,t.name))});
+  p.appendChild(legend);
+
+  var pos=layout(S.notes,g.edges);
+  var svg=sv("svg",{viewBox:"0 0 "+MW+" "+MH,role:"group","aria-label":"Карта связей между заметками"});
+  var hot={};
+  if(sel){hot[sel.id]=true;g.near[sel.id].forEach(function(id){hot[id]=true})}
+  function dimmed(n){
+    if(sel)return !hot[n.id];
+    return !!S.mapType&&(n.type||"без типа")!==S.mapType;
+  }
+  g.edges.forEach(function(e){
+    var a=pos[e[0]],b=pos[e[1]],on=sel&&(e[0]===sel.id||e[1]===sel.id);
+    svg.appendChild(sv("line",{x1:a.x.toFixed(1),y1:a.y.toFixed(1),x2:b.x.toFixed(1),y2:b.y.toFixed(1),class:on?"on":null}));
+  });
+  var showAll=S.notes.length<=14;
+  S.notes.forEach(function(n){
+    var q=pos[n.id],r=7+Math.min(g.deg[n.id],6),dim=dimmed(n);
+    function pick(){S.sel=S.sel===n.id?"":n.id;render(true)}
+    var grp=sv("g",{class:(dim?"dim":"")+(sel&&sel.id===n.id?" sel":""),tabindex:"0",role:"button",
+      "aria-label":(n.title||n.file||"заметка")+", "+(n.type||"без типа")+", связей: "+g.deg[n.id],
+      onclick:pick,onkeydown:function(ev){if(ev.key==="Enter"||ev.key===" "){ev.preventDefault();pick()}}});
+    var c=sv("circle",{cx:q.x.toFixed(1),cy:q.y.toFixed(1),r:String(r)});
+    c.style.fill=typeColor(n.type||"без типа");
+    grp.appendChild(c);
+    if(showAll||hot[n.id]){
+      grp.appendChild(sv("text",{x:q.x.toFixed(1),y:(q.y+r+13).toFixed(1),"text-anchor":"middle",text:cut(n.title||n.file,26)}));
+    }
+    svg.appendChild(grp);
+  });
+  p.appendChild(h("div",{class:"map"},svg));
+
+  if(sel){
+    var card=h("div",{class:"card"},
+      h("div",{class:"what",text:sel.title||sel.file}),
+      h("div",{class:"meta"},h("span",{class:"tag"},sel.type||"без типа"),(sel.date||"")+(sel.file?" · "+sel.file:"")),
+      sel.summary?h("div",{class:"pre",text:sel.summary}):null);
+    if((sel.tags||[]).length){
+      var tg=h("div",{class:"meta"});
+      sel.tags.forEach(function(t){tg.appendChild(h("span",{class:"tag plain",text:t}))});
+      card.appendChild(tg);
+    }
+    var near=g.near[sel.id];
+    if(near.length){
+      card.appendChild(h("div",{class:"lbl",text:"Связана с"})).style.marginTop="10px";
+      near.forEach(function(id){
+        var n=byId(S.notes,id);
+        card.appendChild(h("div",null,h("button",{class:"link",onclick:function(){S.sel=id;render(true)}},n.title||n.file)));
+      });
+    }else card.appendChild(h("div",{class:"meta",text:"Связей нет — заметка стоит особняком."}));
+    card.appendChild(h("div",{class:"note",text:"Полный текст — в заметке «"+(sel.file||"")+"»: откройте её в Obsidian или попросите ассистента показать."}));
+    p.appendChild(card);
+  }else{
+    p.appendChild(h("div",{class:"note",text:"Нажмите на кружок, чтобы увидеть суть заметки и её соседей. Чем больше связей, тем крупнее кружок."}));
+    var list=S.notes.filter(function(n){return !S.mapType||(n.type||"без типа")===S.mapType})
+      .sort(function(a,b){return g.deg[b.id]-g.deg[a.id]});
+    list.slice(0,30).forEach(function(n){p.appendChild(noteLine(n))});
+    if(list.length>30)p.appendChild(h("div",{class:"note",text:"Показаны 30 самых связанных заметок из "+list.length+"."}));
+  }
+}
+
+/* ---------- Вопросы ---------- */
+function checkKind(x){
+  var c=String(x.check||"").toLowerCase();
+  if(c.indexOf("нет")>=0&&c.indexOf("баз")>=0)return "none";
+  if(c.indexOf("не подтв")>=0||c.indexOf("частично")>=0)return "weak";
+  if(c.indexOf("подтв")>=0)return "ok";
+  return "other";
+}
+function renderQa(p){
+  if(!S.qa.length){p.appendChild(empty("Журнал вопросов пуст. Спросите ассистента, например: «что у нас решено по срокам согласования?»"));return}
+  var filters=[["","Все"],["ok","Подтверждено"],["weak","Не подтверждено"],["none","В базе нет"]];
+  var chips=h("div",{class:"chips"});
+  filters.forEach(function(f){
+    var n=f[0]?S.qa.filter(function(x){return checkKind(x)===f[0]}).length:S.qa.length;
+    chips.appendChild(h("button",{class:"chip","aria-pressed":S.qaFilter===f[0]?"true":"false",onclick:function(){S.qaFilter=f[0];render(true)}},f[1]+" "+n));
+  });
+  p.appendChild(h("div",{class:"bar"},chips));
+  var list=S.qa.filter(function(x){return !S.qaFilter||checkKind(x)===S.qaFilter})
+    .sort(function(a,b){return String(b.date||"")<String(a.date||"")?-1:1});
+  if(!list.length){p.appendChild(empty("Таких вопросов в журнале нет."));return}
+  list.forEach(function(x){
+    var k=checkKind(x),cls=k==="ok"?"tag":k==="weak"?"tag warn":k==="none"?"tag plain":"tag plain";
+    var card=h("div",{class:"card"+(k==="weak"?" attn":"")},
+      h("div",{class:"what",text:x.question||""}),
+      h("div",{class:"meta"},h("span",{class:cls,text:x.check||"без проверки"}),(x.date||"")+(x.origin?" · "+x.origin:"")),
+      h("div",{class:"pre",text:x.answer||""}));
+    if((x.sources||[]).length){
+      card.appendChild(h("div",{class:"lbl",text:"Источники"})).style.marginTop="8px";
+      x.sources.forEach(function(s){
+        var stem=String(s).split("§")[0].split("(")[0].trim(),note=null;
+        S.notes.forEach(function(n){if(n.file===stem)note=n});
+        card.appendChild(h("div",{class:"meta"},note?h("button",{class:"link",onclick:function(){goNote(note.id)}},String(s)):String(s)));
+      });
+    }
+    p.appendChild(card);
+  });
+}
+
+/* ---------- Уход ---------- */
+function renderCare(p){
+  if(!S.care.length){p.appendChild(empty("База в порядке: битых ссылок, дублей и заметок без связей не найдено."));return}
+  p.appendChild(h("div",{class:"note",text:"Ассистент ничего не исправляет сам. Отметьте, что исправить, а что оставить, — он сделает это при следующей сверке или в разговоре."}));
+  var kinds=[],by={};
+  S.care.forEach(function(x){var k=x.kind||"прочее";if(!by[k]){by[k]=[];kinds.push(k)}by[k].push(x)});
+  kinds.forEach(function(k){
+    p.appendChild(h("div",{class:"group",text:k+" · "+by[k].length}));
+    by[k].forEach(function(x){
+      var card=h("div",{class:"card"+(x.decision?"":" attn")},
+        h("div",{class:"what",text:x.note||""}),
+        h("div",{class:"meta",text:x.text||""}),
+        x.advice?h("div",{class:"meta"},h("b",{text:"Что предлагается: "}),x.advice):null);
+      if(x.decision){
+        var m=h("div",{class:"meta"},h("span",{class:"tag",text:x.decision==="fix"?"решено: исправить":"решено: оставить как есть"}));
+        if(x.dirty)m.appendChild(h("span",{class:"tag plain",text:"ждёт ассистента"}));
+        card.appendChild(m);
+      }
+      if(S.canWrite){
+        var acts=h("div",{class:"actions"});
+        if(!x.decision){
+          acts.appendChild(h("button",{class:"btn small",onclick:function(){write("care",x.id,{decision:"fix"})}},"Исправить"));
+          acts.appendChild(h("button",{class:"btn small ghost",onclick:function(){write("care",x.id,{decision:"keep"})}},"Оставить как есть"));
+        }else if(x.dirty){
+          acts.appendChild(h("button",{class:"btn small ghost",onclick:function(){write("care",x.id,{decision:""})}},"Отменить решение"));
+        }
+        if(acts.childNodes.length)card.appendChild(acts);
+      }
+      p.appendChild(card);
+    });
+  });
+}
+
+/* ---------- общий рендер ---------- */
+function tabSpec(){for(var i=0;i<TABS.length;i++)if(TABS[i].id===S.tab)return TABS[i];return TABS[0]}
+function render(force){
+  renderHeader();renderTabs();
+  var p=$("panel"),a=document.activeElement;
+  if(!force&&a&&p.contains(a)&&(a.tagName==="INPUT"||a.tagName==="TEXTAREA")&&a.value){deferred=true;return}
+  deferred=false;p.textContent="";
+  if(S.error&&!S.db){p.appendChild(empty("Данные базы знаний недоступны в этом просмотре. Откройте страницу в claude.ai под своей учётной записью."));return}
+  var spec=tabSpec();
+  if(!spec.need.every(function(c){return S.loaded[c]})){p.appendChild(empty("Загружаю…"));return}
+  if(spec.id==="overview")renderOverview(p);
+  else if(spec.id==="conflicts")renderConflicts(p);
+  else if(spec.id==="map")renderMap(p);
+  else if(spec.id==="qa")renderQa(p);
+  else renderCare(p);
+}
+$("panel").addEventListener("focusout",function(){if(deferred)setTimeout(function(){render()},0)});
+$("sync-now").addEventListener("click",askSync);
+
+/* ---------- учебные данные (вымышленный набор из demo/) ---------- */
+function demoData(){
+  var notes=[
+    {id:"n1",title:"Регламент согласования документов",type:"регламент",date:"2026-03-01",file:"demo_регламент-согласования-документов",tags:["согласование","сроки"],
+     summary:"Кто и в какой срок согласует документы. Срок согласования — 5 рабочих дней; договоры свыше 500 тысяч рублей дополнительно согласует директор по финансам.",links:["n7"]},
+    {id:"n2",title:"Протокол совещания 10.09.2026",type:"протокол",date:"2026-09-10",file:"demo_протокол-совещания-2026-09-10",tags:["согласование","решение"],
+     summary:"Решили сократить срок согласования до 3 рабочих дней с 1 октября 2026 года и подготовить правку регламента.",links:["n1","n6"]},
+    {id:"n3",title:"Протокол совещания 29.09.2026",type:"протокол",date:"2026-09-29",file:"demo_протокол-совещания-2026-09-29",tags:["пилот","договор"],
+     summary:"Правка регламента не утверждена, вопрос перенесён на 15 октября. Пилот СЭД «Маршрут» стартует 20 октября в двух отделах.",links:["n2","n4","n5","n6"]},
+    {id:"n4",title:"ООО «Северный контур»",type:"контрагент",date:"2026-09-12",file:"demo_ООО-Северный-контур",tags:["подрядчик"],
+     summary:"Подрядчик по внедрению СЭД «Маршрут». Договор действует до конца 2026 года; контактное лицо — Гусев Д. С.",links:["n5","n6"]},
+    {id:"n5",title:"Решение о продлении договора с подрядчиком",type:"решение",date:"2026-09-29",file:"demo_решение-о-продлении-договора-с-подрядчиком",tags:["договор"],
+     summary:"Договор продлеваем только при фиксации цены на уровне 2026 года; переговоры — до 14 ноября 2026 года.",links:["n4","n3"]},
+    {id:"n6",title:"Проект: пилот СЭД «Маршрут»",type:"проект",date:"2026-09-30",file:"demo_проект-пилот-СЭД-Маршрут",tags:["пилот","СЭД"],
+     summary:"Пилот электронного согласования в отделе закупок и отделе обучения. Старт — 20 октября 2026 года. Бюджет в материалах не указан.",links:["n4","n8","n1"]},
+    {id:"n7",title:"Вопросы и ответы по согласованию",type:"справка",date:"2026-10-02",file:"demo_вопросы-и-ответы-по-согласованию",tags:["согласование"],
+     summary:"Короткие ответы сотрудникам: сколько согласуется документ (5 рабочих дней), кто согласует, что делать при отказе.",links:["n1"]},
+    {id:"n8",title:"Обзор: электронное согласование",type:"публикация",date:"2026-08-20",file:"demo_обзор-электронное-согласование",tags:["обзор","СЭД"],
+     summary:"Обзор практики перехода на электронное согласование: типичные сроки, ошибки внедрения, с чего начинать пилот.",links:["n6"]},
+    {id:"n9",title:"Памятка по командировкам",type:"справка",date:"2026-05-14",file:"demo_памятка-по-командировкам",tags:["командировки"],
+     summary:"Порядок оформления командировки и отчёта по ней. С другими заметками пока не связана.",links:[]}
+  ];
+  var counts={};notes.forEach(function(n){counts[n.type]=(counts[n.type]||0)+1});
+  return {
+    notes:notes,
+    inbox:[{id:"n10",title:"Заметка после разговора с юристом",file:"demo_заметка-после-разговора-с-юристом",date:"2026-10-03"}],
+    conflicts:[
+      {id:"c1",date:"2026-10-03",fact:"Срок согласования документов с 1 октября 2026 года",
+       a:"5 рабочих дней [demo_регламент-согласования-документов § 3. Сроки согласования, 2026-03-01; demo_вопросы-и-ответы-по-согласованию, 2026-10-02]",
+       b:"3 рабочих дня [demo_протокол-совещания-2026-09-10 § Решения, 2026-09-10]",
+       newer:"b",newerNote:"решение новее, но правка регламента не утверждена — перенесена на 15.10 [demo_протокол-совещания-2026-09-29 § Решения]",status:"open"}
+    ],
+    qa:[
+      {id:"q1",date:"2026-10-03",question:"Какой срок согласования документов?",answer:"Источники расходятся: 5 рабочих дней по регламенту и 3 рабочих дня по решению совещания 10.09; правка регламента не утверждена. Решение за вами.",
+       sources:["demo_регламент-согласования-документов § 3. Сроки согласования","demo_протокол-совещания-2026-09-10 § Решения","demo_протокол-совещания-2026-09-29 § Решения"],check:"подтверждено",origin:"чат"},
+      {id:"q2",date:"2026-10-03",question:"Когда стартует пилот СЭД и в каких отделах?",answer:"20 октября 2026 года; отдел закупок и отдел обучения.",
+       sources:["demo_протокол-совещания-2026-09-29 § Решения","demo_проект-пилот-СЭД-Маршрут"],check:"подтверждено",origin:"чат"},
+      {id:"q3",date:"2026-10-03",question:"На каких условиях продлеваем договор с СК?",answer:"Только при фиксации цены на уровне 2026 года; переговоры до 14 ноября 2026 года.",
+       sources:["demo_решение-о-продлении-договора-с-подрядчиком","demo_протокол-совещания-2026-09-29 § Решения"],check:"подтверждено",origin:"telegram"},
+      {id:"q4",date:"2026-10-03",question:"Какой бюджет пилота системы «Маршрут»?",answer:"В базе этого нет.",
+       sources:["demo_проект-пилот-СЭД-Маршрут (бюджет не указан)"],check:"в базе нет",origin:"чат"}
+    ],
+    care:[
+      {id:"k1",kind:"битая ссылка",note:"demo_вопросы-и-ответы-по-согласованию",target:"demo_шаблон-листа-согласования",text:"ссылка [[demo_шаблон-листа-согласования]] никуда не ведёт",advice:"создать заметку или убрать ссылку",decision:""},
+      {id:"k2",kind:"без связей",note:"demo_памятка-по-командировкам",target:"",text:"на заметку никто не ссылается и она ни на что не ссылается",advice:"связать с подходящей заметкой или оставить как есть",decision:""}
+    ],
+    meta:{syncedAt:"2026-10-03 17:05",total:notes.length,counts:counts,pageVersion:PAGE_VERSION}
+  };
+}
+function startDemo(){
+  var data=demoData();S.demo=true;S.meta=data.meta;
+  COLLS.forEach(function(c){S[c]=data[c];S.loaded[c]=true});
+  render(true);
+}
+function sub(db,name){
+  db.collection(name).limit(500).onSnapshot(function(snap){
+    S[name]=snap.docs.map(function(d){var o=Object.assign({},d.data());o.id=d.id;return o});
+    S.loaded[name]=true;render();
+  },function(){S.loaded[name]=true;S.error="Связь с данными страницы прервалась — обновите страницу";render(true)});
+}
+function allLoaded(){COLLS.forEach(function(c){S.loaded[c]=true})}
+
+render(true);
+if(!window.claude){startDemo();return}
+Promise.all([window.claude.use("db"),window.claude.use("user")]).then(function(r){
+  var db=r[0],user=r[1];
+  if(!db){S.error="Данные недоступны в этом просмотре";allLoaded();render(true);return}
+  S.db=db;
+  COLLS.forEach(function(c){sub(db,c)});
+  db.doc("meta/state").onSnapshot(function(s){S.meta=s.exists?s.data():null;render()},function(){});
+  if(user)Promise.resolve(user.can("data.write")).then(function(v){if(v===false){S.canWrite=false;render(true)}},function(){});
+  render(true);
+},function(){S.error="Данные недоступны в этом просмотре";allLoaded();render(true)});
+Promise.resolve(window.claude.use("room")).then(function(room){
+  if(!room||typeof room.sendToClaudeSession!=="function")return;
+  S.room=room;render();
+  if(typeof room.canSendToClaudeSession==="function")room.canSendToClaudeSession().then(function(v){S.ask=v;render()},function(){S.ask="off";render()});
+},function(){});
+})();
+</script>

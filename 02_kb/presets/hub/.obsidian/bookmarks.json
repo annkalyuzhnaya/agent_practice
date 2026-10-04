@@ -1,0 +1,24 @@
+{
+  "items": [
+    {
+      "type": "file",
+      "ctime": 1790000000000,
+      "path": "Главная.md"
+    },
+    {
+      "type": "file",
+      "ctime": 1790000000001,
+      "path": "kb/_противоречия.md"
+    },
+    {
+      "type": "file",
+      "ctime": 1790000000002,
+      "path": "kb/_вопросы.md"
+    },
+    {
+      "type": "file",
+      "ctime": 1790000000003,
+      "path": "memory/glossary.md"
+    }
+  ]
+}

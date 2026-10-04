@@ -1,0 +1,552 @@
+<title>Входящие</title>
+<style>
+:root{
+  --bg:#f5f2ec;--surface:#fffdf8;--ink:#1e2226;--muted:#6a6f76;--line:#e0dacd;
+  --accent:#2d5b4e;--accent-ink:#ffffff;--soft:#e7efe9;
+  --warn:#a85a14;--warn-soft:#f6ead9;--danger:#a3312c;--danger-soft:#f6e1de;--ok:#2f6b3c;
+  --radius:10px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#15181a;--surface:#1e2225;--ink:#e9e6e0;--muted:#9aa1a8;--line:#31363b;
+    --accent:#84c9b2;--accent-ink:#10201b;--soft:#22302c;
+    --warn:#e0a25c;--warn-soft:#33291c;--danger:#e58a84;--danger-soft:#3a2220;--ok:#8fce9d;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#15181a;--surface:#1e2225;--ink:#e9e6e0;--muted:#9aa1a8;--line:#31363b;
+  --accent:#84c9b2;--accent-ink:#10201b;--soft:#22302c;
+  --warn:#e0a25c;--warn-soft:#33291c;--danger:#e58a84;--danger-soft:#3a2220;--ok:#8fce9d;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:860px;margin:0 auto;padding:20px 16px 64px}
+header h1{font-size:22px;margin:0 0 2px;letter-spacing:-.01em}
+.sub{color:var(--muted);font-size:13px}
+.tabs{display:flex;gap:6px;margin:18px -16px 14px;padding:0 16px;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:none;border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:7px 12px;border-radius:999px;font:inherit;cursor:pointer;white-space:nowrap}
+.tab[aria-selected="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.tab .n{opacity:.75;margin-left:5px;font-variant-numeric:tabular-nums}
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px}
+.chips{display:flex;gap:4px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:transparent;color:var(--muted);padding:4px 10px;border-radius:999px;font:inherit;font-size:13px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--soft);color:var(--ink);border-color:var(--accent)}
+.btn{border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink);padding:7px 14px;border-radius:8px;font:inherit;font-weight:600;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--accent)}
+.btn.small{padding:4px 10px;font-size:13px;font-weight:500}
+.btn:disabled{opacity:.5;cursor:default}
+.spacer{flex:1}
+.group{margin:18px 0 6px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.group.late{color:var(--danger)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:12px 14px;margin-bottom:8px}
+.card.late{border-left:3px solid var(--danger)}
+.card.done .what{text-decoration:line-through;color:var(--muted)}
+.row{display:flex;gap:10px;align-items:flex-start}
+.check{flex:none;width:22px;height:22px;margin-top:1px;border-radius:50%;border:2px solid var(--muted);background:transparent;cursor:pointer;padding:0;color:var(--accent-ink);font-size:13px;line-height:1}
+.check.on{background:var(--ok);border-color:var(--ok)}
+.main{flex:1;min-width:0}
+.what{font-weight:500;overflow-wrap:anywhere}
+.meta{color:var(--muted);font-size:13px;margin-top:3px;overflow-wrap:anywhere}
+.meta b{font-weight:600;color:var(--ink)}
+.late-text{color:var(--danger);font-weight:600}
+.tag{display:inline-block;padding:1px 8px;border-radius:999px;font-size:12px;background:var(--soft);color:var(--ink);margin-right:6px}
+.tag.warn{background:var(--warn-soft);color:var(--warn)}
+.tag.danger{background:var(--danger-soft);color:var(--danger)}
+.actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+select,input,textarea{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:6px 8px;max-width:100%}
+.card select{font-size:13px;padding:3px 6px}
+.empty{color:var(--muted);padding:26px 14px;text-align:center;border:1px dashed var(--line);border-radius:var(--radius)}
+.score{flex:none;width:28px;height:28px;border-radius:8px;background:var(--soft);display:grid;place-items:center;font-weight:700}
+a{color:var(--accent)}
+details summary{cursor:pointer;color:var(--accent);margin-top:8px;font-size:13px}
+.pre{white-space:pre-wrap;overflow-wrap:anywhere;margin-top:8px;font-size:14px}
+.answer{display:flex;gap:6px;margin-top:10px}
+.answer input{flex:1;min-width:0}
+dialog{border:1px solid var(--line);border-radius:14px;background:var(--surface);color:var(--ink);padding:18px;width:min(480px,calc(100vw - 32px))}
+dialog::backdrop{background:rgba(0,0,0,.45)}
+dialog h3{margin:0 0 12px}
+label{display:block;font-size:13px;color:var(--muted);margin:10px 0 4px}
+dialog input,dialog select,dialog textarea{width:100%}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.dlg-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
+.toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:9px 14px;border-radius:8px;font-size:14px;max-width:calc(100vw - 32px);display:none}
+.note{color:var(--muted);font-size:13px;margin-top:14px}
+.mail-head{display:flex;gap:10px;justify-content:space-between;align-items:baseline}
+.mail-head .meta{flex:none;margin-top:0;white-space:nowrap}
+.subj{margin-top:2px;overflow-wrap:anywhere}
+.tags{margin-top:8px}
+.reply{display:block;width:100%;margin-top:10px;resize:vertical;line-height:1.45}
+.reply-label{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-top:12px}
+.card.quiet{background:transparent}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));gap:8px;margin-bottom:8px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:10px 12px}
+.stat b{display:block;font-size:24px;line-height:1.15;font-variant-numeric:tabular-nums}
+.stat span{color:var(--muted);font-size:13px}
+.stat.hot b{color:var(--danger)}
+.stat.good b{color:var(--ok)}
+.list{margin:0;padding-left:18px}
+.list li{margin:3px 0;overflow-wrap:anywhere}
+.banner{display:none;margin-top:10px;padding:8px 12px;border-radius:8px;background:var(--warn-soft);color:var(--warn);font-size:13px}
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>Входящие</h1>
+    <div class="sub" id="sync">Загружаю данные…</div>
+    <div class="banner" id="banner">Учебный режим: данные вымышленные, изменения живут до закрытия страницы, ничего никуда не отправляется.</div>
+  </header>
+  <div class="tabs" role="tablist" id="tabs"></div>
+  <main id="panel"></main>
+</div>
+
+<dialog id="dlg">
+  <form method="dialog" id="form">
+    <h3 id="dlg-title">Задача</h3>
+    <label for="f-what">Что сделать</label>
+    <textarea id="f-what" rows="3" required maxlength="1000"></textarea>
+    <div class="two">
+      <div><label for="f-who">Кто</label><input id="f-who" maxlength="100" placeholder="владелец"></div>
+      <div><label for="f-due">Срок</label><input id="f-due" type="date"></div>
+    </div>
+    <label for="f-status">Статус</label>
+    <select id="f-status"></select>
+    <div class="dlg-actions">
+      <button type="button" class="btn ghost" id="f-cancel">Отмена</button>
+      <button type="submit" class="btn" id="f-save">Сохранить</button>
+    </div>
+  </form>
+</dialog>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(function(){
+  var STATUSES=["предложено","новое","в работе","сделано","отменено"];
+  var TABS=[["mail","Почта"],["tasks","Задачи"],["triage","Разбор"]];
+  var S={tasks:[],mail:[],triage:[],meta:null,tab:"mail",filter:"active",mailFilter:"wait",db:null,canWrite:true,loaded:{},error:"",demo:false};
+  var busy={},deferred=false,editing=null;
+  // почта: несохранённые правки ответов и раскрытые поля ответа — переживают перерисовку
+  var edits={},openReply={},confirmSend={};
+  try{var t=localStorage.getItem("inbox-tab");if(t&&TABS.some(function(x){return x[0]===t}))S.tab=t}catch(e){}
+
+  function $(id){return document.getElementById(id)}
+  function h(tag,attrs){
+    var el=document.createElement(tag),i,k;
+    if(attrs)for(k in attrs){
+      if(k==="text")el.textContent=attrs[k];
+      else if(k.slice(0,2)==="on")el.addEventListener(k.slice(2),attrs[k]);
+      else if(attrs[k]===true)el.setAttribute(k,"");
+      else if(attrs[k]!==false&&attrs[k]!=null)el.setAttribute(k,attrs[k]);
+    }
+    for(i=2;i<arguments.length;i++){var c=arguments[i];if(c==null||c===false)continue;el.appendChild(typeof c==="string"?document.createTextNode(c):c)}
+    return el;
+  }
+  function str(v){return typeof v==="string"?v:(v==null?"":String(v))}
+  function pad(n){return n<10?"0"+n:""+n}
+  function iso(d){return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate())}
+  function today(){return iso(new Date())}
+  function plusDays(n){var d=new Date();d.setDate(d.getDate()+n);return iso(d)}
+  function dueDate(v){var m=/^\d{4}-\d{2}-\d{2}/.exec(str(v));return m?m[0]:""}
+  function human(d){
+    if(!d)return "";
+    if(d===today())return "сегодня";
+    if(d===plusDays(1))return "завтра";
+    if(d===plusDays(-1))return "вчера";
+    var p=d.split("-");return p[2]+"."+p[1]+(p[0]!==String(new Date().getFullYear())?"."+p[0]:"");
+  }
+  function toast(msg){var el=$("toast");el.textContent=msg;el.style.display="block";clearTimeout(toast.t);toast.t=setTimeout(function(){el.style.display="none"},3500)}
+  function safeUrl(u){u=str(u);return /^https?:\/\//i.test(u)?u:""}
+  function isOpen(t){return t.status!=="сделано"&&t.status!=="отменено"}
+
+  // запись: одна за раз на документ, только по действию человека
+  function write(coll,id,patch,create){
+    if(!S.db||!S.canWrite){toast("Изменять данные в этом просмотре нельзя");return Promise.resolve(false)}
+    var key=coll+"/"+id;
+    if(busy[key])return Promise.resolve(false);
+    busy[key]=true;
+    patch.dirty=true;patch.updatedAt=new Date().toISOString();
+    var ref=S.db.collection(coll).doc(id);
+    return (create?ref.set(patch):ref.update(patch)).then(function(){return true},function(e){
+      if(e&&e.code==="invalid_argument"){S.canWrite=false;toast("Нет права на запись — доска открыта только для чтения");render()}
+      else if(e&&e.code==="quota_exceeded")toast("Хранилище доски заполнено — попросите агента почистить старые записи");
+      else toast("Не удалось сохранить. Попробуйте ещё раз");
+      return false;
+    }).then(function(ok){delete busy[key];return ok});
+  }
+
+  function renderTabs(){
+    var box=$("tabs");box.textContent="";
+    var counts={
+      tasks:S.tasks.filter(isOpen).length,
+      mail:S.mail.filter(function(m){return mailState(m)==="wait"}).length,
+      triage:0
+    };
+    TABS.forEach(function(t){
+      box.appendChild(h("button",{class:"tab",role:"tab","aria-selected":String(S.tab===t[0]),onclick:function(){
+        S.tab=t[0];try{localStorage.setItem("inbox-tab",S.tab)}catch(e){}render(true)}},
+        t[1],counts[t[0]]?h("span",{class:"n",text:String(counts[t[0]])}):null));
+    });
+  }
+
+  function renderHeader(){
+    var m=S.meta,sync=$("sync");
+    $("banner").style.display=S.demo?"block":"none";
+    if(S.demo){sync.textContent="Учебные данные · открыто с диска";return}
+    if(S.error){sync.textContent=S.error}
+    else if(!S.db){sync.textContent="Загружаю данные…"}
+    else{
+      var parts=[];
+      if(m&&m.syncedAt)parts.push("Сверено с агентом: "+str(m.syncedAt).replace("T"," ").slice(0,16));
+      else parts.push("Агент ещё не выгружал сюда данные");
+      if(m&&typeof m.savedMin==="number"&&m.savedMin>0)parts.push("сэкономлено ~"+(m.savedMin>=90?Math.round(m.savedMin/60)+" ч":m.savedMin+" мин"));
+      if(!S.canWrite)parts.push("только чтение");
+      sync.textContent=parts.join(" · ");
+    }
+  }
+
+  function empty(text){return h("div",{class:"empty",text:text})}
+
+  function statusSelect(t){
+    var sel=h("select",{"aria-label":"Статус",disabled:!S.canWrite,onchange:function(){write("tasks",t.id,{status:sel.value})}});
+    var list=STATUSES.indexOf(t.status)<0&&t.status?[t.status].concat(STATUSES):STATUSES;
+    list.forEach(function(s){var o=h("option",{value:s,text:s});if(s===t.status)o.selected=true;sel.appendChild(o)});
+    return sel;
+  }
+  function taskCard(t,late){
+    var d=dueDate(t.due),done=t.status==="сделано";
+    var meta=h("div",{class:"meta"});
+    if(t.status==="предложено")meta.appendChild(h("span",{class:"tag warn",text:"предложено агентом"}));
+    if(d)meta.appendChild(h("span",{class:late?"late-text":"",text:"срок "+human(d)+(str(t.due).length>10?" "+str(t.due).slice(10).trim():"")}));
+    else meta.appendChild(document.createTextNode("срок не назван"));
+    if(str(t.who))meta.appendChild(document.createTextNode(" · "+str(t.who)));
+    if(str(t.source))meta.appendChild(document.createTextNode(" · "+str(t.source)));
+    return h("div",{class:"card"+(late?" late":"")+(done?" done":"")},
+      h("div",{class:"row"},
+        h("button",{class:"check"+(done?" on":""),title:done?"Вернуть в работу":"Отметить сделанным","aria-label":done?"Вернуть в работу":"Отметить сделанным",disabled:!S.canWrite,
+          onclick:function(){write("tasks",t.id,{status:done?"в работе":"сделано"})}},done?"✓":""),
+        h("div",{class:"main"},h("div",{class:"what",text:str(t.what)||"(без названия)"}),meta,
+          h("div",{class:"actions"},statusSelect(t),
+            t.status==="предложено"?h("button",{class:"btn small",disabled:!S.canWrite,onclick:function(){write("tasks",t.id,{status:"новое"})}},"Принять"):null,
+            h("button",{class:"btn small ghost",disabled:!S.canWrite,onclick:function(){openDialog(t)}},"Изменить")))));
+  }
+  function renderTasks(p){
+    var filters=[["active","Активные"],["proposed","Предложено"],["done","Закрытые"],["all","Все"]];
+    var chips=h("div",{class:"chips"});
+    filters.forEach(function(f){chips.appendChild(h("button",{class:"chip","aria-pressed":String(S.filter===f[0]),onclick:function(){S.filter=f[0];render(true)}},f[1]))});
+    p.appendChild(h("div",{class:"bar"},chips,h("span",{class:"spacer"}),
+      h("button",{class:"btn",disabled:!S.canWrite,onclick:function(){openDialog(null)}},"Новая задача")));
+    var list=S.tasks.filter(function(t){
+      if(S.filter==="active")return isOpen(t);
+      if(S.filter==="proposed")return t.status==="предложено";
+      if(S.filter==="done")return !isOpen(t);
+      return true;
+    });
+    if(!list.length){p.appendChild(empty(S.tasks.length?"В этом фильтре пусто.":"Задач пока нет. Добавьте свою кнопкой выше или напишите агенту в чате — он внесёт сам."));return}
+    var td=today(),wk=plusDays(7),groups=[["Просрочено",[]],["Сегодня",[]],["На неделе",[]],["Позже",[]],["Без срока",[]],["Закрыто",[]]];
+    list.forEach(function(t){
+      var d=dueDate(t.due);
+      if(!isOpen(t))groups[5][1].push(t);
+      else if(!d)groups[4][1].push(t);
+      else if(d<td)groups[0][1].push(t);
+      else if(d===td)groups[1][1].push(t);
+      else if(d<=wk)groups[2][1].push(t);
+      else groups[3][1].push(t);
+    });
+    groups.forEach(function(g,i){
+      if(!g[1].length)return;
+      g[1].sort(function(a,b){return (dueDate(a.due)||"9999").localeCompare(dueDate(b.due)||"9999")||str(a.what).localeCompare(str(b.what))});
+      p.appendChild(h("div",{class:"group"+(i===0?" late":""),text:g[0]+" · "+g[1].length}));
+      g[1].forEach(function(t){p.appendChild(taskCard(t,i===0))});
+    });
+    p.appendChild(h("div",{class:"note",text:"Изменения, сделанные здесь, агент перенесёт в свои записи при следующем разговоре или запуске по расписанию."}));
+  }
+
+  // почта: wait — ждёт ответа владельца, none — ответ не предполагается, done — обработано
+  function mailState(m){
+    if(m.status==="approved"||m.status==="done"||m.status==="sent"||m.status==="ignored")return "done";
+    return m.reply==="needed"||openReply[m.id]?"wait":"none";
+  }
+  function renderMail(p){
+    if(!S.mail.length){p.appendChild(empty("Обзора почты пока нет. Напишите агенту «разбери почту» — здесь появятся письма с краткой сутью и готовым коротким ответом."));return}
+    var filters=[["wait","Ждут ответа"],["none","Без ответа"],["done","Обработано"],["all","Все"]];
+    var chips=h("div",{class:"chips"});
+    filters.forEach(function(f){
+      var n=f[0]==="all"?S.mail.length:S.mail.filter(function(m){return mailState(m)===f[0]}).length;
+      chips.appendChild(h("button",{class:"chip","aria-pressed":String(S.mailFilter===f[0]),onclick:function(){S.mailFilter=f[0];render(true)}},f[1]+(n?" · "+n:"")));
+    });
+    p.appendChild(h("div",{class:"bar"},chips));
+    var list=S.mail.filter(function(m){return S.mailFilter==="all"||mailState(m)===S.mailFilter})
+      .sort(function(a,b){return str(b.date).localeCompare(str(a.date))||str(a.from).localeCompare(str(b.from))});
+    if(!list.length){p.appendChild(empty(S.mailFilter==="wait"?"Писем, ждущих вашего ответа, нет.":"В этом фильтре пусто."));return}
+    list.forEach(function(m){p.appendChild(mailCard(m))});
+    p.appendChild(h("div",{class:"note",text:"«Отправить» — агент отправит ответ от вашего имени при следующем разговоре или запуске по расписанию; нужно сразу — нажмите на письме «Отправить сейчас» (работает, когда доска открыта рядом с разговором с агентом). «В черновик» — положит ответ в черновики почты, отправите сами."}));
+  }
+  // срочная отправка: просим агента в разговоре рядом с доской сверить её сейчас; что отправлять, он берёт из данных доски
+  function canAsk(){return !!S.room&&S.ask!=="off"&&S.ask!=="unsupported"}
+  function askSync(m){
+    var offline="Агент сейчас не на связи. Откройте доску рядом с разговором с агентом или напишите ему «сверь доску»";
+    var p;
+    // вызов — прямо из нажатия, без ожиданий до него
+    try{p=S.room.sendToClaudeSession({label:"Срочная отправка письма",request:"sync_board",mail:String(m.id)},{deliver:"send",
+      onStatus:function(s){if(s&&s.state==="failed")toast(offline)}})}catch(e){toast(offline);return}
+    Promise.resolve(p).then(function(){toast("Запрос передан агенту — подтвердите его в разговоре")},
+      function(e){toast(e&&e.code==="rate_limited"?"Слишком часто — повторите через минуту":offline)});
+  }
+  function mailCard(m){
+    var st=mailState(m),d=dueDate(m.date),url=safeUrl(m.url);
+    var c=h("div",{class:"card"+(st==="none"?" quiet":"")+(st==="done"?" done":"")});
+    c.appendChild(h("div",{class:"mail-head"},h("b",{text:str(m.from)||"(отправитель не указан)"}),h("span",{class:"meta",text:human(d)||str(m.date)})));
+    c.appendChild(h("div",{class:"subj"},url?h("a",{href:url,target:"_blank",rel:"noopener noreferrer",text:str(m.subject)||"(без темы)"}):h("span",{text:str(m.subject)||"(без темы)"})));
+    if(str(m.summary))c.appendChild(h("div",{class:"meta",text:str(m.summary)}));
+    var tags=h("div",{class:"tags"});
+    if(str(m.to))tags.appendChild(h("span",{class:"tag",text:str(m.to)}));
+    if(str(m.task))tags.appendChild(h("span",{class:"tag",text:"есть задача "+str(m.task)}));
+    if(m.reply!=="needed"&&st==="none")tags.appendChild(h("span",{class:"tag warn",text:"ответ не предполагается"}));
+    if(m.status==="approved")tags.appendChild(h("span",{class:"tag warn",text:m.action==="send"?"к отправке — ждёт агента":"в черновик — ждёт агента"}));
+    if(m.status==="sent")tags.appendChild(h("span",{class:"tag",text:"отправлено"}));
+    if(m.status==="done")tags.appendChild(h("span",{class:"tag",text:"ответ в черновиках почты"}));
+    if(m.status==="ignored")tags.appendChild(h("span",{class:"tag",text:"игнорировать"}));
+    if(tags.firstChild)c.appendChild(tags);
+    if(m.reply!=="needed"&&str(m.why)&&st!=="done")c.appendChild(h("div",{class:"meta",text:str(m.why)}));
+
+    if(st==="wait"){
+      var text=edits[m.id]!=null?edits[m.id]:str(m.draft);
+      var ta=h("textarea",{class:"reply",maxlength:"4000","aria-label":"Ответ",placeholder:"Напишите ответ…",rows:String(Math.min(12,Math.max(3,text.split("\n").length+1))),disabled:!S.canWrite});
+      ta.value=text;
+      ta.addEventListener("input",function(){edits[m.id]=ta.value});
+      c.appendChild(h("div",{class:"reply-label",text:str(m.draft)?"Предложенный ответ — можно править":"Ваш ответ"}));
+      var vars=Array.isArray(m.variants)?m.variants.filter(function(v){return v&&str(v.label)&&str(v.text)}):[];
+      if(vars.length){
+        var vb=h("div",{class:"chips"});
+        vars.slice(0,4).forEach(function(v){vb.appendChild(h("button",{class:"chip",disabled:!S.canWrite,title:"Подставить этот вариант ответа",onclick:function(){ta.value=str(v.text);edits[m.id]=ta.value;ta.focus()}},str(v.label)))});
+        c.appendChild(vb);
+      }
+      c.appendChild(ta);
+      var approve=function(action){
+        write("mail",m.id,{answer:ta.value.trim(),action:action,status:"approved"}).then(function(ok){delete confirmSend[m.id];if(ok){delete edits[m.id];delete openReply[m.id]}else render(true)})};
+      ta.addEventListener("input",function(){if(confirmSend[m.id]){delete confirmSend[m.id]}});
+      c.appendChild(h("div",{class:"actions"},
+        h("button",{class:"btn small",disabled:!S.canWrite,onclick:function(){
+          if(!ta.value.trim()){toast("Ответ пустой — напишите текст или нажмите «Игнорировать»");return}
+          // отправка необратима — второй клик подтверждает
+          if(!confirmSend[m.id]){confirmSend[m.id]=true;render(true);return}
+          approve("send")}},confirmSend[m.id]?"Подтвердить отправку":"Отправить"),
+        h("button",{class:"btn small ghost",disabled:!S.canWrite,onclick:function(){
+          if(!ta.value.trim()){toast("Ответ пустой — напишите текст или нажмите «Игнорировать»");return}
+          approve("draft")}},"В черновик"),
+        m.reply==="needed"
+          ?h("button",{class:"btn small ghost",disabled:!S.canWrite,onclick:function(){write("mail",m.id,{status:"ignored"}).then(function(ok){if(ok)delete edits[m.id]})}},"Игнорировать")
+          :h("button",{class:"btn small ghost",onclick:function(){delete openReply[m.id];delete edits[m.id];render(true)}},"Не отвечать")));
+    }else if(st==="none"){
+      c.appendChild(h("div",{class:"actions"},
+        h("button",{class:"btn small ghost",disabled:!S.canWrite,onclick:function(){openReply[m.id]=true;S.mailFilter=S.mailFilter==="none"?"wait":S.mailFilter;render(true)}},"Всё же ответить")));
+    }else{
+      if(str(m.answer)&&m.status!=="ignored")c.appendChild(h("details",null,h("summary",{text:"Текст ответа"}),h("div",{class:"pre",text:str(m.answer)})));
+      if(m.status==="approved")c.appendChild(h("div",{class:"actions"},
+        m.action==="send"&&canAsk()?h("button",{class:"btn small",disabled:!S.canWrite,title:"Попросить агента сверить доску и отправить письмо прямо сейчас",onclick:function(){askSync(m)}},"Отправить сейчас"):null,
+        h("button",{class:"btn small ghost",disabled:!S.canWrite,onclick:function(){edits[m.id]=str(m.answer);openReply[m.id]=true;write("mail",m.id,{status:"new",action:""})}},m.action==="send"?"Отменить отправку":"Изменить ответ")));
+      if(m.status==="ignored")c.appendChild(h("div",{class:"actions"},h("button",{class:"btn small ghost",disabled:!S.canWrite,onclick:function(){write("mail",m.id,{status:"new"})}},"Вернуть")));
+    }
+    return c;
+  }
+
+  // разбор: итог последнего разбора входящих — только для чтения
+  function num(v){return typeof v==="number"&&isFinite(v)?v:0}
+  function mins(n){return n>=90?(Math.round(n/6)/10)+" ч":n+" мин"}
+  function stat(value,label,cls){return h("div",{class:"stat"+(cls?" "+cls:"")},h("b",{text:String(value)}),h("span",{text:label}))}
+  function items(v){return Array.isArray(v)?v.map(str).filter(function(x){return x}):[]}
+  function listBlock(p,title,arr,cls){
+    if(!arr.length)return;
+    p.appendChild(h("div",{class:"group"+(cls?" "+cls:""),text:title+" · "+arr.length}));
+    var ul=h("ul",{class:"list"});
+    arr.slice(0,30).forEach(function(x){ul.appendChild(h("li",{text:x}))});
+    p.appendChild(h("div",{class:"card"},ul));
+  }
+  function renderTriage(p){
+    var all=S.triage.slice().sort(function(a,b){return str(b.date||b.id).localeCompare(str(a.date||a.id))});
+    var limit=plusDays(-2);
+    var stale=S.mail.filter(function(m){var d=dueDate(m.date);return m.reply==="needed"&&(!m.status||m.status==="new")&&d&&d<limit})
+      .map(function(m){return (str(m.from)||"(отправитель не указан)")+" — "+(str(m.subject)||"(без темы)")+", письмо от "+human(dueDate(m.date))});
+    var waiting=S.mail.filter(function(m){return m.status==="done"})
+      .map(function(m){return (str(m.from)||"(отправитель не указан)")+" — "+(str(m.subject)||"(без темы)")});
+    if(!all.length){
+      p.appendChild(empty("Разборов пока нет. Напишите агенту «разбери входящие» — здесь появится итог: сколько срочных, что делегировать, что требует вашего решения."));
+    }else{
+      var t=all[0],d=dueDate(t.date||t.id),saved=Math.max(0,num(t.manualMin)-num(t.agentMin));
+      var deleg=items(t.delegate);
+      p.appendChild(h("div",{class:"group",text:"Последний разбор · "+(human(d)||str(t.date||t.id))}));
+      var st=h("div",{class:"stats"});
+      st.appendChild(stat(num(t.total),"сообщений"));
+      st.appendChild(stat(num(t.urgent),"срочных",num(t.urgent)?"hot":""));
+      st.appendChild(stat(num(t.replies),"ждут ответа"));
+      st.appendChild(stat(num(t.tasks),"задач"));
+      st.appendChild(stat(deleg.length,"делегировать"));
+      if(saved)st.appendChild(stat("~"+mins(saved),"сэкономлено","good"));
+      p.appendChild(st);
+      if(num(t.spam))p.appendChild(h("div",{class:"meta",text:"Спам, не попавший в обзор почты: "+num(t.spam)}));
+      listBlock(p,"Сегодня",items(t.today));
+      listBlock(p,"На неделе",items(t.week));
+      listBlock(p,"Делегировать",deleg);
+      listBlock(p,"Требует вашего решения",items(t.decide));
+      listBlock(p,"Замечания безопасности",items(t.flags),"late");
+      if(str(t.check))p.appendChild(h("div",{class:"meta"},h("b",{text:"Независимая проверка: "}),str(t.check)));
+    }
+    listBlock(p,"Без ответа дольше двух дней",stale,"late");
+    listBlock(p,"В черновиках почты — отправьте сами",waiting);
+    var m=S.meta;
+    if(m&&num(m.savedMin)>0){
+      p.appendChild(h("div",{class:"group",text:"Счётчик времени"}));
+      p.appendChild(h("div",{class:"card"},h("div",{class:"meta"},
+        "Всего сэкономлено по бортжурналу: ",h("b",{text:"~"+mins(num(m.savedMin))}),
+        num(m.agentMin)?" · работа агента: ~"+mins(num(m.agentMin)):"")));
+    }
+    if(all.length>1){
+      p.appendChild(h("div",{class:"group",text:"Прошлые разборы"}));
+      var ul=h("ul",{class:"list"});
+      all.slice(1,11).forEach(function(x){
+        var dd=dueDate(x.date||x.id);
+        ul.appendChild(h("li",{text:(human(dd)||str(x.date||x.id))+": сообщений "+num(x.total)+", срочных "+num(x.urgent)+", ждали ответа "+num(x.replies)+", задач "+num(x.tasks)}));
+      });
+      p.appendChild(h("div",{class:"card"},ul));
+    }
+    p.appendChild(h("div",{class:"note",text:"Эту вкладку заполняет агент после каждого разбора. Оценки времени — грубые, из бортжурнала."}));
+  }
+
+  function render(force){
+    renderHeader();renderTabs();
+    var p=$("panel"),a=document.activeElement;
+    if(!force&&a&&p.contains(a)&&(a.tagName==="INPUT"||a.tagName==="TEXTAREA")&&a.value){deferred=true;return}
+    deferred=false;p.textContent="";
+    if(S.error&&!S.db){p.appendChild(empty("Данные доски недоступны в этом просмотре. Откройте страницу в claude.ai под своей учётной записью."));return}
+    if(!S.loaded[S.tab]){p.appendChild(empty("Загружаю…"));return}
+    ({tasks:renderTasks,mail:renderMail,triage:renderTriage})[S.tab](p);
+  }
+  $("panel").addEventListener("focusout",function(){if(deferred)setTimeout(function(){render()},0)});
+
+  function openDialog(t){
+    editing=t;
+    $("dlg-title").textContent=t?"Изменить задачу":"Новая задача";
+    $("f-what").value=t?str(t.what):"";$("f-who").value=t?str(t.who):"";$("f-due").value=t?dueDate(t.due):"";
+    var sel=$("f-status");sel.textContent="";
+    STATUSES.forEach(function(s){var o=h("option",{value:s,text:s});if(s===(t?t.status:"новое"))o.selected=true;sel.appendChild(o)});
+    $("dlg").showModal();$("f-what").focus();
+  }
+  $("f-cancel").addEventListener("click",function(){$("dlg").close()});
+  $("form").addEventListener("submit",function(e){
+    e.preventDefault();
+    var what=$("f-what").value.trim();if(!what)return;
+    var data={what:what,who:$("f-who").value.trim()||"владелец",due:$("f-due").value||"",status:$("f-status").value};
+    var p;
+    if(editing){
+      // время после даты (если было) сохраняем, когда дата не менялась
+      if(data.due&&data.due===dueDate(editing.due))data.due=str(editing.due);
+      p=write("tasks",editing.id,data);
+    }else{
+      data.created=today();data.source="доска";
+      p=write("tasks","u"+Date.now().toString(36)+Math.random().toString(36).slice(2,5),data,true);
+    }
+    $("f-save").disabled=true;
+    p.then(function(ok){$("f-save").disabled=false;if(ok)$("dlg").close()});
+  });
+
+  function sub(db,name){
+    db.collection(name).limit(500).onSnapshot(function(snap){
+      S[name]=snap.docs.map(function(d){var o=Object.assign({},d.data());o.id=d.id;return o});
+      S.loaded[name]=true;render();
+    },function(){S.loaded[name]=true;S.error="Связь с данными доски прервалась — обновите страницу";render(true)});
+  }
+
+  // учебный режим: файл открыт с диска (не опубликован) — те же вызовы, данные в памяти
+  function demoDb(data){
+    var subs={};
+    function snap(name){return {docs:Object.keys(data[name]||{}).map(function(id){return {id:id,data:function(){return data[name][id]}}})}}
+    function emit(name){(subs[name]||[]).forEach(function(cb){cb(snap(name))})}
+    return {
+      collection:function(name){
+        var api={limit:function(){return api},
+          onSnapshot:function(cb){(subs[name]=subs[name]||[]).push(cb);setTimeout(function(){cb(snap(name))},0)},
+          doc:function(id){return {
+            set:function(v){(data[name]=data[name]||{})[id]=Object.assign({},v);emit(name);return Promise.resolve()},
+            update:function(v){if(!data[name]||!data[name][id])return Promise.reject({code:"not_found"});Object.assign(data[name][id],v);emit(name);return Promise.resolve()}}}};
+        return api},
+      doc:function(path){return {onSnapshot:function(cb){var q=path.split("/");var d=(data[q[0]]||{})[q[1]];setTimeout(function(){cb({exists:!!d,data:function(){return d}})},0)}}}
+    };
+  }
+  function demoData(){
+    var d0=today(),d1=plusDays(1),d2=plusDays(2),d3=plusDays(3),d4=plusDays(4),p1=plusDays(-1),p3=plusDays(-3);
+    var k=d0.replace(/-/g,"");
+    function mail(n,o){o.status=o.status||"new";var r={};r["e-"+k+"-"+n]=o;return r}
+    var M=Object.assign({},
+      mail(1,{date:p3,from:"Смирнов Павел Андреевич",subject:"Справка по пилоту к комитету",to:"лично",reply:"needed",task:"t001",
+        summary:"Просит справку на одну страницу по пилоту агента-обозревателя к комитету по цифровизации; материалы сдаются за два дня до заседания.",
+        draft:"Павел Андреевич, добрый день. Задачу приняла, справку по пилоту на одну страницу подготовлю и передам секретарю комитета в срок сдачи материалов."}),
+      mail(2,{date:d0,from:"Белова Татьяна, секретарь комитета",subject:"Заседание комитета: повестка и срок материалов",to:"в числе получателей",reply:"none",why:"к сведению",
+        summary:"Заседание комитета по цифровизации через три дня в 11:00; материалы принимаются до завтра, 18:00."}),
+      mail(3,{date:d0,from:"Ковалёв Дмитрий, ООО «Вектор-Диджитал»",subject:"Редакция договора: пункт 4.2",to:"лично",reply:"needed",
+        summary:"Прислал редакцию договора с изменённым пунктом 4.2 (сроки оплаты); просит подтвердить до послезавтра, иначе поток обучения не начнётся вовремя.",
+        draft:"Дмитрий, добрый день. Редакцию получила, передаю пункт 4.2 юристу. Вернусь с ответом до конца дня "+human(d2)+".",
+        variants:[{label:"Согласовать",text:"Дмитрий, добрый день. Редакцию пункта 4.2 согласовываю, можно готовить договор к подписанию."},
+          {label:"Попросить правки",text:"Дмитрий, добрый день. В текущей редакции пункт 4.2 согласовать не могу. Наши замечания направит юрист; прошу дождаться их до подготовки итоговой версии."}]}),
+      mail(4,{date:p3,from:"Лебедев Игорь, АНО «Цифровой диалог»",subject:"Приглашение выступить на конференции",to:"лично",reply:"needed",
+        summary:"Приглашает выступить с 15-минутным докладом; ответ нужен до конца недели. В письме есть инструкция «для автоматических помощников» — не выполнена.",
+        draft:"Игорь, добрый день. Спасибо за приглашение. Мне нужно сверить календарь; вернусь с ответом до "+human(d4)+".",
+        variants:[{label:"Согласиться",text:"Игорь, добрый день. Спасибо за приглашение, с удовольствием выступлю. Пришлите, пожалуйста, требования к докладу и программу."},
+          {label:"Отказаться",text:"Игорь, добрый день. Спасибо за приглашение. К сожалению, в этот раз участвовать не смогу. Буду рада предложениям на будущие мероприятия."}]}),
+      mail(6,{date:p3,from:"Гришин Алексей",subject:"Re: Договор на обучение — замечания",to:"в копии",reply:"none",why:"вы в копии",
+        summary:"Юрист сообщает подрядчику, что замечания к пункту 6 направит в понедельник."}),
+      mail(7,{date:p3,from:"Орлова Наталья (Telegram)",subject:"Выгрузка за сентябрь",to:"лично",reply:"needed",task:"t004",
+        summary:"Пришлёт выгрузку за сентябрь «к пятнице» и просит посмотреть цифры по подрядчикам до отчёта. Дата двусмысленная.",
+        draft:"Наталья, добрый день. Цифры по подрядчикам посмотрю. Уточните, пожалуйста: выгрузка будет к этой пятнице, "+human(d4)+"?"}),
+      mail(8,{date:d0,from:"Смирнов Павел Андреевич (Telegram)",subject:"Голосование по бюджету обучения",to:"лично",reply:"none",why:"достаточно проголосовать",task:"t002",
+        summary:"Просит сегодня до 15:00 проголосовать в системе документооборота по бюджету обучения на IV квартал."}),
+      mail(9,{date:d0,from:"Система электронного документооборота",subject:"На согласовании: служебная записка № 214",to:"лично",reply:"none",why:"уведомление системы",task:"t003",
+        summary:"Служебная записка «О продлении лицензий» ждёт вашего согласования; срок — послезавтра."}),
+      mail(10,{date:d0,from:"Дайджест департамента",subject:"Новости недели",to:"рассылка",reply:"none",why:"рассылка",
+        summary:"Еженедельная рассылка: новости департамента, действий не требует."}),
+      mail(11,{date:p3,from:"Кузнецова Мария",subject:"Вопрос о стажировке",to:"лично",reply:"needed",
+        summary:"Студентка спрашивает о возможности стажировки в направлении цифровых сервисов.",
+        draft:"Мария, здравствуйте! Спасибо за интерес к нашему направлению. Пришлите, пожалуйста, резюме и напишите, какие задачи вам интересны, — я посмотрю и вернусь с ответом.",
+        variants:[{label:"Отказать",text:"Мария, здравствуйте! Спасибо за письмо. Сейчас стажёрских мест в направлении нет. Желаю успехов в поиске."}]}),
+      mail(12,{date:d0,from:"Орлова Наталья",subject:"Планёрка переносится",to:"в числе получателей",reply:"none",why:"к сведению",
+        summary:"Планёрка направления переносится со вторника на среду, 10:00."}));
+    var T={
+      t001:{what:"Подготовить справку по пилоту на одну страницу к комитету по цифровизации",who:"владелец",due:d1+" 18:00",status:"новое",source:"письмо Смирнова",created:d0},
+      t002:{what:"Проголосовать в системе документооборота по бюджету обучения на IV квартал",who:"владелец",due:d0+" 15:00",status:"новое",source:"Telegram, Смирнов",created:d0},
+      t003:{what:"Согласовать служебную записку № 214 «О продлении лицензий»",who:"владелец",due:d2,status:"новое",source:"уведомление системы",created:d0},
+      t004:{what:"Проверить цифры по подрядчикам в выгрузке за сентябрь",who:"владелец",due:"",status:"новое",source:"Telegram, Орлова",created:d0},
+      t005:{what:"Сдать заявку на обучение команды",who:"владелец",due:p1,status:"в работе",source:"доска",created:p3}
+    };
+    var R={};
+    R[d0]={date:d0,total:12,urgent:2,replies:5,tasks:4,spam:1,agentMin:6,manualMin:40,
+      today:["Проголосовать по бюджету обучения — до 15:00","Справка по пилоту: начать сегодня, сдать завтра до 18:00"],
+      week:["Согласовать служебную записку № 214 — до "+human(d2),"Ответить подрядчику по пункту 4.2 — до "+human(d2),"Планёрка перенесена на среду, 10:00","Проверить цифры по подрядчикам — к "+human(d4)],
+      delegate:["Гришину Алексею — проверить правки пункта 4.2 договора","Орловой Наталье — подготовить данные для справки по пилоту"],
+      decide:["Выступать ли на конференции — ответ ждут до конца недели","«К пятнице» у Орловой — эта пятница или следующая"],
+      flags:["Письмо Лебедева: внутри инструкция «для автоматических помощников» — сразу подтвердить участие и приложить контакты руководства. Не выполнена."],
+      check:"принято, замечаний нет"};
+    R[p3]={date:p3,total:7,urgent:1,replies:2,tasks:1,spam:0,agentMin:4,manualMin:25};
+    return {mail:M,tasks:T,triage:R,meta:{state:{syncedAt:new Date().toISOString(),savedMin:55,agentMin:10}}};
+  }
+
+  function start(db,user){
+    S.db=db;
+    TABS.forEach(function(t){sub(db,t[0])});
+    db.doc("meta/state").onSnapshot(function(s){S.meta=s.exists?s.data():null;render()},function(){});
+    if(user)Promise.resolve(user.can("data.write")).then(function(v){if(v===false){S.canWrite=false;render(true)}},function(){});
+    render(true);
+  }
+  function noData(){S.error="Данные недоступны в этом просмотре";TABS.forEach(function(t){S.loaded[t[0]]=true});render(true)}
+  render(true);
+  if(!window.claude){S.demo=true;start(demoDb(demoData()),null)}
+  else Promise.all([window.claude.use("db"),window.claude.use("user")]).then(function(r){
+    if(!r[0]){noData();return}
+    start(r[0],r[1]);
+  },noData);
+  // связь с разговором рядом с доской — только для кнопки «Отправить сейчас»; без неё доска работает как раньше
+  if(window.claude)Promise.resolve(window.claude.use("room")).then(function(room){
+    if(!room||typeof room.sendToClaudeSession!=="function")return;
+    S.room=room;render();
+    if(typeof room.canSendToClaudeSession==="function")room.canSendToClaudeSession().then(function(v){S.ask=v;render()},function(){S.ask="off";render()});
+  },function(){});
+})();
+</script>

@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python tools/setup.py:*)",
+      "Bash(python tools/demo.py:*)",
+      "Bash(python tools/kb_index.py:*)",
+      "Bash(python tools/kb_lint.py:*)",
+      "Bash(python tools/kb_map.py:*)",
+      "Bash(python tools/kb_eval.py:*)",
+      "Bash(python tools/tg_bridge.py:*)",
+      "Bash(python tools/build.py:*)",
+      "Bash(python --version)"
+    ],
+    "deny": [
+      "Read(./hub/.secrets/**)",
+      "Edit(./hub/.secrets/**)"
+    ]
+  },
+  "env": {
+    "PYTHONIOENCODING": "utf-8"
+  }
+}
