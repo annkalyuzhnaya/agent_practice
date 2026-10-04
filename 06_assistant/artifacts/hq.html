@@ -1,0 +1,864 @@
+<title>Доска ассистента</title>
+<style>
+:root{
+  --bg:#f5f2ec;--surface:#fffdf8;--ink:#1e2226;--muted:#6a6f76;--line:#e0dacd;
+  --accent:#2d5b4e;--accent-ink:#ffffff;--soft:#e7efe9;
+  --warn:#a85a14;--warn-soft:#f6ead9;--danger:#a3312c;--danger-soft:#f6e1de;--ok:#2f6b3c;
+  --radius:10px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#15181a;--surface:#1e2225;--ink:#e9e6e0;--muted:#9aa1a8;--line:#31363b;
+    --accent:#84c9b2;--accent-ink:#10201b;--soft:#22302c;
+    --warn:#e0a25c;--warn-soft:#33291c;--danger:#e58a84;--danger-soft:#3a2220;--ok:#8fce9d;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#15181a;--surface:#1e2225;--ink:#e9e6e0;--muted:#9aa1a8;--line:#31363b;
+  --accent:#84c9b2;--accent-ink:#10201b;--soft:#22302c;
+  --warn:#e0a25c;--warn-soft:#33291c;--danger:#e58a84;--danger-soft:#3a2220;--ok:#8fce9d;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:860px;margin:0 auto;padding:20px 16px 64px}
+header h1{font-size:22px;margin:0 0 2px;letter-spacing:-.01em}
+.head{display:flex;gap:10px;align-items:flex-start;justify-content:space-between}
+.sub{color:var(--muted);font-size:13px}
+.banner{background:var(--warn-soft);color:var(--warn);border-radius:8px;padding:8px 12px;font-size:13px;margin-bottom:12px}
+.chans{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.chan{font-size:12px;padding:2px 9px;border-radius:999px;border:1px solid var(--line);color:var(--muted);background:var(--surface)}
+.chan.on{color:var(--ink);border-color:var(--accent)}
+.chan.error{color:var(--danger);border-color:var(--danger);background:var(--danger-soft)}
+.tabs{display:flex;gap:6px;margin:16px -16px 14px;padding:0 16px;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:none;border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:7px 12px;border-radius:999px;font:inherit;cursor:pointer;white-space:nowrap}
+.tab[aria-selected="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.tab .n{opacity:.75;margin-left:5px;font-variant-numeric:tabular-nums}
+.tab .flag{margin-left:5px;padding:0 6px;border-radius:999px;font-size:12px;font-weight:700;background:var(--warn-soft);color:var(--warn)}
+.tab .flag.late{background:var(--danger-soft);color:var(--danger)}
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px}
+.chips{display:flex;gap:4px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:transparent;color:var(--muted);padding:4px 10px;border-radius:999px;font:inherit;font-size:13px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--soft);color:var(--ink);border-color:var(--accent)}
+.btn{border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink);padding:7px 14px;border-radius:8px;font:inherit;font-weight:600;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--accent)}
+.btn.small{padding:4px 10px;font-size:13px;font-weight:500}
+.btn:disabled{opacity:.5;cursor:default}
+.spacer{flex:1}
+.group{margin:18px 0 6px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.group.late{color:var(--danger)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:12px 14px;margin-bottom:8px}
+.card.late{border-left:3px solid var(--danger)}
+.card.attn{border-left:3px solid var(--warn)}
+.card.done .what{text-decoration:line-through;color:var(--muted)}
+.row{display:flex;gap:10px;align-items:flex-start}
+.check{flex:none;width:22px;height:22px;margin-top:1px;border-radius:50%;border:2px solid var(--muted);background:transparent;cursor:pointer;padding:0;color:var(--accent-ink);font-size:13px;line-height:1}
+.check.on{background:var(--ok);border-color:var(--ok)}
+.main{flex:1;min-width:0}
+.what{font-weight:500;overflow-wrap:anywhere}
+.meta{color:var(--muted);font-size:13px;margin-top:3px;overflow-wrap:anywhere}
+.meta b{font-weight:600;color:var(--ink)}
+.late-text{color:var(--danger);font-weight:600}
+.tag{display:inline-block;padding:1px 8px;border-radius:999px;font-size:12px;background:var(--soft);color:var(--ink);margin-right:6px}
+.tag.warn{background:var(--warn-soft);color:var(--warn)}
+.tag.danger{background:var(--danger-soft);color:var(--danger)}
+.tag.plain{background:transparent;border:1px solid var(--line);color:var(--muted)}
+.actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;align-items:center}
+select,input,textarea{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:6px 8px;max-width:100%}
+.card select,.card input{font-size:13px;padding:3px 6px}
+.empty{color:var(--muted);padding:26px 14px;text-align:center;border:1px dashed var(--line);border-radius:var(--radius)}
+.score{flex:none;width:28px;height:28px;border-radius:8px;background:var(--soft);display:grid;place-items:center;font-weight:700}
+a{color:var(--accent)}
+details summary{cursor:pointer;color:var(--accent);margin-top:8px;font-size:13px}
+.pre{white-space:pre-wrap;overflow-wrap:anywhere;margin-top:8px;font-size:14px}
+dialog{border:1px solid var(--line);border-radius:14px;background:var(--surface);color:var(--ink);padding:18px;width:min(480px,calc(100vw - 32px))}
+dialog::backdrop{background:rgba(0,0,0,.45)}
+dialog h3{margin:0 0 12px}
+label{display:block;font-size:13px;color:var(--muted);margin:10px 0 4px}
+dialog input,dialog select,dialog textarea{width:100%}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.dlg-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
+.toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:9px 14px;border-radius:8px;font-size:14px;max-width:calc(100vw - 32px);display:none}
+.note{color:var(--muted);font-size:13px;margin-top:14px}
+.mail-head{display:flex;gap:10px;justify-content:space-between;align-items:baseline}
+.mail-head .meta{flex:none;margin-top:0;white-space:nowrap}
+.subj{margin-top:2px;overflow-wrap:anywhere}
+.tags{margin-top:8px}
+.reply{display:block;width:100%;margin-top:10px;resize:vertical;line-height:1.45}
+.reply-label{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-top:12px}
+.card.quiet{background:transparent}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-bottom:12px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:10px 12px}
+.stat b{display:block;font-size:20px;font-variant-numeric:tabular-nums}
+.stat span{color:var(--muted);font-size:13px}
+.ver{border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin-top:8px;font-size:14px;overflow-wrap:anywhere}
+.ver .lbl{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:2px}
+.ver.pick{border-color:var(--ok)}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="banner" id="demo" hidden>Учебный режим: страница открыта как файл, данные вымышленные, изменения нигде не сохраняются. Рабочая доска — та же страница, опубликованная Ассистентом.</div>
+    <div class="head">
+      <div>
+        <h1>Доска ассистента</h1>
+        <div class="sub" id="sync">Загружаю данные…</div>
+      </div>
+      <button class="btn small ghost" id="sync-now" hidden title="Попросить Ассистента в разговоре рядом с доской сверить её сейчас">Сверить сейчас</button>
+    </div>
+    <div class="chans" id="chans"></div>
+  </header>
+  <div class="tabs" role="tablist" id="tabs"></div>
+  <main id="panel"></main>
+</div>
+
+<dialog id="dlg">
+  <form method="dialog" id="form">
+    <h3 id="dlg-title">Задача</h3>
+    <label for="f-what">Что сделать</label>
+    <textarea id="f-what" rows="3" required maxlength="1000"></textarea>
+    <div class="two">
+      <div><label for="f-who">Кто</label><input id="f-who" maxlength="100" placeholder="владелец"></div>
+      <div><label for="f-due">Срок</label><input id="f-due" type="date"></div>
+    </div>
+    <label for="f-status">Статус</label>
+    <select id="f-status"></select>
+    <div class="dlg-actions">
+      <button type="button" class="btn ghost" id="f-cancel">Отмена</button>
+      <button type="submit" class="btn" id="f-save">Сохранить</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="rdlg">
+  <form method="dialog" id="rform">
+    <h3>Новая заявка агенту</h3>
+    <label for="r-text">Что нужно сделать</label>
+    <textarea id="r-text" rows="4" required maxlength="2000" placeholder="Например: собрать отчёт за сентябрь по шаблону отчёта направления"></textarea>
+    <div class="two">
+      <div><label for="r-to">Кому</label><select id="r-to"></select></div>
+      <div><label for="r-due">Срок</label><input id="r-due" type="date"></div>
+    </div>
+    <div class="note">Заявку Ассистент заведёт на шине при следующей сверке. Файлы к ней положите в папку ассистента или пришлите в чат.</div>
+    <div class="dlg-actions">
+      <button type="button" class="btn ghost" id="r-cancel">Отмена</button>
+      <button type="submit" class="btn" id="r-save">Создать заявку</button>
+    </div>
+  </form>
+</dialog>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(function(){
+  var STATUSES=["предложено","новое","в работе","сделано","отменено"];
+  // ключ вкладки = имя коллекции в хранилище доски
+  var TABS=[["tasks","Задачи"],["mail","Почта"],["meetings","Встречи"],["digest","Дайджест"],["requests","Документы"],["conflicts","База"],["routines","Рутины"]];
+  var AGENTS={docs:"Документ-инженер",kb:"Библиотекарь",digest:"Обозреватель",meeting:"Встреча",inbox:"Входящие"};
+  var S={tasks:[],mail:[],meetings:[],digest:[],requests:[],conflicts:[],routines:[],meta:null,tab:"tasks",filter:"active",mailFilter:"wait",reqFilter:"open",
+    db:null,canWrite:true,loaded:{},error:"",demo:false,room:null,ask:""};
+  var busy={},deferred=false,editing=null;
+  // несохранённые правки и раскрытые поля — переживают перерисовку
+  var edits={},openReply={},confirmSend={},openTime={},openOther={};
+  try{var t=localStorage.getItem("hq-tab");if(t&&TABS.some(function(x){return x[0]===t}))S.tab=t}catch(e){}
+
+  function $(id){return document.getElementById(id)}
+  function h(tag,attrs){
+    var el=document.createElement(tag),i,k;
+    if(attrs)for(k in attrs){
+      if(k==="text")el.textContent=attrs[k];
+      else if(k.slice(0,2)==="on")el.addEventListener(k.slice(2),attrs[k]);
+      else if(attrs[k]===true)el.setAttribute(k,"");
+      else if(attrs[k]!==false&&attrs[k]!=null)el.setAttribute(k,attrs[k]);
+    }
+    for(i=2;i<arguments.length;i++){var c=arguments[i];if(c==null||c===false)continue;el.appendChild(typeof c==="string"?document.createTextNode(c):c)}
+    return el;
+  }
+  function str(v){return typeof v==="string"?v:(v==null?"":String(v))}
+  function pad(n){return n<10?"0"+n:""+n}
+  function iso(d){return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate())}
+  function today(){return iso(new Date())}
+  function plusDays(n){var d=new Date();d.setDate(d.getDate()+n);return iso(d)}
+  function dueDate(v){var m=/^\d{4}-\d{2}-\d{2}/.exec(str(v));return m?m[0]:""}
+  function human(d){
+    if(!d)return "";
+    if(d===today())return "сегодня";
+    if(d===plusDays(1))return "завтра";
+    if(d===plusDays(-1))return "вчера";
+    var p=d.split("-");return p[2]+"."+p[1]+(p[0]!==String(new Date().getFullYear())?"."+p[0]:"");
+  }
+  // «ГГГГ-ММ-ДД ЧЧ:ММ» (или с «T») → дата в местном времени
+  function parseDT(v){var m=/^(\d{4})-(\d{2})-(\d{2})(?:[ T](\d{2}):(\d{2}))?/.exec(str(v));return m?new Date(+m[1],+m[2]-1,+m[3],+(m[4]||0),+(m[5]||0)):null}
+  function stamp(d){return iso(d)+" "+pad(d.getHours())+":"+pad(d.getMinutes())}
+  function humanDT(v){var s=str(v).replace("T"," "),d=dueDate(s);return d?(human(d)+" "+s.slice(11,16)).trim():s}
+  function ageDays(v){var d=parseDT(v);if(!d)return 0;var n=new Date();return Math.max(0,Math.round((new Date(n.getFullYear(),n.getMonth(),n.getDate())-new Date(d.getFullYear(),d.getMonth(),d.getDate()))/86400000))}
+  function toast(msg){var el=$("toast");el.textContent=msg;el.style.display="block";clearTimeout(toast.t);toast.t=setTimeout(function(){el.style.display="none"},3500)}
+  function safeUrl(u){u=str(u);return /^https?:\/\//i.test(u)?u:""}
+  function isOpen(t){return t.status!=="сделано"&&t.status!=="отменено"}
+  function newId(){return "u"+Date.now().toString(36)+Math.random().toString(36).slice(2,5)}
+
+  // запись: одна за раз на документ, только по действию человека
+  function write(coll,id,patch,create){
+    patch.dirty=true;patch.updatedAt=new Date().toISOString();
+    if(S.demo){
+      // учебный режим: данные только в памяти страницы
+      var arr=S[coll],cur=arr.filter(function(x){return x.id===id})[0];
+      if(cur)Object.assign(cur,patch);else{patch.id=id;arr.push(patch)}
+      render();return Promise.resolve(true);
+    }
+    if(!S.db||!S.canWrite){toast("Изменять данные в этом просмотре нельзя");return Promise.resolve(false)}
+    var key=coll+"/"+id;
+    if(busy[key])return Promise.resolve(false);
+    busy[key]=true;
+    var ref=S.db.collection(coll).doc(id);
+    return (create?ref.set(patch):ref.update(patch)).then(function(){return true},function(e){
+      if(e&&e.code==="invalid_argument"){S.canWrite=false;toast("Нет права на запись — доска открыта только для чтения");render()}
+      else if(e&&e.code==="quota_exceeded")toast("Хранилище доски заполнено — попросите Ассистента почистить старые записи");
+      else toast("Не удалось сохранить. Попробуйте ещё раз");
+      return false;
+    }).then(function(ok){delete busy[key];return ok});
+  }
+
+  // запрос в разговор рядом с доской: «сверь доску сейчас». Что именно делать, Ассистент берёт из данных доски, а не из этого сообщения
+  function canAsk(){return !!S.room&&S.ask!=="off"&&S.ask!=="unsupported"}
+  function askSync(label,extra){
+    var offline="Ассистент сейчас не на связи. Откройте доску рядом с разговором с Ассистентом или напишите ему «сверь доску»";
+    var msg={label:label,request:"sync_board"},k,p;
+    if(extra)for(k in extra)msg[k]=extra[k];
+    // вызов — прямо из нажатия, без ожиданий до него
+    try{p=S.room.sendToClaudeSession(msg,{deliver:"send",onStatus:function(s){if(s&&s.state==="failed")toast(offline)}})}catch(e){toast(offline);return}
+    Promise.resolve(p).then(function(){toast("Запрос передан Ассистенту — подтвердите его в разговоре")},
+      function(e){toast(e&&e.code==="rate_limited"?"Слишком часто — повторите через минуту":offline)});
+  }
+
+  /* ---------- расписание рутин: разбор cron на странице ---------- */
+  function cronField(s,lo,hi){
+    var out={},ok=true;
+    str(s).split(",").forEach(function(part){
+      var m=/^(\*|\d{1,2})(?:-(\d{1,2}))?(?:\/(\d{1,2}))?$/.exec(part);
+      if(!m){ok=false;return}
+      var a=m[1]==="*"?lo:+m[1],b=m[1]==="*"?hi:(m[2]!=null?+m[2]:(m[3]?hi:a)),st=m[3]?+m[3]:1,v;
+      if(a<lo||b>hi||a>b||st<1){ok=false;return}
+      for(v=a;v<=b;v+=st)out[v]=1;
+    });
+    return ok?Object.keys(out).map(Number).sort(function(x,y){return x-y}):null;
+  }
+  function cronParse(c){
+    var p=str(c).trim().split(/\s+/);
+    if(p.length!==5||p[2]!=="*"||p[3]!=="*")return null;
+    var m=cronField(p[0],0,59),hh=cronField(p[1],0,23),d=cronField(p[4],0,7);
+    if(!m||!hh||!d||!m.length||!hh.length||!d.length)return null;
+    var days={};d.forEach(function(x){days[x%7]=1});
+    return {m:m,h:hh,d:Object.keys(days).map(Number).sort(function(x,y){return x-y})};
+  }
+  var DOW_BY=["по воскресеньям","по понедельникам","по вторникам","по средам","по четвергам","по пятницам","по субботам"];
+  var DOW_SHORT=["вс","пн","вт","ср","чт","пт","сб"];
+  function evenStep(a){if(a.length<2)return 0;var st=a[1]-a[0],i;for(i=2;i<a.length;i++)if(a[i]-a[i-1]!==st)return 0;return st}
+  function cronHuman(p){
+    var d=p.d.join(","),days,time;
+    if(p.d.length===7)days="ежедневно";
+    else if(d==="1,2,3,4,5")days="по будням";
+    else if(d==="0,6")days="по выходным";
+    else if(p.d.length===1)days=DOW_BY[p.d[0]];
+    else days=p.d.slice().sort(function(a,b){return (a||7)-(b||7)}).map(function(x){return DOW_SHORT[x]}).join(", ");
+    var hs=evenStep(p.h),ms=evenStep(p.m),span=" с "+pad(p.h[0])+":00 до "+pad(p.h[p.h.length-1])+":59";
+    if(p.m.length===1&&p.h.length<=4)time="в "+p.h.map(function(x){return pad(x)+":"+pad(p.m[0])}).join(", ");
+    else if(p.m.length===1&&hs)time=(hs===1?"каждый час":"каждые "+hs+" ч")+" с "+pad(p.h[0])+":"+pad(p.m[0])+" до "+pad(p.h[p.h.length-1])+":"+pad(p.m[0]);
+    else if(p.m.length===1)time="в "+p.h.map(function(x){return pad(x)+":"+pad(p.m[0])}).join(", ");
+    else time=(ms?"каждые "+ms+" мин":"несколько раз в час")+(p.h.length===24?"":span);
+    return days+" "+time;
+  }
+  function cronPrev(p,from){
+    var k,i,j;
+    for(k=0;k<9;k++){
+      var day=new Date(from.getFullYear(),from.getMonth(),from.getDate()-k);
+      if(p.d.indexOf(day.getDay())<0)continue;
+      for(i=p.h.length-1;i>=0;i--)for(j=p.m.length-1;j>=0;j--){
+        var t=new Date(day.getFullYear(),day.getMonth(),day.getDate(),p.h[i],p.m[j]);
+        if(t<=from)return t;
+      }
+    }
+    return null;
+  }
+  function cronNext(p,from){
+    var k,i,j;
+    for(k=0;k<9;k++){
+      var day=new Date(from.getFullYear(),from.getMonth(),from.getDate()+k);
+      if(p.d.indexOf(day.getDay())<0)continue;
+      for(i=0;i<p.h.length;i++)for(j=0;j<p.m.length;j++){
+        var t=new Date(day.getFullYear(),day.getMonth(),day.getDate(),p.h[i],p.m[j]);
+        if(t>from)return t;
+      }
+    }
+    return null;
+  }
+  // простое расписание (одно время, дни: все / будни / один день) можно менять прямо на странице
+  var SIMPLE=/^(\d{1,2}) (\d{1,2}) \* \* (\*|1-5|[0-6])$/;
+  function routineState(r){
+    var s=str(r.state);
+    if(s==="on"||s==="paused"||s==="off"||s==="unavailable")return s;
+    // записи прежней версии доски: состояние — текстом в поле status
+    var o=str(r.status);
+    if(/пауз/i.test(o))return "paused";
+    return /включ|актив|on/i.test(o)&&!/не\s*включ|выключ/i.test(o)?"on":"off";
+  }
+  function routineInfo(r){
+    var st=routineState(r),cron=str(r.cron),p=cronParse(cron);
+    var info={state:st,cron:cron,p:p,missed:null,error:st==="on"&&r.lastOk===false,
+      pending:!!(str(r.want)||str(r.wantSchedule)||str(r.runRequested))};
+    // «пропущен запуск» считаем на момент последней сверки: позже неё страница о запусках не знает
+    var ref=S.meta&&parseDT(S.meta.syncedAt),last=parseDT(r.lastRun);
+    if(st==="on"&&p&&ref&&last){var prev=cronPrev(p,new Date(ref.getTime()-45*60000));if(prev&&last<prev)info.missed=prev}
+    info.attn=!!(info.missed||info.error||info.pending);
+    return info;
+  }
+
+  /* ---------- шапка и вкладки ---------- */
+  function waitsVerdict(r){return r.status==="done"&&(r.to==="docs"||str(r.docId))&&!str(r.verdict)}
+  function renderTabs(){
+    var box=$("tabs");box.textContent="";
+    var td=today();
+    var late=S.tasks.filter(function(t){var d=dueDate(t.due);return isOpen(t)&&t.status!=="предложено"&&d&&d<td}).length;
+    var verdicts=S.requests.filter(waitsVerdict).length;
+    var attn=S.routines.filter(function(r){return routineInfo(r).attn}).length;
+    var counts={
+      tasks:[S.tasks.filter(isOpen).length,late,"late","просрочено"],
+      mail:[S.mail.filter(function(m){return mailState(m)==="wait"}).length],
+      meetings:[S.meetings.filter(function(m){return str(m.when).slice(0,10)>=td}).length],
+      digest:[S.digest.length],
+      requests:[S.requests.filter(function(r){return r.status==="new"}).length,verdicts,"","ждут вашего решения"],
+      conflicts:[S.conflicts.filter(function(c){return c.status!=="closed"}).length],
+      routines:[S.routines.filter(function(r){return routineState(r)==="on"}).length,attn,"","требуют внимания"]
+    };
+    TABS.forEach(function(t){
+      var c=counts[t[0]];
+      box.appendChild(h("button",{class:"tab",role:"tab","aria-selected":String(S.tab===t[0]),onclick:function(){
+        S.tab=t[0];try{localStorage.setItem("hq-tab",S.tab)}catch(e){}render(true)}},
+        t[1],c[0]?h("span",{class:"n",text:String(c[0])}):null,
+        c[1]?h("span",{class:"flag "+(c[2]||""),title:c[3]+": "+c[1],text:(c[2]==="late"?"!":"")+c[1]}):null));
+    });
+  }
+
+  function renderHeader(){
+    var m=S.meta,sync=$("sync");
+    $("demo").hidden=!S.demo;
+    $("sync-now").hidden=!canAsk();
+    if(S.error){sync.textContent=S.error}
+    else if(!S.db&&!S.demo){sync.textContent="Загружаю данные…"}
+    else{
+      var parts=[];
+      if(m&&m.syncedAt)parts.push("Сверено с ассистентом: "+humanDT(m.syncedAt));
+      else parts.push("Ассистент ещё не выгружал сюда данные");
+      if(m&&typeof m.savedMin==="number"&&m.savedMin>0)parts.push("сэкономлено ~"+(m.savedMin>=90?Math.round(m.savedMin/60)+" ч":m.savedMin+" мин"));
+      if(!S.canWrite)parts.push("только чтение");
+      sync.textContent=parts.join(" · ");
+    }
+    var box=$("chans");box.textContent="";
+    var list=m&&Array.isArray(m.channels)?m.channels:[];
+    list.slice(0,6).forEach(function(c){
+      if(!c||!str(c.name))return;
+      var st=c.state==="on"||c.state==="error"?c.state:"off";
+      var txt=str(c.name)+" · "+(st==="off"?"не подключён":st==="error"?"ошибка":(str(c.pulledAt)?"забрано "+humanDT(c.pulledAt):"подключён"));
+      box.appendChild(h("span",{class:"chan "+st,title:str(c.note)||null,text:txt}));
+    });
+  }
+  $("sync-now").addEventListener("click",function(){askSync("Сверка доски")});
+
+  function empty(text){return h("div",{class:"empty",text:text})}
+  function chipsBar(filters,cur,pick){
+    var chips=h("div",{class:"chips"});
+    filters.forEach(function(f){chips.appendChild(h("button",{class:"chip","aria-pressed":String(cur===f[0]),onclick:function(){pick(f[0])}},f[1]+(f[2]?" · "+f[2]:"")))});
+    return chips;
+  }
+
+  /* ---------- задачи ---------- */
+  function statusSelect(t){
+    var sel=h("select",{"aria-label":"Статус",disabled:!S.canWrite,onchange:function(){write("tasks",t.id,{status:sel.value})}});
+    var list=STATUSES.indexOf(t.status)<0&&t.status?[t.status].concat(STATUSES):STATUSES;
+    list.forEach(function(s){var o=h("option",{value:s,text:s});if(s===t.status)o.selected=true;sel.appendChild(o)});
+    return sel;
+  }
+  function taskCard(t,late){
+    var d=dueDate(t.due),done=t.status==="сделано";
+    var meta=h("div",{class:"meta"});
+    if(t.status==="предложено")meta.appendChild(h("span",{class:"tag warn",text:"предложено агентом"}));
+    if(d)meta.appendChild(h("span",{class:late?"late-text":"",text:"срок "+human(d)+(str(t.due).length>10?" "+str(t.due).slice(10).trim():"")}));
+    else meta.appendChild(document.createTextNode("срок не назван"));
+    if(str(t.who))meta.appendChild(document.createTextNode(" · "+str(t.who)));
+    if(str(t.source))meta.appendChild(document.createTextNode(" · "+str(t.source)));
+    return h("div",{class:"card"+(late?" late":"")+(done?" done":"")},
+      h("div",{class:"row"},
+        h("button",{class:"check"+(done?" on":""),title:done?"Вернуть в работу":"Отметить сделанным","aria-label":done?"Вернуть в работу":"Отметить сделанным",disabled:!S.canWrite,
+          onclick:function(){write("tasks",t.id,{status:done?"в работе":"сделано"})}},done?"✓":""),
+        h("div",{class:"main"},h("div",{class:"what",text:str(t.what)||"(без названия)"}),meta,
+          h("div",{class:"actions"},statusSelect(t),
+            t.status==="предложено"?h("button",{class:"btn small",disabled:!S.canWrite,onclick:function(){write("tasks",t.id,{status:"новое"})}},"Принять"):null,
+            h("button",{class:"btn small ghost",disabled:!S.canWrite,onclick:function(){openDialog(t)}},"Изменить")))));
+  }
+  function renderTasks(p){
+    p.appendChild(h("div",{class:"bar"},
+      chipsBar([["active","Активные"],["proposed","Предложено"],["done","Закрытые"],["all","Все"]],S.filter,function(v){S.filter=v;render(true)}),
+      h("span",{class:"spacer"}),
+      h("button",{class:"btn",disabled:!S.canWrite,onclick:function(){openDialog(null)}},"Новая задача")));
+    var list=S.tasks.filter(function(t){
+      if(S.filter==="active")return isOpen(t);
+      if(S.filter==="proposed")return t.status==="предложено";
+      if(S.filter==="done")return !isOpen(t);
+      return true;
+    });
+    if(!list.length){p.appendChild(empty(S.tasks.length?"В этом фильтре пусто.":"Задач пока нет. Добавьте свою кнопкой выше или напишите Ассистенту в чате — он внесёт сам."));return}
+    var td=today(),wk=plusDays(7),groups=[["Просрочено",[]],["Сегодня",[]],["На неделе",[]],["Позже",[]],["Без срока",[]],["Закрыто",[]]];
+    list.forEach(function(t){
+      var d=dueDate(t.due);
+      if(!isOpen(t))groups[5][1].push(t);
+      else if(!d)groups[4][1].push(t);
+      else if(d<td)groups[0][1].push(t);
+      else if(d===td)groups[1][1].push(t);
+      else if(d<=wk)groups[2][1].push(t);
+      else groups[3][1].push(t);
+    });
+    groups.forEach(function(g,i){
+      if(!g[1].length)return;
+      g[1].sort(function(a,b){return (dueDate(a.due)||"9999").localeCompare(dueDate(b.due)||"9999")||str(a.what).localeCompare(str(b.what))});
+      p.appendChild(h("div",{class:"group"+(i===0?" late":""),text:g[0]+" · "+g[1].length}));
+      g[1].forEach(function(t){p.appendChild(taskCard(t,i===0))});
+    });
+    p.appendChild(h("div",{class:"note",text:"Изменения, сделанные здесь, Ассистент перенесёт в свои записи при следующем разговоре или запуске по расписанию."}));
+  }
+
+  /* ---------- почта: wait — ждёт ответа владельца, none — ответ не предполагается, done — обработано ---------- */
+  function mailState(m){
+    if(m.status==="approved"||m.status==="done"||m.status==="sent"||m.status==="ignored")return "done";
+    return m.reply==="needed"||openReply[m.id]?"wait":"none";
+  }
+  function renderMail(p){
+    if(!S.mail.length){p.appendChild(empty("Обзора почты пока нет. Напишите Ассистенту «разбери почту» — здесь появятся письма с краткой сутью и готовым коротким ответом."));return}
+    function n(k){return k==="all"?S.mail.length:S.mail.filter(function(m){return mailState(m)===k}).length}
+    p.appendChild(h("div",{class:"bar"},chipsBar([["wait","Ждут ответа",n("wait")],["none","Без ответа",n("none")],["done","Обработано",n("done")],["all","Все",n("all")]],
+      S.mailFilter,function(v){S.mailFilter=v;render(true)})));
+    var list=S.mail.filter(function(m){return S.mailFilter==="all"||mailState(m)===S.mailFilter})
+      .sort(function(a,b){return str(b.date).localeCompare(str(a.date))||str(a.from).localeCompare(str(b.from))});
+    if(!list.length){p.appendChild(empty(S.mailFilter==="wait"?"Писем, ждущих вашего ответа, нет.":"В этом фильтре пусто."));return}
+    list.forEach(function(m){p.appendChild(mailCard(m))});
+    p.appendChild(h("div",{class:"note",text:"«Отправить» — Ассистент отправит ответ от вашего имени при следующем разговоре или запуске по расписанию; нужно сразу — нажмите на письме «Отправить сейчас» (работает, когда доска открыта рядом с разговором с Ассистентом). «В черновик» — положит ответ в черновики почты, отправите сами."}));
+  }
+  function mailCard(m){
+    var st=mailState(m),d=dueDate(m.date),url=safeUrl(m.url);
+    var c=h("div",{class:"card"+(st==="none"?" quiet":"")+(st==="done"?" done":"")});
+    c.appendChild(h("div",{class:"mail-head"},h("b",{text:str(m.from)||"(отправитель не указан)"}),h("span",{class:"meta",text:human(d)||str(m.date)})));
+    c.appendChild(h("div",{class:"subj"},url?h("a",{href:url,target:"_blank",rel:"noopener noreferrer",text:str(m.subject)||"(без темы)"}):h("span",{text:str(m.subject)||"(без темы)"})));
+    if(str(m.summary))c.appendChild(h("div",{class:"meta",text:str(m.summary)}));
+    var tags=h("div",{class:"tags"});
+    if(str(m.to))tags.appendChild(h("span",{class:"tag",text:str(m.to)}));
+    if(str(m.task))tags.appendChild(h("span",{class:"tag",text:"есть задача "+str(m.task)}));
+    if(m.reply!=="needed"&&st==="none")tags.appendChild(h("span",{class:"tag warn",text:"ответ не предполагается"}));
+    if(m.status==="approved")tags.appendChild(h("span",{class:"tag warn",text:m.action==="send"?"к отправке — ждёт ассистента":"в черновик — ждёт ассистента"}));
+    if(m.status==="sent")tags.appendChild(h("span",{class:"tag",text:"отправлено"}));
+    if(m.status==="done")tags.appendChild(h("span",{class:"tag",text:"ответ в черновиках почты"}));
+    if(m.status==="ignored")tags.appendChild(h("span",{class:"tag",text:"игнорировать"}));
+    if(tags.firstChild)c.appendChild(tags);
+    if(m.reply!=="needed"&&str(m.why)&&st!=="done")c.appendChild(h("div",{class:"meta",text:str(m.why)}));
+
+    if(st==="wait"){
+      var text=edits[m.id]!=null?edits[m.id]:str(m.draft);
+      var ta=h("textarea",{class:"reply",maxlength:"4000","aria-label":"Ответ",placeholder:"Напишите ответ…",rows:String(Math.min(12,Math.max(3,text.split("\n").length+1))),disabled:!S.canWrite});
+      ta.value=text;
+      ta.addEventListener("input",function(){edits[m.id]=ta.value});
+      c.appendChild(h("div",{class:"reply-label",text:str(m.draft)?"Предложенный ответ — можно править":"Ваш ответ"}));
+      var vars=Array.isArray(m.variants)?m.variants.filter(function(v){return v&&str(v.label)&&str(v.text)}):[];
+      if(vars.length){
+        var vb=h("div",{class:"chips"});
+        vars.slice(0,4).forEach(function(v){vb.appendChild(h("button",{class:"chip",disabled:!S.canWrite,title:"Подставить этот вариант ответа",onclick:function(){ta.value=str(v.text);edits[m.id]=ta.value;ta.focus()}},str(v.label)))});
+        c.appendChild(vb);
+      }
+      c.appendChild(ta);
+      var approve=function(action){
+        write("mail",m.id,{answer:ta.value.trim(),action:action,status:"approved"}).then(function(ok){delete confirmSend[m.id];if(ok){delete edits[m.id];delete openReply[m.id]}render(true)})};
+      ta.addEventListener("input",function(){if(confirmSend[m.id]){delete confirmSend[m.id]}});
+      c.appendChild(h("div",{class:"actions"},
+        h("button",{class:"btn small",disabled:!S.canWrite,onclick:function(){
+          if(!ta.value.trim()){toast("Ответ пустой — напишите текст или нажмите «Игнорировать»");return}
+          // отправка необратима — второй клик подтверждает
+          if(!confirmSend[m.id]){confirmSend[m.id]=true;render(true);return}
+          approve("send")}},confirmSend[m.id]?"Подтвердить отправку":"Отправить"),
+        h("button",{class:"btn small ghost",disabled:!S.canWrite,onclick:function(){
+          if(!ta.value.trim()){toast("Ответ пустой — напишите текст или нажмите «Игнорировать»");return}
+          approve("draft")}},"В черновик"),
+        m.reply==="needed"
+          ?h("button",{class:"btn small ghost",disabled:!S.canWrite,onclick:function(){write("mail",m.id,{status:"ignored"}).then(function(ok){if(ok)delete edits[m.id]})}},"Игнорировать")
+          :h("button",{class:"btn small ghost",onclick:function(){delete openReply[m.id];delete edits[m.id];render(true)}},"Не отвечать")));
+    }else if(st==="none"){
+      c.appendChild(h("div",{class:"actions"},
+        h("button",{class:"btn small ghost",disabled:!S.canWrite,onclick:function(){openReply[m.id]=true;S.mailFilter=S.mailFilter==="none"?"wait":S.mailFilter;render(true)}},"Всё же ответить")));
+    }else{
+      if(str(m.answer)&&m.status!=="ignored")c.appendChild(h("details",null,h("summary",{text:"Текст ответа"}),h("div",{class:"pre",text:str(m.answer)})));
+      if(m.status==="approved")c.appendChild(h("div",{class:"actions"},
+        m.action==="send"&&canAsk()?h("button",{class:"btn small",disabled:!S.canWrite,title:"Попросить Ассистента сверить доску и отправить письмо прямо сейчас",onclick:function(){askSync("Срочная отправка письма",{mail:String(m.id)})}},"Отправить сейчас"):null,
+        h("button",{class:"btn small ghost",disabled:!S.canWrite,onclick:function(){edits[m.id]=str(m.answer);openReply[m.id]=true;write("mail",m.id,{status:"new",action:""})}},m.action==="send"?"Отменить отправку":"Изменить ответ")));
+      if(m.status==="ignored")c.appendChild(h("div",{class:"actions"},h("button",{class:"btn small ghost",disabled:!S.canWrite,onclick:function(){write("mail",m.id,{status:"new"})}},"Вернуть")));
+    }
+    return c;
+  }
+
+  /* ---------- встречи ---------- */
+  function renderMeetings(p){
+    if(!S.meetings.length){p.appendChild(empty("Встреч нет. Напишите Ассистенту «у меня встреча с … в четверг в 15:00» — он внесёт её и подготовит бриф."));return}
+    var td=today(),list=S.meetings.slice().sort(function(a,b){return str(a.when).localeCompare(str(b.when))});
+    var up=list.filter(function(m){return str(m.when).slice(0,10)>=td}),past=list.filter(function(m){return str(m.when).slice(0,10)<td}).reverse();
+    function card(m){
+      var d=dueDate(m.when),c=h("div",{class:"card"});
+      c.appendChild(h("div",{class:"what",text:str(m.party)||"Встреча"}));
+      c.appendChild(h("div",{class:"meta"},h("b",{text:(human(d)||str(m.when))+" "+str(m.when).slice(10).trim()}),str(m.status)?" · "+str(m.status):""));
+      if(str(m.goal))c.appendChild(h("div",{class:"meta",text:str(m.goal)}));
+      if(str(m.people))c.appendChild(h("div",{class:"meta",text:"Участники: "+str(m.people)}));
+      if(str(m.brief))c.appendChild(h("details",null,h("summary",{text:"Бриф к встрече"}),h("div",{class:"pre",text:str(m.brief)})));
+      else if(d>=td)c.appendChild(h("div",{class:"meta"},h("span",{class:"tag warn",text:"брифа пока нет"})));
+      if(str(m.memo))c.appendChild(h("details",null,h("summary",{text:"Мемо после встречи"}),h("div",{class:"pre",text:str(m.memo)})));
+      else if(d&&d<td)c.appendChild(h("div",{class:"meta"},h("span",{class:"tag warn",text:"мемо нет — пришлите Ассистенту заметки"})));
+      return c;
+    }
+    if(up.length){p.appendChild(h("div",{class:"group",text:"Предстоящие · "+up.length}));up.forEach(function(m){p.appendChild(card(m))})}
+    if(past.length){p.appendChild(h("div",{class:"group",text:"Прошедшие"}));past.slice(0,10).forEach(function(m){p.appendChild(card(m))})}
+  }
+
+  /* ---------- дайджест ---------- */
+  function renderDigest(p){
+    if(!S.digest.length){p.appendChild(empty("Дайджеста пока нет. Попросите Ассистента: «что нового по моим темам»."));return}
+    var list=S.digest.slice().sort(function(a,b){return str(b.date).localeCompare(str(a.date))||(Number(b.score)||0)-(Number(a.score)||0)});
+    var cur="";
+    list.forEach(function(x){
+      if(str(x.date)!==cur){cur=str(x.date);p.appendChild(h("div",{class:"group",text:"Дайджест · "+(human(dueDate(cur))||cur)}))}
+      var url=safeUrl(x.url),title=url?h("a",{href:url,target:"_blank",rel:"noopener noreferrer",text:str(x.title)}):h("span",{text:str(x.title)});
+      var mark=str(x.mark);
+      function btn(v,label){return h("button",{class:"chip","aria-pressed":String(mark===v),disabled:!S.canWrite,onclick:function(){write("digest",x.id,{mark:mark===v?"":v})}},label)}
+      p.appendChild(h("div",{class:"card"},h("div",{class:"row"},
+        h("div",{class:"score",title:"Оценка релевантности",text:str(x.score)||"–"}),
+        h("div",{class:"main"},h("div",{class:"what"},title),
+          str(x.summary)?h("div",{class:"meta",text:str(x.summary)}):null,
+          str(x.why)?h("div",{class:"meta",text:"Почему важно: "+str(x.why)}):null,
+          h("div",{class:"actions"},btn("kb","В базу знаний"),btn("task","В задачи"),btn("skip","Не интересно"))))));
+    });
+    p.appendChild(h("div",{class:"note",text:"Отметки учит Обозреватель: «не интересно» уточняет темы профиля, «в базу» и «в задачи» Ассистент выполнит при следующем запуске."}));
+  }
+
+  /* ---------- документы и заявки ---------- */
+  function renderRequests(p){
+    function n(k){return S.requests.filter(function(r){return k==="open"?r.status==="new":k==="done"?r.status==="done":true}).length}
+    p.appendChild(h("div",{class:"bar"},
+      chipsBar([["open","В работе",n("open")],["done","Готово",n("done")],["all","Все",n("all")]],S.reqFilter,function(v){S.reqFilter=v;render(true)}),
+      h("span",{class:"spacer"}),
+      h("button",{class:"btn",disabled:!S.canWrite,onclick:openRequest},"Новая заявка")));
+    var list=S.requests.filter(function(r){return S.reqFilter==="all"||(S.reqFilter==="open"?r.status==="new":r.status==="done")})
+      .sort(function(a,b){return (waitsVerdict(b)?1:0)-(waitsVerdict(a)?1:0)||str(b.date).localeCompare(str(a.date))});
+    if(!list.length){p.appendChild(empty(S.requests.length?"В этом фильтре пусто.":"Заявок нет. Здесь видны поручения агентам (собрать документ, сравнить версии, оформить заметку) и готовые результаты с итогом проверки."));return}
+    list.forEach(function(r){p.appendChild(requestCard(r))});
+    p.appendChild(h("div",{class:"note",text:"Сами файлы лежат в папке ассистента (путь — в карточке). Какая версия документа действующая, решаете вы: Ассистент запишет ваше решение при следующей сверке и ничего никуда не отправит."}));
+  }
+  function requestCard(r){
+    var age=ageDays(r.date),old=r.status==="new"&&age>3,wv=waitsVerdict(r);
+    var c=h("div",{class:"card"+(old?" late":wv?" attn":"")+(r.status==="cancelled"?" done":"")});
+    c.appendChild(h("div",{class:"what",text:str(r.title)||str(r.text).slice(0,80)||"(заявка без названия)"}));
+    var tags=h("div",{class:"tags"});
+    tags.appendChild(h("span",{class:"tag",text:AGENTS[r.to]||str(r.to)||"агент не указан"}));
+    if(r.status==="new")tags.appendChild(h("span",{class:"tag "+(old?"danger":"warn"),text:age?"ждёт "+age+" дн.":"новая"}));
+    if(r.status==="new"&&r.needs==="code")tags.appendChild(h("span",{class:"tag plain",title:"Выполняется на компьютере в Claude Code: рутиной «Разбор заявок» или по просьбе «выполни заявки»",text:"нужен Claude Code"}));
+    if(r.status==="done")tags.appendChild(h("span",{class:"tag",text:"готово"}));
+    if(r.status==="cancelled")tags.appendChild(h("span",{class:"tag plain",text:"отменена"}));
+    if(r.status==="done"&&r.check==="ok")tags.appendChild(h("span",{class:"tag",title:str(r.checkNote)||null,text:"проверка целостности пройдена"}));
+    if(r.status==="done"&&r.check==="fail")tags.appendChild(h("span",{class:"tag danger",text:"проверка не пройдена"}));
+    if(r.verdict==="accepted")tags.appendChild(h("span",{class:"tag",text:"принято как действующая версия"}));
+    if(r.verdict==="rejected")tags.appendChild(h("span",{class:"tag warn",text:"не принято"}));
+    c.appendChild(tags);
+    var meta=[];
+    if(str(r.date))meta.push("от "+(human(dueDate(r.date))||str(r.date)));
+    if(str(r.from))meta.push(str(r.from));
+    if(dueDate(r.due))meta.push("срок "+human(dueDate(r.due)));
+    if(str(r.versions))meta.push("версии: "+str(r.versions));
+    if(meta.length)c.appendChild(h("div",{class:"meta",text:meta.join(" · ")}));
+    if(str(r.text)&&str(r.text)!==str(r.title))c.appendChild(h("div",{class:"meta",text:str(r.text)}));
+    if(r.check==="fail"&&str(r.checkNote))c.appendChild(h("div",{class:"meta late-text",text:str(r.checkNote)}));
+    if(str(r.result))c.appendChild(h("details",{open:wv},h("summary",{text:"Результат"}),h("div",{class:"pre",text:str(r.result)})));
+    var files=Array.isArray(r.files)?r.files.filter(function(f){return str(f)}):[];
+    if(files.length)c.appendChild(h("div",{class:"meta",text:"Файлы: "+files.slice(0,6).map(str).join("; ")}));
+    var act=h("div",{class:"actions"});
+    if(r.status==="new")act.appendChild(h("button",{class:"btn small ghost",disabled:!S.canWrite,onclick:function(){write("requests",r.id,{status:"cancelled"})}},"Отменить заявку"));
+    if(r.status==="cancelled"&&r.dirty)act.appendChild(h("button",{class:"btn small ghost",disabled:!S.canWrite,onclick:function(){write("requests",r.id,{status:"new"})}},"Вернуть"));
+    if(wv){
+      act.appendChild(h("button",{class:"btn small",disabled:!S.canWrite,title:"Эта версия документа становится действующей; Ассистент запишет это в заявку и базу знаний",onclick:function(){write("requests",r.id,{verdict:"accepted"})}},"Принять как действующую"));
+      act.appendChild(h("button",{class:"btn small ghost",disabled:!S.canWrite,onclick:function(){write("requests",r.id,{verdict:"rejected"})}},"Не принимать"));
+    }else if(str(r.verdict)){
+      act.appendChild(h("button",{class:"btn small ghost",disabled:!S.canWrite,onclick:function(){write("requests",r.id,{verdict:""})}},"Изменить решение"));
+    }
+    if(act.firstChild)c.appendChild(act);
+    return c;
+  }
+  function openRequest(){
+    var sel=$("r-to");sel.textContent="";
+    ["docs","kb","digest","meeting"].forEach(function(k){sel.appendChild(h("option",{value:k,text:AGENTS[k]}))});
+    $("r-text").value="";$("r-due").value="";
+    $("rdlg").showModal();$("r-text").focus();
+  }
+  $("r-cancel").addEventListener("click",function(){$("rdlg").close()});
+  $("rform").addEventListener("submit",function(e){
+    e.preventDefault();
+    var text=$("r-text").value.trim();if(!text)return;
+    var to=$("r-to").value,first=text.split("\n")[0];
+    var data={title:first.length>80?first.slice(0,77)+"…":first,text:text,to:to,needs:to==="docs"?"code":"any",status:"new",date:today(),from:"владелец",due:$("r-due").value||"",source:"доска"};
+    $("r-save").disabled=true;
+    write("requests",newId(),data,true).then(function(ok){$("r-save").disabled=false;if(ok){S.reqFilter="open";$("rdlg").close();render(true)}});
+  });
+
+  /* ---------- база знаний: противоречия и входящее ---------- */
+  function renderConflicts(p){
+    var m=S.meta||{},open=S.conflicts.filter(function(c){return c.status!=="closed"}),closed=S.conflicts.filter(function(c){return c.status==="closed"});
+    function stat(v,label){return h("div",{class:"stat"},h("b",{text:typeof v==="number"?String(v):"–"}),h("span",{text:label}))}
+    p.appendChild(h("div",{class:"stats"},stat(open.length,"открытые противоречия"),stat(m.kbInbox,"входящее на разбор"),stat(m.kbCare,"замечания по уходу за базой")));
+    if(typeof m.kbInbox==="number"&&m.kbInbox>0)p.appendChild(h("div",{class:"note",text:"Разобрать входящее — напишите Ассистенту «разбери входящее в базе» или включите рутину «Уход за базой знаний»."}));
+    if(!S.conflicts.length){p.appendChild(empty("Противоречий нет. Когда два источника расходятся (срок, сумма, ответственный), Библиотекарь не выбирает сам, а показывает обе версии здесь."));return}
+    if(open.length){p.appendChild(h("div",{class:"group",text:"Нужно ваше решение · "+open.length}));open.forEach(function(c){p.appendChild(conflictCard(c))})}
+    if(closed.length){p.appendChild(h("div",{class:"group",text:"Решено"}));closed.slice(0,10).forEach(function(c){p.appendChild(conflictCard(c))})}
+    p.appendChild(h("div",{class:"note",text:"Закрыть противоречие может только человек. Ассистент запишет ваш выбор в базу знаний при следующей сверке; сами заметки открываются в Obsidian."}));
+  }
+  function conflictCard(x){
+    var closed=x.status==="closed",c=h("div",{class:"card"+(closed?"":" attn")});
+    c.appendChild(h("div",{class:"what",text:str(x.fact)||"(факт не назван)"}));
+    if(str(x.date))c.appendChild(h("div",{class:"meta",text:"замечено "+(human(dueDate(x.date))||str(x.date))}));
+    function ver(k,label){
+      return h("div",{class:"ver"+(closed&&x.choice===k?" pick":"")},
+        h("div",{class:"lbl",text:label+(x.newer===k?" · новее":"")+(closed&&x.choice===k?" · выбрано вами":"")}),h("div",{text:str(x[k])||"—"}));
+    }
+    c.appendChild(ver("a","Версия А"));c.appendChild(ver("b","Версия Б"));
+    if(closed){
+      if(x.choice==="other"||str(x.note))c.appendChild(h("div",{class:"meta",text:"Ваше решение: "+(str(x.note)||"ни одна из версий")}));
+      if(x.dirty)c.appendChild(h("div",{class:"actions"},h("span",{class:"tag warn",text:"ждёт ассистента"}),
+        h("button",{class:"btn small ghost",disabled:!S.canWrite,onclick:function(){write("conflicts",x.id,{status:"open",choice:"",note:""})}},"Изменить решение")));
+      return c;
+    }
+    function close(choice,note){write("conflicts",x.id,{status:"closed",choice:choice,note:note||"",closed:today()}).then(function(ok){if(ok){delete openOther[x.id];delete edits["c:"+x.id]}render(true)})}
+    if(openOther[x.id]){
+      var inp=h("input",{maxlength:"300","aria-label":"Как правильно",placeholder:"Как правильно",style:"flex:1;min-width:160px"});
+      inp.value=edits["c:"+x.id]||"";
+      inp.addEventListener("input",function(){edits["c:"+x.id]=inp.value});
+      c.appendChild(h("div",{class:"actions"},inp,
+        h("button",{class:"btn small",disabled:!S.canWrite,onclick:function(){if(!inp.value.trim()){toast("Напишите, как правильно");return}close("other",inp.value.trim())}},"Сохранить"),
+        h("button",{class:"btn small ghost",onclick:function(){delete openOther[x.id];delete edits["c:"+x.id];render(true)}},"Отмена")));
+    }else{
+      c.appendChild(h("div",{class:"actions"},
+        h("button",{class:"btn small",disabled:!S.canWrite,onclick:function(){close("a")}},"Верно А"),
+        h("button",{class:"btn small",disabled:!S.canWrite,onclick:function(){close("b")}},"Верно Б"),
+        h("button",{class:"btn small ghost",disabled:!S.canWrite,onclick:function(){openOther[x.id]=true;render(true)}},"Иначе…")));
+    }
+    return c;
+  }
+
+  /* ---------- рутины: пульт автоматизации ---------- */
+  var SET_ORDER={"минимум":0,"стандарт":1,"полный":2};
+  function renderRoutines(p){
+    if(!S.routines.length){p.appendChild(empty("Каталог рутин ещё не выгружен. Напишите Ассистенту «настрой рутины» — он покажет здесь готовый набор, и включать их можно будет прямо отсюда."));return}
+    var rows=S.routines.map(function(r){return {r:r,i:routineInfo(r)}});
+    function cnt(f){return rows.filter(f).length}
+    function stat(v,label){return h("div",{class:"stat"},h("b",{text:String(v)}),h("span",{text:label}))}
+    p.appendChild(h("div",{class:"stats"},
+      stat(cnt(function(x){return x.i.state==="on"})+" из "+rows.length,"включено рутин"),
+      stat(cnt(function(x){return x.i.missed||x.i.error}),"сбой или пропуск запуска"),
+      stat(cnt(function(x){return x.i.pending}),"запросы ждут Ассистента")));
+    var groups=[["on","Работают"],["paused","На паузе"],["off","Можно включить"],["unavailable","Недоступны в этой среде"]];
+    groups.forEach(function(g){
+      var list=rows.filter(function(x){return x.i.state===g[0]});
+      if(!list.length)return;
+      list.sort(function(a,b){return (b.i.attn?1:0)-(a.i.attn?1:0)||(SET_ORDER[str(a.r.set)]||0)-(SET_ORDER[str(b.r.set)]||0)||str(a.r.name).localeCompare(str(b.r.name))});
+      p.appendChild(h("div",{class:"group",text:g[1]+" · "+list.length}));
+      list.forEach(function(x){p.appendChild(routineCard(x.r,x.i))});
+    });
+    p.appendChild(h("div",{class:"note",text:"Кнопки здесь — ваши поручения Ассистенту. Включение, пауза и новое время применяются, когда вы открываете разговор с ним (рутина по расписанию сама расписаний не меняет). «Запустить сейчас» срабатывает сразу, если доска открыта рядом с разговором. Рутины работают, пока приложение Claude открыто на компьютере."}));
+  }
+  function routineCard(r,i){
+    var c=h("div",{class:"card"+(i.error||i.missed?" late":i.pending?" attn":"")});
+    c.appendChild(h("div",{class:"what",text:str(r.name)||str(r.id)}));
+    var sched=i.p?cronHuman(i.p):(str(r.schedule)||"расписание не задано");
+    var meta=h("div",{class:"meta"},h("b",{text:sched}));
+    if(i.state==="on"&&i.p){var nx=cronNext(i.p,new Date());if(nx)meta.appendChild(document.createTextNode(" · следующий запуск: "+humanDT(stamp(nx))))}
+    if(str(r.where))meta.appendChild(document.createTextNode(" · "+str(r.where)));
+    c.appendChild(meta);
+    if(str(r.what))c.appendChild(h("div",{class:"meta",text:str(r.what)}));
+    if(str(r.why))c.appendChild(h("div",{class:"meta",text:"Зачем: "+str(r.why)}));
+    var tags=h("div",{class:"tags"});
+    if(str(r.set))tags.appendChild(h("span",{class:"tag plain",text:"набор «"+str(r.set)+"»"}));
+    if(str(r.agent))tags.appendChild(h("span",{class:"tag plain",text:str(r.agent)}));
+    if(str(r.env)&&str(r.env)!=="любая")tags.appendChild(h("span",{class:"tag plain",text:"только "+str(r.env)}));
+    if(i.missed)tags.appendChild(h("span",{class:"tag danger",title:"На момент последней сверки запуска по расписанию не было",text:"пропущен запуск "+humanDT(stamp(i.missed))}));
+    if(i.error)tags.appendChild(h("span",{class:"tag danger",text:"последний запуск с ошибкой"}));
+    if(tags.firstChild)c.appendChild(tags);
+    if(str(r.lastRun))c.appendChild(h("div",{class:"meta"+(i.error?" late-text":""),text:"Последний запуск: "+humanDT(r.lastRun)+(str(r.lastResult)?" — "+str(r.lastResult):"")}));
+    else if(i.state==="on")c.appendChild(h("div",{class:"meta",text:"Ещё не запускалась."}));
+    if(str(r.note))c.appendChild(h("div",{class:"meta",text:str(r.note)}));
+
+    if(i.pending){
+      var asks=[];
+      if(r.want==="on")asks.push("включить");
+      if(r.want==="paused")asks.push("поставить на паузу");
+      var wp=cronParse(r.wantSchedule);
+      if(wp)asks.push("новое время — "+cronHuman(wp));
+      if(str(r.runRequested))asks.push("запустить один раз сейчас");
+      c.appendChild(h("div",{class:"actions"},h("span",{class:"tag warn",text:"ждёт Ассистента: "+(asks.join("; ")||"запрос")}),
+        str(r.runRequested)&&canAsk()?h("button",{class:"btn small",disabled:!S.canWrite,onclick:function(){askSync("Запуск рутины",{routine:String(r.id)})}},"Напомнить Ассистенту"):null,
+        h("button",{class:"btn small ghost",disabled:!S.canWrite,onclick:function(){delete openTime[r.id];write("routines",r.id,{want:"",wantSchedule:"",runRequested:""})}},"Отменить запрос")));
+      return c;
+    }
+    if(i.state==="unavailable")return c;
+    var act=h("div",{class:"actions"});
+    if(i.state==="on")act.appendChild(h("button",{class:"btn small ghost",disabled:!S.canWrite,onclick:function(){write("routines",r.id,{want:"paused"})}},"Поставить на паузу"));
+    else act.appendChild(h("button",{class:"btn small",disabled:!S.canWrite,onclick:function(){write("routines",r.id,{want:"on"})}},"Включить"));
+    act.appendChild(h("button",{class:"btn small ghost",disabled:!S.canWrite,title:"Разовый запуск; расписание не меняется",onclick:function(){
+      // запрос записываем в данные доски, а в разговор уходит только сигнал «сверь доску»
+      if(canAsk())askSync("Запуск рутины",{routine:String(r.id)});
+      else toast(S.demo?"Учебный режим: запрос записан только на этой странице":"Запрос записан — Ассистент выполнит его в ближайшем разговоре");
+      write("routines",r.id,{runRequested:new Date().toISOString()});
+    }},"Запустить сейчас"));
+    var sm=SIMPLE.exec(i.cron);
+    if(sm&&!openTime[r.id])act.appendChild(h("button",{class:"btn small ghost",disabled:!S.canWrite,onclick:function(){openTime[r.id]=true;render(true)}},"Изменить время"));
+    c.appendChild(act);
+    if(sm&&openTime[r.id]){
+      var tm=h("input",{type:"time","aria-label":"Время запуска"});tm.value=pad(+sm[2])+":"+pad(+sm[1]);
+      var ds=h("select",{"aria-label":"Дни запуска"});
+      [["1-5","по будням"],["*","ежедневно"],["1",DOW_BY[1]],["2",DOW_BY[2]],["3",DOW_BY[3]],["4",DOW_BY[4]],["5",DOW_BY[5]],["6",DOW_BY[6]],["0",DOW_BY[0]]].forEach(function(o){
+        var el=h("option",{value:o[0],text:o[1]});if(o[0]===sm[3])el.selected=true;ds.appendChild(el)});
+      c.appendChild(h("div",{class:"actions"},ds,tm,
+        h("button",{class:"btn small",disabled:!S.canWrite,onclick:function(){
+          var v=/^(\d{2}):(\d{2})$/.exec(tm.value);
+          if(!v){toast("Укажите время");return}
+          var cron=(+v[2])+" "+(+v[1])+" * * "+ds.value;
+          delete openTime[r.id];
+          if(cron===i.cron){render(true);return}
+          write("routines",r.id,{wantSchedule:cron}).then(function(){render(true)});
+        }},"Сохранить время"),
+        h("button",{class:"btn small ghost",onclick:function(){delete openTime[r.id];render(true)}},"Отмена")));
+    }else if(!sm&&i.state==="on"){
+      c.appendChild(h("div",{class:"meta",text:"Расписание составное — перенести его можно в разговоре с Ассистентом."}));
+    }
+    return c;
+  }
+
+  function render(force){
+    renderHeader();renderTabs();
+    var p=$("panel"),a=document.activeElement;
+    if(!force&&a&&p.contains(a)&&(a.tagName==="INPUT"||a.tagName==="TEXTAREA")&&a.value){deferred=true;return}
+    deferred=false;p.textContent="";
+    if(S.error&&!S.db){p.appendChild(empty("Данные доски недоступны в этом просмотре. Откройте страницу в claude.ai под своей учётной записью."));return}
+    if(!S.loaded[S.tab]){p.appendChild(empty("Загружаю…"));return}
+    ({tasks:renderTasks,mail:renderMail,meetings:renderMeetings,digest:renderDigest,requests:renderRequests,conflicts:renderConflicts,routines:renderRoutines})[S.tab](p);
+  }
+  $("panel").addEventListener("focusout",function(){if(deferred)setTimeout(function(){render()},0)});
+
+  function openDialog(t){
+    editing=t;
+    $("dlg-title").textContent=t?"Изменить задачу":"Новая задача";
+    $("f-what").value=t?str(t.what):"";$("f-who").value=t?str(t.who):"";$("f-due").value=t?dueDate(t.due):"";
+    var sel=$("f-status");sel.textContent="";
+    STATUSES.forEach(function(s){var o=h("option",{value:s,text:s});if(s===(t?t.status:"новое"))o.selected=true;sel.appendChild(o)});
+    $("dlg").showModal();$("f-what").focus();
+  }
+  $("f-cancel").addEventListener("click",function(){$("dlg").close()});
+  $("form").addEventListener("submit",function(e){
+    e.preventDefault();
+    var what=$("f-what").value.trim();if(!what)return;
+    var data={what:what,who:$("f-who").value.trim()||"владелец",due:$("f-due").value||"",status:$("f-status").value};
+    var p;
+    if(editing){
+      // время после даты (если было) сохраняем, когда дата не менялась
+      if(data.due&&data.due===dueDate(editing.due))data.due=str(editing.due);
+      p=write("tasks",editing.id,data);
+    }else{
+      data.created=today();data.source="доска";
+      p=write("tasks",newId(),data,true);
+    }
+    $("f-save").disabled=true;
+    p.then(function(ok){$("f-save").disabled=false;if(ok){$("dlg").close();render(true)}});
+  });
+
+  /* ---------- учебный режим: файл открыт с диска, хранилища нет ---------- */
+  function demoData(){
+    var now=new Date(),d=plusDays;
+    // прошедшие события не должны оказаться в будущем: «сегодня 09:00» до девяти утра становится «вчера 09:00»
+    function at(days,hh,mm){var x=new Date(now.getFullYear(),now.getMonth(),now.getDate()+days,hh,mm);if(days===0&&x>now)x.setDate(x.getDate()-1);return stamp(x)}
+    return {
+      meta:{syncedAt:stamp(now),savedMin:185,agentMin:42,kbInbox:3,kbCare:2,boardVersion:"0.5.0",channels:[
+        {name:"Почта",state:"on",pulledAt:at(-3,9,1)},{name:"Календарь",state:"on",pulledAt:at(0,8,30)},{name:"Telegram",state:"off",note:"мост не настроен"}]},
+      tasks:[
+        {id:"t001",what:"Согласовать договор с подрядчиком по обучению",who:"владелец",due:d(-2),status:"в работе",source:"письмо, ООО «Вектор-Диджитал»",created:d(-9)},
+        {id:"t002",what:"Отправить Смирнову замечания к регламенту согласования",who:"владелец",due:d(0),status:"новое",source:"встреча",created:d(-3)},
+        {id:"t003",what:"Подготовить вопросы к демонстрации платформы",who:"владелец",due:d(3),status:"новое",source:"бриф встречи",created:d(-1)},
+        {id:"t004",what:"Проверить перерасход по подрядчикам за сентябрь",who:"Орлова (условно)",due:d(5),status:"предложено",source:"отчёт направления",created:d(0)},
+        {id:"t005",what:"Обновить список тем для дайджеста",who:"владелец",due:"",status:"новое",source:"доска",created:d(-5)},
+        {id:"t006",what:"Утвердить программу практикума для руководителей",who:"владелец",due:d(-6),status:"сделано",source:"письмо",created:d(-12)}],
+      mail:[
+        {id:"e-demo-1",date:d(0),from:"Гришин П. (ООО «Вектор-Диджитал»)",subject:"Сроки пилота и состав рабочей группы",summary:"Просит подтвердить старт пилота с понедельника и назвать двух участников с вашей стороны.",to:"лично",reply:"needed",
+          draft:"Пётр, добрый день.\nСтарт с понедельника подтверждаю. Участников рабочей группы назову до конца дня.",
+          variants:[{label:"Согласиться",text:"Пётр, добрый день.\nСтарт с понедельника подтверждаю. Участников рабочей группы назову до конца дня."},{label:"Перенести",text:"Пётр, добрый день.\nПредлагаю сдвинуть старт на неделю: нам нужно время согласовать состав группы."}],status:"new"},
+        {id:"e-demo-2",date:d(-1),from:"Орлова Е. (финансовый отдел, условно)",subject:"Перерасход по статье «Подрядчики»",summary:"Факт 710 при плане 600, нужен комментарий до пятницы.",to:"лично",reply:"needed",task:"t004",
+          answer:"Елена, добрый день.\nКомментарий по перерасходу пришлю в четверг: сверяю акты.",action:"send",status:"approved",dirty:true},
+        {id:"e-demo-3",date:d(-1),from:"Смирнов А. (отдел методологии, условно)",subject:"Регламент согласования, версия 2",summary:"Прислал обновлённую редакцию, вы в копии; ответа ждут от руководителя направления.",to:"в копии",reply:"none",why:"Письмо адресовано другому человеку, вы в копии.",status:"new"},
+        {id:"e-demo-4",date:d(-2),from:"Учебный портал (рассылка)",subject:"Новые курсы октября",summary:"Информационная рассылка.",to:"рассылка",reply:"none",why:"Рассылка.",status:"ignored"}],
+      meetings:[
+        {id:"m-demo-1",when:at(1,15,0),party:"ООО «Вектор-Диджитал» — демонстрация платформы",goal:"Понять, закрывает ли платформа сценарий обучения руководителей.",people:"Гришин П., Смирнов А.",status:"подтверждена",
+          brief:"Цель: решить, идём ли в пилот.\nЧто известно: предложение от прошлого месяца, цена за 50 мест.\nВопросы: сроки внедрения; кто ведёт обучение; что с выгрузкой отчётов.\nРиски: перерасход по статье «Подрядчики»."},
+        {id:"m-demo-2",when:at(4,11,0),party:"Еженедельное совещание направления",goal:"Статус задач и рисков.",people:"команда направления",status:"регулярная"},
+        {id:"m-demo-3",when:at(-2,14,0),party:"Смирнов А. — регламент согласования",goal:"Снять замечания к разделу 3.",people:"Смирнов А.",status:"прошла",brief:"Раздел 3: сроки 5 и 2 рабочих дня; предложение сократить до 3 и 1.",memo:"Договорились: срок 3 рабочих дня, срочные — 1 день. Смирнов готовит версию 2, вы отправляете замечания."}],
+      digest:[
+        {id:"g-demo-1",date:d(0),title:"Обзор: как компании вводят ИИ-ассистентов в документооборот",url:"https://example.org/review-1",score:5,summary:"Разбор трёх подходов к внедрению и типичных ошибок.",why:"Прямо по теме вашего пилота.",mark:""},
+        {id:"g-demo-2",date:d(0),title:"Исследование: сколько времени экономит автоматический разбор почты",url:"https://example.org/study-2",score:4,summary:"Замеры на условной выборке сотрудников.",why:"Пригодится для обоснования бюджета.",mark:"kb"},
+        {id:"g-demo-3",date:d(0),title:"Конференция по корпоративному обучению: программа",url:"https://example.org/conf-3",score:3,summary:"Опубликована программа осенней конференции.",why:"Есть секция про обучение руководителей.",mark:""}],
+      requests:[
+        {id:"r-demo-1",title:"Внести правку сроков в регламент согласования",text:"Раздел 3: срок 3 рабочих дня, срочные — 1 день; сохранить новую версию и сравнить с прежней.",to:"docs",needs:"code",status:"done",date:d(-1),from:"владелец",
+          result:"Версия v2 сохранена. Изменены 2 абзаца раздела 3, добавлен 1 абзац. Остальные разделы совпадают с v1.",check:"ok",checkNote:"заголовки, таблицы и нумерация сохранены",docId:"demo_регламент",versions:"v1 → v2",files:["hub/docs/out/demo_регламент_v2.docx"]},
+        {id:"r-demo-2",title:"Собрать отчёт направления за сентябрь по шаблону",text:"Данные — из выгрузки задач; шаблон отчёта направления.",to:"docs",needs:"code",status:"new",date:d(-5),from:"Ассистент (Cowork)",due:d(1)},
+        {id:"r-demo-3",title:"Оформить заметку о контрагенте «Вектор-Диджитал»",text:"Собрать из писем и мемо встречи.",to:"kb",needs:"any",status:"new",date:d(0),from:"Встреча"},
+        {id:"r-demo-4",title:"Сводка по выгрузке задач",text:"Свод по статусам и часам.",to:"docs",needs:"code",status:"done",date:d(-3),from:"владелец",result:"Сводка собрана, 4 задачи, итог по часам — 45.",check:"fail",checkNote:"в шаблоне осталась незаполненная метка {{период}}",files:["hub/docs/out/demo_сводка.xlsx"]}],
+      conflicts:[
+        {id:"c-001",date:d(-1),fact:"Срок согласования документа",a:"5 рабочих дней [регламент v1, прошлый месяц]",b:"3 рабочих дня [мемо встречи со Смирновым, позавчера]",newer:"b",status:"open"},
+        {id:"c-002",date:d(-4),fact:"Цена платформы за 50 мест",a:"по письму — 380 (условно)",b:"по предложению — 400 (условно)",newer:"a",status:"open"},
+        {id:"c-003",date:d(-8),fact:"Ответственный за практикум",a:"Орлова [план квартала]",b:"Смирнов [письмо]",newer:"b",status:"closed",choice:"b"}],
+      routines:[
+        {id:"hq-morning",name:"Утренний «Мой день»",what:"Собирает план дня: почта, задачи, встречи, вопросы на решение.",why:"день начинается с готовой картины, а не с разбора входящих.",set:"минимум",env:"любая",agent:"оркестратор",cron:"30 8 * * 1-5",state:"on",where:"Claude Code",lastRun:at(0,8,31),lastResult:"план дня готов, 2 вопроса на решение",lastOk:true},
+        {id:"hq-handoff",name:"Разбор заявок из Cowork",what:"Выполняет заявки, которым нужен компьютер: документы Word и Excel с проверкой целостности.",why:"заявка не ждёт, пока вы откроете Claude Code.",set:"минимум",env:"Code",agent:"Документ-инженер",cron:"0 10-18/2 * * 1-5",state:"on",where:"Claude Code",lastRun:at(-1,16,0),lastResult:"выполнена 1 заявка",lastOk:true},
+        {id:"hq-meeting-eve",name:"Бриф накануне встречи",what:"Готовит брифы к встречам следующего рабочего дня.",why:"к встрече вы приходите с собранным контекстом.",set:"стандарт",env:"любая",agent:"Встреча",cron:"0 17 * * 1-5",state:"on",where:"Claude Code",lastRun:at(-1,17,2),lastResult:"не открылся календарь: файл занят",lastOk:false},
+        {id:"hq-evening",name:"Итог дня",what:"Сверяет доску и дописывает в план итог дня: закрыто, перенесено, просрочено.",why:"между днями ничего не теряется.",set:"стандарт",env:"любая",agent:"оркестратор",cron:"30 18 * * 1-5",state:"paused",where:"Claude Code",lastRun:at(-6,18,30),lastResult:"итог дня дописан",lastOk:true},
+        {id:"hq-weekly-review",name:"Обзор недели",what:"Сводит неделю: задачи, противоречия в базе, зависшие заявки, экономия времени.",why:"видно, что зависло и что поправить в настройках.",set:"стандарт",env:"любая",agent:"оркестратор",cron:"0 16 * * 5",state:"off"},
+        {id:"hq-kb-care",name:"Уход за базой знаний",what:"Пересобирает индекс базы, разбирает входящее, ищет дубли и заметки без связей.",why:"база остаётся пригодной для поиска.",set:"полный",env:"Code",agent:"Библиотекарь",cron:"30 16 * * 5",state:"off"},
+        {id:"hq-weekly-digest",name:"Дайджест недели",what:"Собирает дайджест за 7 дней по темам профиля.",why:"важное по вашим темам не проходит мимо.",set:"полный",env:"любая",agent:"Обозреватель",cron:"0 9 * * 1",state:"off",want:"on",dirty:true},
+        {id:"hq-mail-pull",name:"Забрать личную почту",what:"Забирает новые письма и готовит обзор с короткими ответами на вкладке «Почта».",why:"обзор почты готов к вашему приходу.",set:"полный",env:"любая",agent:"Входящие",cron:"0 9,13,17 * * 1-5",state:"on",where:"Claude Code",lastRun:at(-3,9,1),lastResult:"4 новых письма, 2 ждут ответа",lastOk:true},
+        {id:"hq-tg-pull",name:"Забрать Telegram",what:"Забирает сообщения из Telegram и разбирает их вместе с почтой.",why:"сообщения из мессенджера попадают в общий разбор.",set:"полный",env:"Code",agent:"Входящие",cron:"*/20 8-21 * * *",state:"unavailable",note:"Telegram не подключён: мост настраивается в Claude Code (шаг «Каналы» настройки)."}]
+    };
+  }
+  function startDemo(){
+    var data=demoData();
+    S.demo=true;S.meta=data.meta;
+    TABS.forEach(function(t){S[t[0]]=data[t[0]];S.loaded[t[0]]=true});
+    render(true);
+  }
+
+  function sub(db,name){
+    db.collection(name).limit(500).onSnapshot(function(snap){
+      S[name]=snap.docs.map(function(d){var o=Object.assign({},d.data());o.id=d.id;return o});
+      S.loaded[name]=true;render();
+    },function(){S.loaded[name]=true;S.error="Связь с данными доски прервалась — обновите страницу";render(true)});
+  }
+
+  render(true);
+  if(!window.claude){startDemo();return}
+  Promise.all([window.claude.use("db"),window.claude.use("user")]).then(function(r){
+    var db=r[0],user=r[1];
+    if(!db){S.error="Данные недоступны в этом просмотре";TABS.forEach(function(t){S.loaded[t[0]]=true});render(true);return}
+    S.db=db;
+    TABS.forEach(function(t){sub(db,t[0])});
+    db.doc("meta/state").onSnapshot(function(s){S.meta=s.exists?s.data():null;render()},function(){});
+    if(user)Promise.resolve(user.can("data.write")).then(function(v){if(v===false){S.canWrite=false;render(true)}},function(){});
+    render(true);
+  },function(){S.error="Данные недоступны в этом просмотре";TABS.forEach(function(t){S.loaded[t[0]]=true});render(true)});
+  // связь с разговором рядом с доской — для кнопок «Отправить сейчас», «Запустить сейчас», «Сверить сейчас»; без неё доска работает как раньше
+  Promise.resolve(window.claude.use("room")).then(function(room){
+    if(!room||typeof room.sendToClaudeSession!=="function")return;
+    S.room=room;render();
+    if(typeof room.canSendToClaudeSession==="function")room.canSendToClaudeSession().then(function(v){S.ask=v;render()},function(){S.ask="off";render()});
+  },function(){});
+})();
+</script>

@@ -1,0 +1,37 @@
+{
+ "ts": "2026-10-04T03:48:07",
+ "before": "demo_регламент.docx",
+ "after": "demo_регламент_правка_от_коллеги.docx",
+ "before_sha": "44611d392493e25e",
+ "after_sha": "aac04733a29ea6d0",
+ "mode": "содержание и оформление",
+ "allow": [
+  "Сроки"
+ ],
+ "same": 15,
+ "touched": [
+  {
+   "kind": "изменён",
+   "section": "2. Участники и роли > 2.2. Согласующие",
+   "allowed": false,
+   "hash_before": "2ce5a3d76e196de4",
+   "hash_after": "ac7b4a53553469fc"
+  },
+  {
+   "kind": "изменён",
+   "section": "3. Сроки согласования",
+   "allowed": true,
+   "hash_before": "60aa7e417c55af78",
+   "hash_after": "6f77792669adac25"
+  },
+  {
+   "kind": "изменён",
+   "section": "7. Ответственность",
+   "allowed": false,
+   "hash_before": "dc15c5af09ba79c2",
+   "hash_after": "38adce48f6f098cf"
+  }
+ ],
+ "unused_allow": [],
+ "ok": false
+}

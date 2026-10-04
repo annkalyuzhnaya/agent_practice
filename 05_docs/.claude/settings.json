@@ -1,0 +1,28 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python tools/parser.py:*)",
+      "Bash(python tools/generator.py:*)",
+      "Bash(python tools/integrity_diff.py:*)",
+      "Bash(python tools/guard.py:*)",
+      "Bash(python tools/numcheck.py:*)",
+      "Bash(python tools/versions.py:*)",
+      "Bash(python tools/version_report.py:*)",
+      "Bash(python tools/handoff.py:*)",
+      "Bash(python tools/registry.py:*)",
+      "Bash(python tools/doc_search.py:*)",
+      "Bash(python tools/evals.py:*)",
+      "Bash(python tools/setup.py:*)",
+      "Bash(python tools/demo.py:*)",
+      "Bash(python tools/tg_bridge.py check:*)",
+      "Bash(python tools/tg_bridge.py whoami:*)",
+      "Bash(python tools/tg_bridge.py pull:*)"
+    ],
+    "deny": [
+      "Read(hub/.secrets/**)"
+    ]
+  },
+  "env": {
+    "PYTHONIOENCODING": "utf-8"
+  }
+}

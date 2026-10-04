@@ -1,0 +1,515 @@
+<title>Встречи</title>
+<style>
+:root{
+  --bg:#f5f2ec;--surface:#fffdf8;--ink:#1e2226;--muted:#6a6f76;--line:#e0dacd;
+  --accent:#2d5b4e;--accent-ink:#ffffff;--soft:#e7efe9;
+  --warn:#a85a14;--warn-soft:#f6ead9;--danger:#a3312c;--danger-soft:#f6e1de;--ok:#2f6b3c;
+  --radius:10px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#15181a;--surface:#1e2225;--ink:#e9e6e0;--muted:#9aa1a8;--line:#31363b;
+    --accent:#84c9b2;--accent-ink:#10201b;--soft:#22302c;
+    --warn:#e0a25c;--warn-soft:#33291c;--danger:#e58a84;--danger-soft:#3a2220;--ok:#8fce9d;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#15181a;--surface:#1e2225;--ink:#e9e6e0;--muted:#9aa1a8;--line:#31363b;
+  --accent:#84c9b2;--accent-ink:#10201b;--soft:#22302c;
+  --warn:#e0a25c;--warn-soft:#33291c;--danger:#e58a84;--danger-soft:#3a2220;--ok:#8fce9d;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:860px;margin:0 auto;padding:20px 16px 64px}
+header h1{font-size:22px;margin:0 0 2px;letter-spacing:-.01em}
+.sub{color:var(--muted);font-size:13px}
+.banner{margin-top:10px;padding:8px 12px;border-radius:8px;background:var(--warn-soft);color:var(--warn);font-size:13px}
+.tabs{display:flex;gap:6px;margin:18px -16px 14px;padding:0 16px;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:none;border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:7px 12px;border-radius:999px;font:inherit;cursor:pointer;white-space:nowrap}
+.tab[aria-selected="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.tab .n{opacity:.75;margin-left:5px;font-variant-numeric:tabular-nums}
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px}
+.chips{display:flex;gap:4px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:transparent;color:var(--muted);padding:4px 10px;border-radius:999px;font:inherit;font-size:13px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--soft);color:var(--ink);border-color:var(--accent)}
+.btn{border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink);padding:7px 14px;border-radius:8px;font:inherit;font-weight:600;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--accent)}
+.btn.small{padding:4px 10px;font-size:13px;font-weight:500}
+.btn:disabled{opacity:.5;cursor:default}
+.spacer{flex:1}
+.group{margin:18px 0 6px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.group.late{color:var(--danger)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:12px 14px;margin-bottom:8px}
+.card.late{border-left:3px solid var(--danger)}
+.card.soon{border-left:3px solid var(--accent)}
+.card.done .what{text-decoration:line-through;color:var(--muted)}
+.row{display:flex;gap:10px;align-items:flex-start}
+.check{flex:none;width:22px;height:22px;margin-top:1px;border-radius:50%;border:2px solid var(--muted);background:transparent;cursor:pointer;padding:0;color:var(--accent-ink);font-size:13px;line-height:1}
+.check.on{background:var(--ok);border-color:var(--ok)}
+.check.sq{border-radius:6px}
+.main{flex:1;min-width:0}
+.what{font-weight:500;overflow-wrap:anywhere}
+.title{font-size:17px;font-weight:600;overflow-wrap:anywhere}
+.meta{color:var(--muted);font-size:13px;margin-top:3px;overflow-wrap:anywhere}
+.meta b{font-weight:600;color:var(--ink)}
+.late-text{color:var(--danger);font-weight:600}
+.tag{display:inline-block;padding:1px 8px;border-radius:999px;font-size:12px;background:var(--soft);color:var(--ink);margin-right:6px}
+.tag.warn{background:var(--warn-soft);color:var(--warn)}
+.tag.danger{background:var(--danger-soft);color:var(--danger)}
+.tags{margin-top:8px}
+.actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+select,input,textarea{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:6px 8px;max-width:100%}
+.card select{font-size:13px;padding:3px 6px}
+.empty{color:var(--muted);padding:26px 14px;text-align:center;border:1px dashed var(--line);border-radius:var(--radius)}
+details summary{cursor:pointer;color:var(--accent);margin-top:8px;font-size:13px}
+.pre{white-space:pre-wrap;overflow-wrap:anywhere;margin-top:8px;font-size:14px}
+.doc-h{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:12px 0 2px}
+.label{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-top:12px}
+.five{margin:6px 0 0;padding-left:20px}
+.five li{margin:2px 0;overflow-wrap:anywhere}
+.item{display:flex;gap:8px;align-items:flex-start;margin-top:6px}
+.item .txt{flex:1;min-width:0;overflow-wrap:anywhere}
+.item.on .txt{color:var(--muted);text-decoration:line-through}
+.notes{display:block;width:100%;margin-top:6px;resize:vertical;line-height:1.45}
+dialog{border:1px solid var(--line);border-radius:14px;background:var(--surface);color:var(--ink);padding:18px;width:min(480px,calc(100vw - 32px))}
+dialog::backdrop{background:rgba(0,0,0,.45)}
+dialog h3{margin:0 0 12px}
+label{display:block;font-size:13px;color:var(--muted);margin:10px 0 4px}
+dialog input,dialog select,dialog textarea{width:100%}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.dlg-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
+.toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:9px 14px;border-radius:8px;font-size:14px;max-width:calc(100vw - 32px);display:none}
+.note{color:var(--muted);font-size:13px;margin-top:14px}
+@media (max-width:480px){.two{grid-template-columns:1fr}}
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>Встречи</h1>
+    <div class="sub" id="sync">Загружаю данные…</div>
+    <div class="banner" id="banner" hidden></div>
+  </header>
+  <div class="tabs" role="tablist" id="tabs"></div>
+  <main id="panel"></main>
+</div>
+
+<dialog id="dlg">
+  <form method="dialog" id="form">
+    <h3 id="dlg-title">Задача</h3>
+    <label for="f-what">Что сделать</label>
+    <textarea id="f-what" rows="3" required maxlength="1000"></textarea>
+    <div class="two">
+      <div><label for="f-who">Кто</label><input id="f-who" maxlength="100" placeholder="владелец"></div>
+      <div><label for="f-due">Срок</label><input id="f-due" type="date"></div>
+    </div>
+    <label for="f-status">Статус</label>
+    <select id="f-status"></select>
+    <div class="dlg-actions">
+      <button type="button" class="btn ghost" id="f-cancel">Отмена</button>
+      <button type="submit" class="btn" id="f-save">Сохранить</button>
+    </div>
+  </form>
+</dialog>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(function(){
+  var STATUSES=["предложено","новое","в работе","сделано","отменено"];
+  var TABS=[["meetings","Встречи"],["tasks","Задачи"],["parties","Контрагенты"]];
+  var S={meetings:[],tasks:[],parties:[],meta:null,tab:"meetings",filter:"active",db:null,local:false,canWrite:true,loaded:{},error:""};
+  var busy={},deferred=false,editing=null;
+  // несохранённые заметки переживают перерисовку
+  var drafts={};
+  try{var t=localStorage.getItem("meet-tab");if(t&&TABS.some(function(x){return x[0]===t}))S.tab=t}catch(e){}
+
+  function $(id){return document.getElementById(id)}
+  function h(tag,attrs){
+    var el=document.createElement(tag),i,k;
+    if(attrs)for(k in attrs){
+      if(k==="text")el.textContent=attrs[k];
+      else if(k.slice(0,2)==="on")el.addEventListener(k.slice(2),attrs[k]);
+      else if(attrs[k]===true)el.setAttribute(k,"");
+      else if(attrs[k]!==false&&attrs[k]!=null)el.setAttribute(k,attrs[k]);
+    }
+    for(i=2;i<arguments.length;i++){var c=arguments[i];if(c==null||c===false)continue;el.appendChild(typeof c==="string"?document.createTextNode(c):c)}
+    return el;
+  }
+  function str(v){return typeof v==="string"?v:(v==null?"":String(v))}
+  function pad(n){return n<10?"0"+n:""+n}
+  function iso(d){return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate())}
+  function today(){return iso(new Date())}
+  function plusDays(n){var d=new Date();d.setDate(d.getDate()+n);return iso(d)}
+  function dueDate(v){var m=/^\d{4}-\d{2}-\d{2}/.exec(str(v));return m?m[0]:""}
+  function human(d){
+    if(!d)return "";
+    if(d===today())return "сегодня";
+    if(d===plusDays(1))return "завтра";
+    if(d===plusDays(-1))return "вчера";
+    var p=d.split("-");return p[2]+"."+p[1]+(p[0]!==String(new Date().getFullYear())?"."+p[0]:"");
+  }
+  function toast(msg){var el=$("toast");el.textContent=msg;el.style.display="block";clearTimeout(toast.t);toast.t=setTimeout(function(){el.style.display="none"},3500)}
+  function isOpen(t){return t.status!=="сделано"&&t.status!=="отменено"}
+  function isLate(t){var d=dueDate(t.due);return isOpen(t)&&t.status!=="предложено"&&d&&d<today()}
+  function held(m){return str(m.status)==="проведена"||dueDate(m.when)<today()}
+  function cancelled(m){return str(m.status)==="отменена"}
+
+  // запись: одна за раз на документ, только по действию человека
+  function write(coll,id,patch,create){
+    if(!S.canWrite||(!S.db&&!S.local)){toast("Изменять данные в этом просмотре нельзя");return Promise.resolve(false)}
+    var key=coll+"/"+id;
+    if(busy[key])return Promise.resolve(false);
+    patch.dirty=true;patch.updatedAt=new Date().toISOString();
+    if(S.local){
+      // учебный режим: данные живут в памяти страницы
+      var list=S[coll],found=null;
+      list.forEach(function(x){if(x.id===id)found=x});
+      if(found)Object.assign(found,patch);else{var o=Object.assign({},patch);o.id=id;list.push(o)}
+      render();return Promise.resolve(true);
+    }
+    busy[key]=true;
+    var ref=S.db.collection(coll).doc(id);
+    return (create?ref.set(patch):ref.update(patch)).then(function(){return true},function(e){
+      if(e&&e.code==="invalid_argument"){S.canWrite=false;toast("Нет права на запись — страница открыта только для чтения");render()}
+      else if(e&&e.code==="quota_exceeded")toast("Хранилище страницы заполнено — попросите агента убрать старые встречи");
+      else toast("Не удалось сохранить. Попробуйте ещё раз");
+      return false;
+    }).then(function(ok){delete busy[key];return ok});
+  }
+
+  function renderTabs(){
+    var box=$("tabs");box.textContent="";
+    var counts={
+      meetings:S.meetings.filter(function(m){return !held(m)&&!cancelled(m)}).length,
+      tasks:S.tasks.filter(isOpen).length,
+      parties:S.parties.length
+    };
+    TABS.forEach(function(t){
+      box.appendChild(h("button",{class:"tab",role:"tab","aria-selected":String(S.tab===t[0]),onclick:function(){
+        S.tab=t[0];try{localStorage.setItem("meet-tab",S.tab)}catch(e){}render(true)}},
+        t[1],counts[t[0]]?h("span",{class:"n",text:String(counts[t[0]])}):null));
+    });
+  }
+
+  function renderHeader(){
+    var m=S.meta,sync=$("sync"),banner=$("banner");
+    banner.hidden=!S.local;
+    if(S.local){
+      banner.textContent="Учебный режим: страница открыта без хранилища и показывает вымышленные данные. Отметки и заметки живут до обновления страницы. Свои встречи появятся здесь после публикации — напишите агенту «опубликуй страницу встреч».";
+      sync.textContent="Учебные данные · ничего никуда не отправляется";return;
+    }
+    if(S.error){sync.textContent=S.error}
+    else if(!S.db){sync.textContent="Загружаю данные…"}
+    else{
+      var parts=[];
+      if(m&&m.syncedAt)parts.push("Сверено с агентом: "+str(m.syncedAt).replace("T"," ").slice(0,16));
+      else parts.push("Агент ещё не выгружал сюда данные");
+      if(m&&typeof m.savedMin==="number"&&m.savedMin>0)parts.push("сэкономлено ~"+(m.savedMin>=90?Math.round(m.savedMin/60)+" ч":m.savedMin+" мин"));
+      if(!S.canWrite)parts.push("только чтение");
+      sync.textContent=parts.join(" · ");
+    }
+  }
+
+  function empty(text){return h("div",{class:"empty",text:text})}
+
+  // текст брифа и мемо: заголовки выделяем, остальное — как есть (только текст, без разметки)
+  function docBlock(text){
+    var box=h("div"),buf=[];
+    function flush(){if(buf.length){var s=buf.join("\n").replace(/^\n+|\n+$/g,"");if(s)box.appendChild(h("div",{class:"pre",text:s}));buf=[]}}
+    str(text).split("\n").forEach(function(line){
+      var m=/^#{1,3}\s+(.*)$/.exec(line);
+      if(m){flush();box.appendChild(h("div",{class:"doc-h",text:m[1]}))}else buf.push(line);
+    });
+    flush();return box;
+  }
+  function lines(v){
+    if(Array.isArray(v))return v.map(str).filter(Boolean);
+    return str(v).split("\n").map(function(s){return s.replace(/^\s*[-•\d.)]+\s*/,"").trim()}).filter(Boolean);
+  }
+
+  // ----- задачи -----
+  function statusSelect(t){
+    var sel=h("select",{"aria-label":"Статус",disabled:!S.canWrite,onchange:function(){write("tasks",t.id,{status:sel.value})}});
+    var list=STATUSES.indexOf(t.status)<0&&t.status?[t.status].concat(STATUSES):STATUSES;
+    list.forEach(function(s){var o=h("option",{value:s,text:s});if(s===t.status)o.selected=true;sel.appendChild(o)});
+    return sel;
+  }
+  function taskMeta(t,late){
+    var d=dueDate(t.due),meta=h("div",{class:"meta"});
+    if(t.status==="предложено")meta.appendChild(h("span",{class:"tag warn",text:"предложено агентом"}));
+    if(d)meta.appendChild(h("span",{class:late?"late-text":"",text:"срок "+human(d)}));
+    else meta.appendChild(document.createTextNode("срок не назван"));
+    if(str(t.who))meta.appendChild(document.createTextNode(" · "+str(t.who)));
+    return meta;
+  }
+  function toggle(t){var done=t.status==="сделано";
+    return h("button",{class:"check"+(done?" on":""),title:done?"Вернуть в работу":"Отметить сделанным","aria-label":done?"Вернуть в работу":"Отметить сделанным",disabled:!S.canWrite,
+      onclick:function(){write("tasks",t.id,{status:done?"в работе":"сделано"})}},done?"✓":"")}
+  function taskCard(t,late){
+    var done=t.status==="сделано",meta=taskMeta(t,late);
+    if(str(t.source))meta.appendChild(document.createTextNode(" · "+str(t.source)));
+    return h("div",{class:"card"+(late?" late":"")+(done?" done":"")},
+      h("div",{class:"row"},toggle(t),
+        h("div",{class:"main"},h("div",{class:"what",text:str(t.what)||"(без названия)"}),meta,
+          h("div",{class:"actions"},statusSelect(t),
+            t.status==="предложено"?h("button",{class:"btn small",disabled:!S.canWrite,onclick:function(){write("tasks",t.id,{status:"новое"})}},"Принять"):null,
+            h("button",{class:"btn small ghost",disabled:!S.canWrite,onclick:function(){openDialog(t)}},"Изменить")))));
+  }
+  function renderTasks(p){
+    var filters=[["active","Активные"],["meet","Из встреч"],["proposed","Предложено"],["done","Закрытые"],["all","Все"]];
+    var chips=h("div",{class:"chips"});
+    filters.forEach(function(f){chips.appendChild(h("button",{class:"chip","aria-pressed":String(S.filter===f[0]),onclick:function(){S.filter=f[0];render(true)}},f[1]))});
+    p.appendChild(h("div",{class:"bar"},chips,h("span",{class:"spacer"}),
+      h("button",{class:"btn",disabled:!S.canWrite,onclick:function(){openDialog(null)}},"Новая задача")));
+    var list=S.tasks.filter(function(t){
+      if(S.filter==="active")return isOpen(t);
+      if(S.filter==="meet")return isOpen(t)&&(str(t.meeting)||/мемо/i.test(str(t.source)));
+      if(S.filter==="proposed")return t.status==="предложено";
+      if(S.filter==="done")return !isOpen(t);
+      return true;
+    });
+    if(!list.length){p.appendChild(empty(S.tasks.length?"В этом фильтре пусто.":"Задач пока нет. Они появятся после первого мемо; свою можно добавить кнопкой выше."));return}
+    var td=today(),wk=plusDays(7),groups=[["Просрочено",[]],["Сегодня",[]],["На неделе",[]],["Позже",[]],["Без срока",[]],["Закрыто",[]]];
+    list.forEach(function(t){
+      var d=dueDate(t.due);
+      if(!isOpen(t))groups[5][1].push(t);
+      else if(!d)groups[4][1].push(t);
+      else if(d<td)groups[0][1].push(t);
+      else if(d===td)groups[1][1].push(t);
+      else if(d<=wk)groups[2][1].push(t);
+      else groups[3][1].push(t);
+    });
+    groups.forEach(function(g,i){
+      if(!g[1].length)return;
+      g[1].sort(function(a,b){return (dueDate(a.due)||"9999").localeCompare(dueDate(b.due)||"9999")||str(a.what).localeCompare(str(b.what))});
+      p.appendChild(h("div",{class:"group"+(i===0?" late":""),text:g[0]+" · "+g[1].length}));
+      g[1].forEach(function(t){p.appendChild(taskCard(t,i===0))});
+    });
+    p.appendChild(h("div",{class:"note",text:"Отметки, сделанные здесь, агент перенесёт в свои записи при следующем разговоре или запуске по расписанию."}));
+  }
+
+  // ----- встречи -----
+  // сигнал агенту в разговоре рядом со страницей: «сверь страницу сейчас»; что оформлять, он берёт из данных страницы
+  function canAsk(){return !!S.room&&S.ask!=="off"&&S.ask!=="unsupported"}
+  function askSync(m){
+    var offline="Агент сейчас не на связи. Откройте страницу рядом с разговором или напишите ему «сверь страницу встреч»";
+    var p;
+    // вызов — прямо из нажатия, без ожиданий до него
+    try{p=S.room.sendToClaudeSession({label:"Оформить мемо по заметкам",request:"sync_board",meeting:String(m.id)},{deliver:"send",
+      onStatus:function(s){if(s&&s.state==="failed")toast(offline)}})}catch(e){toast(offline);return}
+    Promise.resolve(p).then(function(){toast("Запрос передан агенту — подтвердите его в разговоре")},
+      function(e){toast(e&&e.code==="rate_limited"?"Слишком часто — повторите через минуту":offline)});
+  }
+  function readiness(m){
+    if(cancelled(m))return ["отменена","warn"];
+    if(str(m.memo))return ["мемо готово",""];
+    if(held(m))return str(m.notesState)==="new"?["заметки переданы — агент оформит мемо","warn"]:["ждёт ваших заметок","danger"];
+    return str(m.brief)?["бриф готов",""]:["брифа пока нет","warn"];
+  }
+  function checklist(m){
+    var items=Array.isArray(m.checklist)?m.checklist.filter(function(x){return x&&str(x.id)&&str(x.text)}):[];
+    if(!items.length)return null;
+    var checked=m.checked&&typeof m.checked==="object"?m.checked:{};
+    var done=items.filter(function(x){return checked[x.id]}).length;
+    var box=h("div",null,h("div",{class:"label",text:"Подготовка · "+done+" из "+items.length}));
+    items.slice(0,8).forEach(function(x){
+      var on=!!checked[x.id];
+      box.appendChild(h("div",{class:"item"+(on?" on":"")},
+        h("button",{class:"check sq"+(on?" on":""),"aria-label":on?"Снять отметку":"Отметить",disabled:!S.canWrite,onclick:function(){
+          var next=Object.assign({},checked);if(on)delete next[x.id];else next[x.id]=true;
+          write("meetings",m.id,{checked:next})}},on?"✓":""),
+        h("div",{class:"txt",text:str(x.text)})));
+    });
+    return box;
+  }
+  function notesBlock(m){
+    var state=str(m.notesState),box=h("div");
+    if(state==="new"||state==="taken"){
+      box.appendChild(h("div",{class:"label",text:state==="new"?"Ваши заметки — ждут агента":"Ваши заметки — агент забрал"}));
+      box.appendChild(h("details",null,h("summary",{text:"Показать заметки"}),h("div",{class:"pre",text:str(m.notes)})));
+      if(state==="new")box.appendChild(h("div",{class:"actions"},
+        canAsk()?h("button",{class:"btn small",disabled:!S.canWrite,title:"Попросить агента сверить страницу и оформить мемо прямо сейчас",onclick:function(){askSync(m)}},"Оформить мемо сейчас"):null,
+        h("button",{class:"btn small ghost",disabled:!S.canWrite,onclick:function(){drafts[m.id]=str(m.notes);write("meetings",m.id,{notesState:""})}},"Дополнить")));
+      return box;
+    }
+    var text=drafts[m.id]!=null?drafts[m.id]:str(m.notes);
+    var ta=h("textarea",{class:"notes",maxlength:"6000","aria-label":"Заметки по итогам встречи",rows:String(Math.min(14,Math.max(4,text.split("\n").length+1))),disabled:!S.canWrite,
+      placeholder:"Как прошло: что решили, кто что обещал и к какому сроку, что осталось открытым. Можно сырым текстом — агент сам оформит мемо и задачи."});
+    ta.value=text;
+    ta.addEventListener("input",function(){drafts[m.id]=ta.value});
+    box.appendChild(h("div",{class:"label",text:"Заметки по итогам"}));
+    box.appendChild(ta);
+    box.appendChild(h("div",{class:"actions"},h("button",{class:"btn small",disabled:!S.canWrite,onclick:function(){
+      var v=ta.value.trim();
+      if(!v){toast("Заметки пустые — напишите хотя бы пару строк");return}
+      write("meetings",m.id,{notes:v,notesState:"new",notesAt:new Date().toISOString()}).then(function(ok){if(ok)delete drafts[m.id];else render(true)})}},"Передать агенту")));
+    return box;
+  }
+  function meetingCard(m){
+    var d=dueDate(m.when),isHeld=held(m),r=readiness(m),soon=!isHeld&&!cancelled(m)&&d&&d<=plusDays(1);
+    var c=h("div",{class:"card"+(soon?" soon":"")});
+    c.appendChild(h("div",{class:"title",text:str(m.party)||"Встреча"}));
+    c.appendChild(h("div",{class:"meta"},h("b",{text:(human(d)||str(m.when))+" "+str(m.when).slice(10).trim()}),str(m.status)?" · "+str(m.status):""));
+    if(str(m.goal))c.appendChild(h("div",{class:"meta",text:str(m.goal)}));
+    if(str(m.people))c.appendChild(h("div",{class:"meta",text:"Участники: "+str(m.people)}));
+    c.appendChild(h("div",{class:"tags"},h("span",{class:"tag"+(r[1]?" "+r[1]:""),text:r[0]})));
+    if(cancelled(m))return c;
+
+    var five=lines(m.summary);
+    if(!isHeld&&five.length){
+      c.appendChild(h("div",{class:"label",text:"Главное"}));
+      var ol=h("ol",{class:"five"});five.slice(0,5).forEach(function(x){ol.appendChild(h("li",{text:x}))});c.appendChild(ol);
+    }
+    if(str(m.brief))c.appendChild(h("details",null,h("summary",{text:"Бриф к встрече"}),docBlock(m.brief)));
+    if(!isHeld){var cl=checklist(m);if(cl)c.appendChild(cl)}
+
+    if(isHeld){
+      if(str(m.memo))c.appendChild(h("details",{open:dueDate(m.when)>=plusDays(-3)},h("summary",{text:"Мемо после встречи"}),docBlock(m.memo)));
+      var mine=S.tasks.filter(function(t){return str(t.meeting)===m.id});
+      if(mine.length){
+        var open=mine.filter(isOpen).length;
+        c.appendChild(h("div",{class:"label",text:"Задачи из встречи · открыто "+open+" из "+mine.length}));
+        mine.sort(function(a,b){return (dueDate(a.due)||"9999").localeCompare(dueDate(b.due)||"9999")}).forEach(function(t){
+          var late=isLate(t),done=t.status==="сделано";
+          c.appendChild(h("div",{class:"item"+(done?" on":"")},toggle(t),h("div",{class:"main"},h("div",{class:"txt",text:str(t.what)}),taskMeta(t,late))));
+        });
+      }
+      if(!str(m.memo))c.appendChild(notesBlock(m));
+    }
+    return c;
+  }
+  function renderMeetings(p){
+    if(!S.meetings.length){p.appendChild(empty("Встреч нет. Напишите агенту «у меня встреча с … в четверг в 15:00» — он внесёт её и подготовит бриф."));return}
+    var list=S.meetings.slice().sort(function(a,b){return str(a.when).localeCompare(str(b.when))});
+    var up=list.filter(function(m){return !held(m)}),past=list.filter(held).reverse();
+    var wait=past.filter(function(m){return !cancelled(m)&&!str(m.memo)}),closed=past.filter(function(m){return cancelled(m)||str(m.memo)});
+    var noBrief=up.filter(function(m){return !cancelled(m)&&!str(m.brief)&&dueDate(m.when)<=plusDays(2)}).length;
+    if(noBrief)p.appendChild(h("div",{class:"meta"},h("span",{class:"tag warn",text:"без брифа в ближайшие 3 дня: "+noBrief}),"напишите агенту «подготовь бриф»"));
+    if(wait.length){p.appendChild(h("div",{class:"group late",text:"Прошли — нужно мемо · "+wait.length}));wait.forEach(function(m){p.appendChild(meetingCard(m))})}
+    if(up.length){p.appendChild(h("div",{class:"group",text:"Предстоящие · "+up.length}));up.forEach(function(m){p.appendChild(meetingCard(m))})}
+    if(closed.length){p.appendChild(h("div",{class:"group",text:"Прошедшие"}));closed.slice(0,10).forEach(function(m){p.appendChild(meetingCard(m))})}
+    p.appendChild(h("div",{class:"note",text:"Бриф и мемо готовит агент; здесь вы отмечаете подготовку, передаёте заметки по итогам и закрываете задачи. Отправлять письма и менять календарь страница не умеет."}));
+  }
+
+  // ----- контрагенты -----
+  function renderParties(p){
+    if(!S.parties.length){p.appendChild(empty("Досье пока нет. Агент заведёт его после первой встречи или по словам «заведи досье на …»."));return}
+    S.parties.slice().sort(function(a,b){return str(a.name).localeCompare(str(b.name))}).forEach(function(x){
+      var c=h("div",{class:"card"});
+      c.appendChild(h("div",{class:"title",text:str(x.name)||"(без названия)"}));
+      if(str(x.about))c.appendChild(h("div",{class:"meta",text:str(x.about)}));
+      if(str(x.people))c.appendChild(h("div",{class:"meta"},h("b",{text:"Люди: "}),str(x.people)));
+      if(str(x.last))c.appendChild(h("div",{class:"meta"},h("b",{text:"Последний контакт: "}),str(x.last)));
+      if(str(x.next))c.appendChild(h("div",{class:"meta"},h("b",{text:"Следующая встреча: "}),str(x.next)));
+      var open=lines(x.open);
+      if(open.length){
+        c.appendChild(h("div",{class:"label",text:"Открыто"}));
+        var ul=h("ul",{class:"five"});open.slice(0,5).forEach(function(s){ul.appendChild(h("li",{text:s}))});c.appendChild(ul);
+      }
+      p.appendChild(c);
+    });
+    p.appendChild(h("div",{class:"note",text:"Здесь — краткая выжимка. Полное досье ведёт агент; спросите его в чате: «что у нас по …»."}));
+  }
+
+  function render(force){
+    renderHeader();renderTabs();
+    var p=$("panel"),a=document.activeElement;
+    if(!force&&a&&p.contains(a)&&(a.tagName==="INPUT"||a.tagName==="TEXTAREA")&&a.value){deferred=true;return}
+    deferred=false;p.textContent="";
+    if(S.error&&!S.db){p.appendChild(empty("Данные страницы недоступны в этом просмотре. Откройте её в claude.ai под своей учётной записью."));return}
+    if(!S.loaded[S.tab]){p.appendChild(empty("Загружаю…"));return}
+    ({meetings:renderMeetings,tasks:renderTasks,parties:renderParties})[S.tab](p);
+  }
+  $("panel").addEventListener("focusout",function(){if(deferred)setTimeout(function(){render()},0)});
+
+  function openDialog(t){
+    editing=t;
+    $("dlg-title").textContent=t?"Изменить задачу":"Новая задача";
+    $("f-what").value=t?str(t.what):"";$("f-who").value=t?str(t.who):"";$("f-due").value=t?dueDate(t.due):"";
+    var sel=$("f-status");sel.textContent="";
+    STATUSES.forEach(function(s){var o=h("option",{value:s,text:s});if(s===(t?t.status:"новое"))o.selected=true;sel.appendChild(o)});
+    $("dlg").showModal();$("f-what").focus();
+  }
+  $("f-cancel").addEventListener("click",function(){$("dlg").close()});
+  $("form").addEventListener("submit",function(e){
+    e.preventDefault();
+    var what=$("f-what").value.trim();if(!what)return;
+    var data={what:what,who:$("f-who").value.trim()||"владелец",due:$("f-due").value||"",status:$("f-status").value};
+    var p;
+    if(editing){p=write("tasks",editing.id,data)}
+    else{
+      data.created=today();data.source="страница";
+      p=write("tasks","u"+Date.now().toString(36)+Math.random().toString(36).slice(2,5),data,true);
+    }
+    $("f-save").disabled=true;
+    p.then(function(ok){$("f-save").disabled=false;if(ok)$("dlg").close()});
+  });
+
+  // ----- учебный режим: страница открыта без среды артефактов (файл с диска) -----
+  function demoData(){
+    var d1=plusDays(1),d2=plusDays(2),y=plusDays(-1),w=plusDays(-8);
+    return {
+      meetings:[
+        {id:"m-demo-1",when:d1+" 11:00",party:"ООО «Северный контур» (учебный пример)",goal:"Продление договора сопровождения на 2027 год и срок этапа 3",
+         people:"П. Лебедев, М. Котова; с нашей стороны — Г. Арсеньев",status:"подтверждена",
+         summary:["Цель: продлить сопровождение на 12 месяцев с индексацией не выше 6% и закрыть вопрос срока этапа 3.",
+           "Их позиция: Лебедев хочет 24 месяца, +12% и подпись до 15.10; Котова отдельно просит перенос этапа 3 на 30.11.",
+           "Главный риск: в письмах подрядчика две разные картины этапа 3 — «по графику» и «просим перенос».",
+           "Наша опора: при индексации выше 6% договор уходит на комиссию 22.10 — подписать до 15.10 невозможно.",
+           "Не обещать: подпись до 15.10, срок больше 12 месяцев, перенос этапа 3 «рабочим протоколом»."],
+         brief:"## Кто это\nПодрядчик по сопровождению портала обращений. Лебедев — коммерческий директор (интерес: длинный договор и цена; предположение). Котова — руководитель проекта (интерес: перенос срока без штрафа; предположение).\n\n## Вопросы\n1. Какой статус этапа 3 на сегодня — по графику или нужен перенос?\n2. Кто заменит аналитика и с какой даты?\n3. Что входит в 12% индексации?\n\n## Карта возражений\n«Цена вырастет после 15.10» — у нас лимит 6%, решение от 25.09.\n«Перенос оформим протоколом» — срок этапа записан в договоре, меняется только допсоглашением.\n\n## Не подтверждено\nДата выхода нового аналитика. [РЕШИТЬ: готовы ли мы на перенос этапа 3 в обмен на реакцию на инциденты за 4 часа]",
+         checklist:[{id:"c1",text:"Прочитать бриф"},{id:"c2",text:"Решить вопросы с пометкой [РЕШИТЬ]"},{id:"c3",text:"Согласовать позицию по этапу 3 с Арсеньевым"},{id:"c4",text:"Взять решение о лимитах от 25.09 и протокол прошлой встречи"},{id:"c5",text:"Подтвердить время встречи"}],
+         checked:{c1:true}},
+        {id:"m-demo-2",when:d2+" 15:30",party:"АНО «Городские данные» (учебный пример)",goal:"Знакомство: обмен наборами открытых данных",people:"Р. Назаров",status:"ждёт подтверждения"},
+        {id:"m-demo-3",when:y+" 16:00",party:"Отдел эксплуатации — планёрка (учебный пример)",goal:"Статистика инцидентов за квартал",people:"Г. Арсеньев",status:"подтверждена",
+         brief:"## Главное\nСверить цифры инцидентов перед встречей с подрядчиком."},
+        {id:"m-demo-4",when:w+" 10:00",party:"ООО «Северный контур» (учебный пример)",goal:"Приёмка этапа 2",people:"М. Котова, Г. Арсеньев",status:"проведена",
+         memo:"## Решения\nЭтап 2 принят с тремя замечаниями.\n\n## Договорённости\nОни нам: устранить замечания; прислать план-график этапа 3.\nМы им: передать тестовые данные.\n\n## Открытые вопросы\nСрок этапа 3 — подтвердить после плана-графика."}
+      ],
+      tasks:[
+        {id:"t001",what:"Устранить три замечания по этапу 2",who:"М. Котова (подрядчик)",due:plusDays(-3),status:"в работе",source:"мемо приёмки этапа 2",meeting:"m-demo-4"},
+        {id:"t002",what:"Прислать план-график этапа 3",who:"М. Котова (подрядчик)",due:plusDays(-6),status:"в работе",source:"мемо приёмки этапа 2",meeting:"m-demo-4"},
+        {id:"t003",what:"Передать тестовые данные для модуля отчётности",who:"Г. Арсеньев",due:plusDays(-5),status:"сделано",source:"мемо приёмки этапа 2",meeting:"m-demo-4"},
+        {id:"t004",what:"Согласовать с финансовым отделом лимит на сопровождение 2027",who:"владелец",due:plusDays(1),status:"в работе",source:"мемо приёмки этапа 2",meeting:"m-demo-4"},
+        {id:"t005",what:"Запросить у Арсеньева статистику инцидентов за квартал",who:"владелец",due:"",status:"предложено",source:"бриф к встрече"}
+      ],
+      parties:[
+        {id:"p-severny-kontur",name:"ООО «Северный контур» (учебный пример)",about:"Подрядчик по сопровождению портала обращений; договор действует до 31.12.",
+         people:"П. Лебедев — коммерческий директор; М. Котова — руководитель проекта",last:human(w)+" — приёмка этапа 2 с тремя замечаниями",next:human(d1)+" 11:00",
+         open:["Три замечания по этапу 2 — срок прошёл","План-график этапа 3 не прислан","Условия продления на 2027 год"]},
+        {id:"p-gorodskie-dannye",name:"АНО «Городские данные» (учебный пример)",about:"Досье ещё не заведено — первая встреча.",people:"Р. Назаров",last:"",next:human(d2)+" 15:30",open:[]}
+      ]
+    };
+  }
+  function startLocal(){
+    var d=demoData();
+    S.local=true;S.error="";S.meetings=d.meetings;S.tasks=d.tasks;S.parties=d.parties;
+    TABS.forEach(function(t){S.loaded[t[0]]=true});render(true);
+  }
+
+  function sub(db,name){
+    db.collection(name).limit(500).onSnapshot(function(snap){
+      S[name]=snap.docs.map(function(d){var o=Object.assign({},d.data());o.id=d.id;return o});
+      S.loaded[name]=true;render();
+    },function(){S.loaded[name]=true;S.error="Связь с данными страницы прервалась — обновите страницу";render(true)});
+  }
+
+  render(true);
+  if(!window.claude){startLocal()}
+  else Promise.all([window.claude.use("db"),window.claude.use("user")]).then(function(r){
+    var db=r[0],user=r[1];
+    if(!db){startLocal();return}
+    S.db=db;
+    TABS.forEach(function(t){sub(db,t[0])});
+    db.doc("meta/state").onSnapshot(function(s){S.meta=s.exists?s.data():null;render()},function(){});
+    if(user)Promise.resolve(user.can("data.write")).then(function(v){if(v===false){S.canWrite=false;render(true)}},function(){});
+    render(true);
+  },function(){startLocal()});
+  // связь с разговором рядом со страницей — только для кнопки «Оформить мемо сейчас»; без неё страница работает как обычно
+  if(window.claude)Promise.resolve(window.claude.use("room")).then(function(room){
+    if(!room||typeof room.sendToClaudeSession!=="function")return;
+    S.room=room;render();
+    if(typeof room.canSendToClaudeSession==="function")room.canSendToClaudeSession().then(function(v){S.ask=v;render()},function(){S.ask="off";render()});
+  },function(){});
+})();
+</script>

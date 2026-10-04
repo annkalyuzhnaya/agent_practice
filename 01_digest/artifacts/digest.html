@@ -1,0 +1,444 @@
+<title>Дайджест</title>
+<style>
+:root{
+  --bg:#f5f2ec;--surface:#fffdf8;--ink:#1e2226;--muted:#6a6f76;--line:#e0dacd;
+  --accent:#2d5b4e;--accent-ink:#ffffff;--soft:#e7efe9;
+  --warn:#a85a14;--warn-soft:#f6ead9;--danger:#a3312c;--danger-soft:#f6e1de;--ok:#2f6b3c;
+  --radius:10px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#15181a;--surface:#1e2225;--ink:#e9e6e0;--muted:#9aa1a8;--line:#31363b;
+    --accent:#84c9b2;--accent-ink:#10201b;--soft:#22302c;
+    --warn:#e0a25c;--warn-soft:#33291c;--danger:#e58a84;--danger-soft:#3a2220;--ok:#8fce9d;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#15181a;--surface:#1e2225;--ink:#e9e6e0;--muted:#9aa1a8;--line:#31363b;
+  --accent:#84c9b2;--accent-ink:#10201b;--soft:#22302c;
+  --warn:#e0a25c;--warn-soft:#33291c;--danger:#e58a84;--danger-soft:#3a2220;--ok:#8fce9d;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:860px;margin:0 auto;padding:20px 16px 64px}
+header h1{font-size:22px;margin:0 0 2px;letter-spacing:-.01em}
+.head{display:flex;gap:10px;align-items:flex-start;justify-content:space-between}
+.sub{color:var(--muted);font-size:13px}
+.banner{background:var(--warn-soft);color:var(--warn);border-radius:8px;padding:8px 12px;font-size:13px;margin-bottom:12px}
+.tabs{display:flex;gap:6px;margin:16px -16px 14px;padding:0 16px;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:none;border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:7px 12px;border-radius:999px;font:inherit;cursor:pointer;white-space:nowrap}
+.tab[aria-selected="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.tab .n{opacity:.75;margin-left:5px;font-variant-numeric:tabular-nums}
+.tab .flag{margin-left:5px;padding:0 6px;border-radius:999px;font-size:12px;font-weight:700;background:var(--warn-soft);color:var(--warn)}
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px}
+.bar .lbl{font-size:12px;color:var(--muted);min-width:58px}
+.chips{display:flex;gap:4px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:transparent;color:var(--muted);padding:4px 10px;border-radius:999px;font:inherit;font-size:13px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--soft);color:var(--ink);border-color:var(--accent)}
+.btn{border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink);padding:7px 14px;border-radius:8px;font:inherit;font-weight:600;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--accent)}
+.btn.small{padding:4px 10px;font-size:13px;font-weight:500}
+.btn.on{background:var(--soft);color:var(--ink)}
+.btn:disabled{opacity:.5;cursor:default}
+.spacer{flex:1}
+.group{margin:18px 0 6px;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:12px 14px;margin-bottom:8px}
+.card.top{border-left:3px solid var(--accent)}
+.card.attn{border-left:3px solid var(--warn)}
+.card.skip{opacity:.6}
+.row{display:flex;gap:10px;align-items:flex-start}
+.main{flex:1;min-width:0}
+.what{font-weight:600;overflow-wrap:anywhere}
+.meta{color:var(--muted);font-size:13px;margin-top:3px;overflow-wrap:anywhere}
+.meta b{font-weight:600;color:var(--ink)}
+.tag{display:inline-block;padding:1px 8px;border-radius:999px;font-size:12px;background:var(--soft);color:var(--ink);margin-right:6px}
+.tag.warn{background:var(--warn-soft);color:var(--warn)}
+.tag.plain{background:transparent;border:1px solid var(--line);color:var(--muted)}
+.actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;align-items:center}
+textarea{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:6px 8px;max-width:100%}
+.empty{color:var(--muted);padding:26px 14px;text-align:center;border:1px dashed var(--line);border-radius:var(--radius)}
+.score{flex:none;width:28px;height:28px;border-radius:8px;background:var(--soft);display:grid;place-items:center;font-weight:700}
+.score.hi{background:var(--accent);color:var(--accent-ink)}
+a{color:var(--accent)}
+.pre{overflow-wrap:anywhere;margin-top:8px;font-size:14px}
+.why{margin-top:6px;font-size:14px;overflow-wrap:anywhere}
+.why b{font-weight:600}
+dialog{border:1px solid var(--line);border-radius:14px;background:var(--surface);color:var(--ink);padding:18px;width:min(560px,calc(100vw - 32px))}
+dialog::backdrop{background:rgba(0,0,0,.45)}
+dialog h3{margin:0 0 12px}
+dialog textarea{width:100%;line-height:1.45;resize:vertical}
+.dlg-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
+.toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:9px 14px;border-radius:8px;font-size:14px;max-width:calc(100vw - 32px);display:none}
+.note{color:var(--muted);font-size:13px;margin-top:14px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin-bottom:12px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:10px 12px}
+.stat b{display:block;font-size:20px;font-variant-numeric:tabular-nums}
+.stat span{color:var(--muted);font-size:13px}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="banner" id="demo" hidden>Учебный режим: страница открыта как файл, данные вымышленные, изменения нигде не сохраняются. Рабочая страница — та же, опубликованная Обозревателем.</div>
+    <div class="head">
+      <div>
+        <h1>Дайджест</h1>
+        <div class="sub" id="sync">Загружаю данные…</div>
+      </div>
+      <button class="btn small ghost" id="sync-now" hidden title="Попросить Обозревателя в разговоре рядом со страницей сверить её сейчас">Сверить сейчас</button>
+    </div>
+  </header>
+  <div class="tabs" role="tablist" id="tabs"></div>
+  <main id="panel"></main>
+</div>
+
+<dialog id="dlg">
+  <h3>Текст для коллег</h3>
+  <textarea id="share" rows="12" maxlength="6000"></textarea>
+  <div class="note">Здесь только заголовки, краткая суть и ссылки — без ваших отметок и задач. Текст можно поправить перед копированием; он нигде не сохраняется. Пересылаете вы сами.</div>
+  <div class="dlg-actions">
+    <button type="button" class="btn ghost" id="share-close">Закрыть</button>
+    <button type="button" class="btn" id="share-copy">Скопировать</button>
+  </div>
+</dialog>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(function(){
+  // ключ вкладки; коллекции хранилища — digest и topics
+  var TABS=[["issue","Выпуск"],["archive","Архив"],["topics","Темы и источники"]];
+  var COLLS=["digest","topics"];
+  var MARKS=[["kb","В базу"],["task","В задачи"],["skip","Не интересно"]];
+  var MARK_NAME={kb:"в базу",task:"в задачи",skip:"не интересно"};
+  var KINDS=[["topic","Темы"],["source","Источники"],["skip","Не интересно"]];
+  var S={digest:[],topics:[],meta:null,tab:"issue",fTopic:"",fScore:0,fMark:"all",
+    db:null,canWrite:true,loaded:{},error:"",demo:false,room:null,ask:""};
+  var busy={};
+  try{var t=localStorage.getItem("digest-tab");if(t&&TABS.some(function(x){return x[0]===t}))S.tab=t}catch(e){}
+
+  function $(id){return document.getElementById(id)}
+  function h(tag,attrs){
+    var el=document.createElement(tag),i,k;
+    if(attrs)for(k in attrs){
+      if(k==="text")el.textContent=attrs[k];
+      else if(k.slice(0,2)==="on")el.addEventListener(k.slice(2),attrs[k]);
+      else if(attrs[k]===true)el.setAttribute(k,"");
+      else if(attrs[k]!==false&&attrs[k]!=null)el.setAttribute(k,attrs[k]);
+    }
+    for(i=2;i<arguments.length;i++){var c=arguments[i];if(c==null||c===false)continue;el.appendChild(typeof c==="string"?document.createTextNode(c):c)}
+    return el;
+  }
+  function str(v){return typeof v==="string"?v:(v==null?"":String(v))}
+  function num(v){var n=parseInt(v,10);return n>=1&&n<=5?n:0}
+  function pad(n){return n<10?"0"+n:""+n}
+  function isoDay(v){var m=/^\d{4}-\d{2}-\d{2}/.exec(str(v));return m?m[0]:""}
+  function human(d){d=isoDay(d);if(!d)return "";var p=d.split("-");return p[2]+"."+p[1]+"."+p[0]}
+  function toast(msg){var el=$("toast");el.textContent=msg;el.style.display="block";clearTimeout(toast.t);toast.t=setTimeout(function(){el.style.display="none"},3500)}
+  function safeUrl(u){u=str(u);return /^https?:\/\//i.test(u)?u:""}
+  function empty(text){return h("div",{"class":"empty",text:text})}
+
+  // запись: одна за раз на документ, только по действию человека
+  function write(coll,id,patch){
+    patch.dirty=true;patch.updatedAt=new Date().toISOString();
+    if(S.demo){
+      // учебный режим: данные только в памяти страницы
+      var cur=S[coll].filter(function(x){return x.id===id})[0];
+      if(cur)Object.assign(cur,patch);
+      render();return Promise.resolve(true);
+    }
+    if(!S.db||!S.canWrite){toast("Изменять данные в этом просмотре нельзя");return Promise.resolve(false)}
+    var key=coll+"/"+id;
+    if(busy[key])return Promise.resolve(false);
+    busy[key]=true;
+    return S.db.collection(coll).doc(id).update(patch).then(function(){return true},function(e){
+      if(e&&e.code==="invalid_argument"){S.canWrite=false;toast("Нет права на запись — страница открыта только для чтения");render()}
+      else if(e&&e.code==="quota_exceeded")toast("Хранилище страницы заполнено — попросите Обозревателя убрать старые выпуски");
+      else toast("Не удалось сохранить. Попробуйте ещё раз");
+      return false;
+    }).then(function(ok){delete busy[key];return ok});
+  }
+
+  // запрос в разговор рядом со страницей: «сверь сейчас». Что делать, Обозреватель берёт из данных страницы, а не из этого сообщения
+  function canAsk(){return !!S.room&&S.ask!=="off"&&S.ask!=="unsupported"}
+  function askSync(){
+    var offline="Обозреватель сейчас не на связи. Откройте страницу рядом с разговором или напишите ему «сверь страницу»";
+    var p;
+    // вызов — прямо из нажатия, без ожиданий до него
+    try{p=S.room.sendToClaudeSession({label:"Сверить страницу «Дайджест»",request:"sync_board"},{deliver:"send",onStatus:function(s){if(s&&s.state==="failed")toast(offline)}})}catch(e){toast(offline);return}
+    Promise.resolve(p).then(function(){toast("Запрос передан Обозревателю — подтвердите его в разговоре")},
+      function(e){toast(e&&e.code==="rate_limited"?"Слишком часто — повторите через минуту":offline)});
+  }
+
+  /* ---------- данные ---------- */
+  function dates(){
+    var seen={},out=[];
+    S.digest.forEach(function(d){var x=isoDay(d.date);if(x&&!seen[x]){seen[x]=1;out.push(x)}});
+    return out.sort().reverse();
+  }
+  function byIssue(day){
+    return S.digest.filter(function(d){return isoDay(d.date)===day}).sort(function(a,b){
+      return (num(b.score)-num(a.score))||str(a.id).localeCompare(str(b.id),undefined,{numeric:true})});
+  }
+  function pending(){return S.digest.filter(function(d){return d.dirty&&str(d.mark)}).length}
+  function suggestions(){return S.topics.filter(function(t){return str(t.suggest)&&!str(t.decision)})}
+
+  /* ---------- шапка и вкладки ---------- */
+  function renderHeader(){
+    $("demo").hidden=!S.demo;
+    var m=S.meta||{},parts=[];
+    if(S.error)parts.push(S.error);
+    else if(m.syncedAt)parts.push("Сверено: "+str(m.syncedAt));
+    else if(S.loaded.digest)parts.push("Ещё не сверялось");
+    if(+m.savedMin>0)parts.push("сэкономлено: ~"+Math.round(+m.savedMin/6)/10+" ч");
+    var n=pending();
+    if(n)parts.push("отметок ждут Обозревателя: "+n);
+    if(!S.canWrite&&!S.demo)parts.push("только чтение");
+    $("sync").textContent=parts.join(" · ")||"Загружаю данные…";
+    var b=$("sync-now");b.hidden=!canAsk()||S.demo;
+  }
+  function renderTabs(){
+    var box=$("tabs");box.textContent="";
+    var ds=dates(),counts={issue:ds.length?byIssue(ds[0]).length:0,archive:Math.max(0,ds.length-1),topics:0};
+    var flag=suggestions().length;
+    TABS.forEach(function(t){
+      var b=h("button",{"class":"tab",role:"tab","aria-selected":S.tab===t[0]?"true":"false",onclick:function(){
+        S.tab=t[0];try{localStorage.setItem("digest-tab",S.tab)}catch(e){}render()}},t[1]);
+      if(counts[t[0]])b.appendChild(h("span",{"class":"n",text:String(counts[t[0]])}));
+      if(t[0]==="topics"&&flag)b.appendChild(h("span",{"class":"flag",text:String(flag)}));
+      box.appendChild(b);
+    });
+  }
+
+  /* ---------- карточка публикации ---------- */
+  function chip(label,on,fn){return h("button",{"class":"chip","aria-pressed":on?"true":"false",onclick:fn},label)}
+  function itemCard(d){
+    var url=safeUrl(d.url),sc=num(d.score),mark=str(d.mark);
+    var title=url?h("a",{href:url,target:"_blank",rel:"noopener noreferrer",text:str(d.title)||url}):h("span",{text:str(d.title)});
+    var meta=[str(d.source),human(d.pub)].filter(Boolean).join(" · ");
+    var main=h("div",{"class":"main"},
+      h("div",{"class":"what"},title),
+      h("div",{"class":"meta"},
+        d.top?h("span",{"class":"tag",text:"ТОП-3"}):null,
+        str(d.topic)?h("span",{"class":"tag plain",text:str(d.topic)}):null,
+        meta),
+      str(d.summary)?h("div",{"class":"pre",text:str(d.summary)}):null,
+      str(d.why)?h("div",{"class":"why"},h("b",{text:"Почему важно: "}),str(d.why)):null,
+      str(d.action)?h("div",{"class":"why"},h("b",{text:"Что сделать: "}),str(d.action)):null);
+    var acts=h("div",{"class":"actions"});
+    MARKS.forEach(function(m){
+      var on=mark===m[0];
+      acts.appendChild(h("button",{"class":"btn small "+(on?"on":"ghost"),"aria-pressed":on?"true":"false",
+        disabled:(!S.canWrite&&!S.demo)||!!busy["digest/"+d.id],
+        title:on?"Снять отметку":"",
+        onclick:function(){write("digest",d.id,{mark:on?"":m[0]}).then(function(ok){if(ok)toast(on?"Отметка снята":"Отмечено: "+MARK_NAME[m[0]]+". Обозреватель учтёт при сверке")})}},m[1]));
+    });
+    if(mark&&d.dirty)acts.appendChild(h("span",{"class":"meta",text:"ждёт сверки"}));
+    else if(mark)acts.appendChild(h("span",{"class":"meta",text:"учтено"}));
+    main.appendChild(acts);
+    return h("div",{"class":"card"+(d.top?" top":"")+(mark==="skip"?" skip":"")},
+      h("div",{"class":"row"},h("div",{"class":"score"+(sc>=4?" hi":""),title:"Оценка релевантности: "+sc+" из 5",text:sc?String(sc):"–"}),main));
+  }
+
+  /* ---------- вкладка «Выпуск» ---------- */
+  function shareText(day,items){
+    var top=items.filter(function(d){return d.top});
+    if(!top.length)top=items.slice(0,3);
+    var lines=["Обзор публикаций за неделю, "+human(day)+". Главное:",""];
+    top.forEach(function(d,i){
+      lines.push((i+1)+". "+str(d.title));
+      if(str(d.summary))lines.push("   "+str(d.summary));
+      if(safeUrl(d.url))lines.push("   "+safeUrl(d.url));
+      lines.push("");
+    });
+    lines.push("Подборку собрал ИИ-агент, я её просмотрел(а). Если что-то стоит обсудить — напишите.");
+    return lines.join("\n");
+  }
+  function renderIssue(p){
+    var ds=dates();
+    if(!ds.length){p.appendChild(empty("Выпусков пока нет. Напишите Обозревателю «дайджест» — и после сверки выпуск появится здесь."));return}
+    var day=ds[0],all=byIssue(day);
+    var topics=[];all.forEach(function(d){var t=str(d.topic);if(t&&topics.indexOf(t)<0)topics.push(t)});
+    if(S.fTopic&&topics.indexOf(S.fTopic)<0)S.fTopic="";
+    var marked=all.filter(function(d){return str(d.mark)}).length;
+    p.appendChild(h("div",{"class":"stats"},
+      h("div",{"class":"stat"},h("b",{text:human(day)}),h("span",{text:"дата выпуска"})),
+      h("div",{"class":"stat"},h("b",{text:String(all.length)}),h("span",{text:"публикаций в выпуске"})),
+      h("div",{"class":"stat"},h("b",{text:marked+" из "+all.length}),h("span",{text:"с вашей отметкой"}))));
+    var b1=h("div",{"class":"chips"},chip("Все темы",!S.fTopic,function(){S.fTopic="";render()}));
+    topics.forEach(function(t){b1.appendChild(chip(t,S.fTopic===t,function(){S.fTopic=t;render()}))});
+    var b2=h("div",{"class":"chips"});
+    [[0,"Любая"],[5,"5"],[4,"4+"],[3,"3+"]].forEach(function(x){b2.appendChild(chip(x[1],S.fScore===x[0],function(){S.fScore=x[0];render()}))});
+    var b3=h("div",{"class":"chips"});
+    [["all","Все"],["none","Без отметки"],["kb","В базу"],["task","В задачи"],["skip","Не интересно"]].forEach(function(x){
+      b3.appendChild(chip(x[1],S.fMark===x[0],function(){S.fMark=x[0];render()}))});
+    p.appendChild(h("div",{"class":"bar"},h("span",{"class":"lbl",text:"Тема"}),b1));
+    p.appendChild(h("div",{"class":"bar"},h("span",{"class":"lbl",text:"Оценка"}),b2));
+    p.appendChild(h("div",{"class":"bar"},h("span",{"class":"lbl",text:"Отметка"}),b3,h("span",{"class":"spacer"}),
+      h("button",{"class":"btn small ghost",onclick:function(){$("share").value=shareText(day,all);$("dlg").showModal()}},"Текст для коллег")));
+    var list=all.filter(function(d){
+      if(S.fTopic&&str(d.topic)!==S.fTopic)return false;
+      if(S.fScore&&(S.fScore===5?num(d.score)!==5:num(d.score)<S.fScore))return false;
+      if(S.fMark==="none")return !str(d.mark);
+      if(S.fMark!=="all")return str(d.mark)===S.fMark;
+      return true;
+    });
+    if(!list.length){p.appendChild(empty("Под эти фильтры ничего не попало."));return}
+    list.forEach(function(d){p.appendChild(itemCard(d))});
+    p.appendChild(h("div",{"class":"note",text:"Отметка — это ваша просьба Обозревателю: «в базу» — сохранить заметку, «в задачи» — завести задачу, «не интересно» — учесть при уходе за темами. Он выполнит её при ближайшей сверке."}));
+  }
+
+  /* ---------- вкладка «Архив» ---------- */
+  function renderArchive(p){
+    var ds=dates().slice(1);
+    if(!ds.length){p.appendChild(empty("В архиве пока пусто: здесь будут предыдущие выпуски (на странице хранятся пять последних, все остальные — в рабочей папке)."));return}
+    ds.forEach(function(day){
+      var items=byIssue(day),marked=items.filter(function(d){return str(d.mark)}).length;
+      p.appendChild(h("div",{"class":"group",text:"Выпуск "+human(day)+" · публикаций: "+items.length+" · отмечено: "+marked}));
+      items.forEach(function(d){p.appendChild(itemCard(d))});
+    });
+  }
+
+  /* ---------- вкладка «Темы и источники» ---------- */
+  function topicCard(t){
+    var sug=str(t.suggest),dec=str(t.decision),url=t.kind==="source"?safeUrl(t.note):"";
+    var main=h("div",{"class":"main"},
+      h("div",{"class":"what",text:str(t.name)}),
+      url?h("div",{"class":"meta"},h("a",{href:url,target:"_blank",rel:"noopener noreferrer",text:url})):
+        (str(t.note)?h("div",{"class":"meta",text:str(t.note)}):null),
+      str(t.stat)?h("div",{"class":"meta",text:"Отметки за месяц: "+str(t.stat)}):null);
+    if(sug){
+      main.appendChild(h("div",{"class":"why"},h("span",{"class":"tag warn",text:"Предложение"}),sug));
+      if(str(t.why))main.appendChild(h("div",{"class":"meta",text:"Почему: "+str(t.why)}));
+      var acts=h("div",{"class":"actions"});
+      if(!dec){
+        var off=(!S.canWrite&&!S.demo)||!!busy["topics/"+t.id];
+        acts.appendChild(h("button",{"class":"btn small",disabled:off,onclick:function(){write("topics",t.id,{decision:"accepted"}).then(function(ok){if(ok)toast("Принято. Обозреватель поправит профиль при сверке")})}},"Принять"));
+        acts.appendChild(h("button",{"class":"btn small ghost",disabled:off,onclick:function(){write("topics",t.id,{decision:"rejected"}).then(function(ok){if(ok)toast("Отклонено. Профиль не меняется")})}},"Отклонить"));
+      }else{
+        acts.appendChild(h("span",{"class":"tag"+(dec==="accepted"?"":" plain"),text:dec==="accepted"?"Принято":"Отклонено"}));
+        if(t.dirty){
+          acts.appendChild(h("span",{"class":"meta",text:"ждёт сверки"}));
+          acts.appendChild(h("button",{"class":"btn small ghost",onclick:function(){write("topics",t.id,{decision:""})}},"Передумать"));
+        }
+      }
+      main.appendChild(acts);
+    }
+    return h("div",{"class":"card"+(sug&&!dec?" attn":"")},h("div",{"class":"row"},main));
+  }
+  function renderTopics(p){
+    if(!S.topics.length){p.appendChild(empty("Темы и источники появятся здесь после сверки. Они хранятся в вашем профиле; изменить их можно словами в чате: «добавь тему …», «убери источник …»."));return}
+    var n=suggestions().length;
+    if(n)p.appendChild(h("div",{"class":"banner",text:"Обозреватель предлагает правки профиля: "+n+". Профиль меняется только после вашего «Принять»."}));
+    KINDS.forEach(function(k){
+      var list=S.topics.filter(function(t){return str(t.kind)===k[0]}).sort(function(a,b){return (+a.order||99)-(+b.order||99)});
+      if(!list.length)return;
+      p.appendChild(h("div",{"class":"group",text:k[1]}));
+      list.forEach(function(t){p.appendChild(topicCard(t))});
+    });
+    p.appendChild(h("div",{"class":"note",text:"Предложения Обозреватель делает раз в неделю по вашим отметкам. Добавить свою тему или источник — напишите ему в чате."}));
+  }
+
+  function render(){
+    renderHeader();renderTabs();
+    var p=$("panel");p.textContent="";
+    if(S.error&&!S.db){p.appendChild(empty("Данные страницы недоступны в этом просмотре. Откройте страницу в claude.ai под своей учётной записью."));return}
+    var need=S.tab==="topics"?"topics":"digest";
+    if(!S.loaded[need]){p.appendChild(empty("Загружаю…"));return}
+    ({issue:renderIssue,archive:renderArchive,topics:renderTopics})[S.tab](p);
+  }
+
+  /* ---------- диалог «Текст для коллег» ---------- */
+  $("share-close").addEventListener("click",function(){$("dlg").close()});
+  $("share-copy").addEventListener("click",function(){
+    var el=$("share"),done=function(){toast("Скопировано. Перешлите сами — агент ничего не отправляет")};
+    var manual=function(){el.focus();el.select();try{if(document.execCommand("copy")){done();return}}catch(e){}toast("Выделите текст и скопируйте вручную")};
+    try{
+      if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(el.value).then(done,manual);
+      else manual();
+    }catch(e){manual()}
+  });
+  $("sync-now").addEventListener("click",function(){if(canAsk())askSync()});
+
+  /* ---------- учебные данные (страница открыта как файл) ---------- */
+  function demoData(){
+    var D="2026-10-02",P="2026-09-22";
+    return {
+      meta:{syncedAt:"2026-10-02 09:05",savedMin:145,agentMin:22,issue:D},
+      digest:[
+        {id:"g-20261002-1",date:D,top:true,score:5,topic:"Регулирование и безопасность ИИ в организациях",source:"«Регуляторный вестник»",pub:"2026-09-30",
+          title:"Опубликован проект рекомендаций по использованию ИИ-ассистентов в организациях",url:"https://regulation-watch.example/news/ai-assistants-guidelines-draft",
+          summary:"Проект рекомендаций: перечень данных, которые нельзя передавать ассистенту; проверка человеком всего, что уходит вовне; журнал использования; ответственный в каждом подразделении. Итоговая редакция — в декабре.",
+          why:"вы готовите внутренние правила использования ИИ-ассистентов; замечания принимаются до 20 октября.",action:"Сверить черновик внутренних правил с четырьмя положениями проекта.",mark:"task"},
+        {id:"g-20261002-2",date:D,top:true,score:5,topic:"ИИ-агенты в работе руководителя и команды",source:"журнал «Цифровой офис»",pub:"2026-09-29",
+          title:"Проектный офис сократил рутину на 6 часов в неделю: итоги пилота ИИ-агентов",url:"https://digital-office.example/cases/ai-agents-pmo-pilot",
+          summary:"Трёхмесячный пилот: 14 руководителей проектов, три агента; по хронометражу — минус 6 часов в неделю на человека. В приложении — шаблон хронометража «до/после».",
+          why:"ваше направление ведёт такой же пилот — здесь описаны провалы и условия успеха.",action:"Взять шаблон хронометража и сопоставить условия успеха со своим пилотом.",mark:"kb",dirty:true},
+        {id:"g-20261002-3",date:D,top:true,score:4,topic:"Обучение сотрудников цифровым навыкам",source:"«Лаборатория обучения»",pub:"2026-09-26",
+          title:"Исследование: обучение ИИ на собственных рабочих задачах даёт вдвое больше применений через месяц",url:"https://learning-lab.example/research/ai-skills-own-tasks",
+          summary:"Две группы по 120 сотрудников: после курса на собственных задачах ИИ регулярно применяют 61% участников, после курса на типовых примерах — 29%. Оценка — самоотчёт.",
+          why:"вы запускаете программу обучения — исследование даёт проверяемый приём и цифры.",action:"Добавить в программу правило «своя задача на входе — рабочий результат на выходе».",mark:""},
+        {id:"g-20261002-4",date:D,top:false,score:3,topic:"ИИ-агенты в работе руководителя и команды",source:"блог «Лаборатория метрик»",pub:"2026-10-01",
+          title:"Как измерять экономию времени от ИИ: три способа и их погрешности",url:"https://metrics-lab.example/blog/time-saved",
+          summary:"Самоотчёт завышает эффект в полтора-два раза; хронометраж точнее, но дорог; контрольная группа надёжна от 30 человек.",
+          why:"по итогам пилота придётся показывать эффект; ссылка была в вашей очереди «посмотри это».",action:"Прочитать при подготовке отчёта о пилоте.",mark:""},
+        {id:"g-20261002-5",date:D,top:false,score:3,topic:"ИИ-агенты в работе руководителя и команды",source:"блог «Практика внедрения»",pub:"2026-09-28",
+          title:"Пять ошибок при внедрении чат-ботов в поддержку сотрудников",url:"https://practice-blog.example/posts/five-chatbot-mistakes",
+          summary:"Пять ошибок из опыта одной команды поддержки. Цифр нет.",
+          why:"две ошибки — «нет владельца содержания» и «устаревшие регламенты» — относятся и к вашему пилоту.",action:"Действий не требуется.",mark:"skip",dirty:true},
+        {id:"g-20260922-1",date:P,top:true,score:4,topic:"ИИ-агенты в работе руководителя и команды",source:"портал «События»",pub:"2026-09-18",
+          title:"Конференция «ИИ в офисе — 2026»: открыта регистрация",url:"https://events.example/conf/ai-office-2026",
+          summary:"Двухдневная программа: внедрение агентов, обучение сотрудников, правила безопасности. Регистрация открыта.",
+          why:"три секции совпадают с вашими темами.",action:"Решить, кто из команды участвует.",mark:"task"},
+        {id:"g-20260922-2",date:P,top:false,score:3,topic:"Обучение сотрудников цифровым навыкам",source:"«Лаборатория обучения»",pub:"2026-09-16",
+          title:"Короткие форматы обучения: что удерживает внимание взрослых",url:"https://learning-lab.example/notes/short-formats",
+          summary:"Обзор приёмов: занятие до 40 минут, одна задача, разбор ошибок на следующей встрече.",
+          why:"пригодится при планировании расписания программы.",action:"Действий не требуется.",mark:""}
+      ],
+      topics:[
+        {id:"p-01",kind:"topic",order:1,name:"ИИ-агенты в работе руководителя и команды",stat:"в базу 2, в задачи 1, не интересно 1"},
+        {id:"p-02",kind:"topic",order:2,name:"Обучение сотрудников цифровым навыкам",stat:"в базу 1, в задачи 1, не интересно 0"},
+        {id:"p-03",kind:"topic",order:3,name:"Регулирование и безопасность ИИ в организациях",stat:"в базу 0, в задачи 3, не интересно 0",
+          suggest:"Поднять тему на первое место",why:"три полезные отметки подряд и ни одной «не интересно»."},
+        {id:"p-11",kind:"source",order:1,name:"«Регуляторный вестник»",note:"https://regulation-watch.example/news",stat:"в задачи 2"},
+        {id:"p-12",kind:"source",order:2,name:"Агрегатор «Новости ИТ»",note:"https://news-aggregator.example/it",stat:"полезных отметок нет",
+          suggest:"Убрать источник",why:"за месяц дал только пересказы чужих публикаций — все ушли в «Пропущено»."},
+        {id:"p-13",kind:"source",order:3,name:"«Мнения»",note:"https://opinion-hub.example/columns",stat:"полезных отметок нет",
+          suggest:"Убрать источник",why:"в тексте колонки было обращение к ИИ с требованием завысить оценку; фактов в колонках нет.",decision:"accepted",dirty:true},
+        {id:"p-21",kind:"skip",order:1,name:"Криптовалюты и курсы"},
+        {id:"p-22",kind:"skip",order:2,name:"Обзоры гаджетов"}
+      ]
+    };
+  }
+  function startDemo(){
+    var data=demoData();
+    S.demo=true;S.meta=data.meta;
+    COLLS.forEach(function(c){S[c]=data[c];S.loaded[c]=true});
+    render();
+  }
+
+  function sub(db,name){
+    db.collection(name).limit(500).onSnapshot(function(snap){
+      S[name]=snap.docs.map(function(d){var o=Object.assign({},d.data());o.id=d.id;return o});
+      S.loaded[name]=true;render();
+    },function(){S.loaded[name]=true;S.error="Связь с данными страницы прервалась — обновите страницу";render()});
+  }
+
+  render();
+  if(!window.claude){startDemo();return}
+  Promise.all([window.claude.use("db"),window.claude.use("user")]).then(function(r){
+    var db=r[0],user=r[1];
+    if(!db){S.error="Данные недоступны в этом просмотре";COLLS.forEach(function(c){S.loaded[c]=true});render();return}
+    S.db=db;
+    COLLS.forEach(function(c){sub(db,c)});
+    db.doc("meta/state").onSnapshot(function(s){S.meta=s.exists?s.data():null;render()},function(){});
+    if(user)Promise.resolve(user.can("data.write")).then(function(v){if(v===false){S.canWrite=false;render()}},function(){});
+    render();
+  },function(){S.error="Данные недоступны в этом просмотре";COLLS.forEach(function(c){S.loaded[c]=true});render()});
+  // связь с разговором рядом со страницей — для кнопки «Сверить сейчас»; без неё страница работает так же
+  Promise.resolve(window.claude.use("room")).then(function(room){
+    if(!room||typeof room.sendToClaudeSession!=="function")return;
+    S.room=room;render();
+    if(typeof room.canSendToClaudeSession==="function")room.canSendToClaudeSession().then(function(v){S.ask=v;render()},function(){S.ask="off";render()});
+  },function(){});
+})();
+</script>
