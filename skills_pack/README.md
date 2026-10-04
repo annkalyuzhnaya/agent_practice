@@ -8,9 +8,9 @@
 | Что | Где |
 |---|---|
 | Единый источник навыков | `skills_pack/skills/<навык>/` |
-| Что в какой кейс идёт | `skills_pack/manifest.json` |
+| Что в какой кейс идёт | `skills_pack/manifest.json` (ключ — путь кейса от корня: `1_claude/01_digest`, `2_hermes/01_digest`) |
 | Копия в кейсе (руками не править) | `<кейс>/pack/skills/`, лицензии — `<кейс>/pack/licenses/` |
-| Подключение в Claude Code и в плагин Cowork | `python tools/build.py` в папке кейса: копирует `pack/skills/*` в `.claude/skills/` и в плагин |
+| Подключение | `python tools/build.py` в папке кейса: трек Claude — копирует `pack/skills/*` в `.claude/skills/` и в плагин Cowork; трек Hermes — в `.hermes/skills/` |
 
 Изменили навык или состав — два шага:
 

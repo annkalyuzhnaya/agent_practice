@@ -1,11 +1,11 @@
 {
   "_comment": "Какие навыки пака кладутся в какой кейс. После правки: python skills_pack/sync.py, затем python tools/build.py в кейсе.",
-  "01_digest":    ["tavily-cli", "tavily-search", "tavily-extract", "tavily-research", "build-dashboard", "internal-comms", "skill-creator"],
-  "02_kb":        ["memory-management", "skill-creator"],
-  "03_meeting":   ["task-management", "internal-comms", "tavily-cli", "tavily-research", "skill-creator"],
-  "04_inbox":     ["task-management", "memory-management", "internal-comms", "skill-creator"],
-  "05_docs":      ["build-dashboard", "data-visualization", "validate-data", "skill-creator"],
-  "06_assistant": ["memory-management", "task-management", "start", "update", "internal-comms", "build-dashboard",
+  "1_claude/01_digest":    ["tavily-cli", "tavily-search", "tavily-extract", "tavily-research", "build-dashboard", "internal-comms", "skill-creator"],
+  "1_claude/02_kb":   ["memory-management", "skill-creator"],
+  "1_claude/03_meeting":   ["task-management", "internal-comms", "tavily-cli", "tavily-research", "skill-creator"],
+  "1_claude/04_inbox":     ["task-management", "memory-management", "internal-comms", "skill-creator"],
+  "1_claude/05_docs":      ["build-dashboard", "data-visualization", "validate-data", "skill-creator"],
+  "1_claude/06_assistant": ["memory-management", "task-management", "start", "update", "internal-comms", "build-dashboard",
                    "tavily-cli", "tavily-search", "tavily-extract", "tavily-research", "skill-creator"],
   "2_hermes/01_digest": ["internal-comms", "build-dashboard"]
 }
