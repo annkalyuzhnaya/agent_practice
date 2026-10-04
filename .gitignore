@@ -5,3 +5,6 @@ __pycache__/
 ~$*
 .secrets/
 .install-target
+
+# Трек Hermes: рабочие папки кейсов
+/2_hermes/*/hub/

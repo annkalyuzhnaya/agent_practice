@@ -6,5 +6,6 @@
   "04_inbox":     ["task-management", "memory-management", "internal-comms", "skill-creator"],
   "05_docs":      ["build-dashboard", "data-visualization", "validate-data", "skill-creator"],
   "06_assistant": ["memory-management", "task-management", "start", "update", "internal-comms", "build-dashboard",
-                   "tavily-cli", "tavily-search", "tavily-extract", "tavily-research", "skill-creator"]
+                   "tavily-cli", "tavily-search", "tavily-extract", "tavily-research", "skill-creator"],
+  "2_hermes/01_digest": ["internal-comms", "build-dashboard"]
 }

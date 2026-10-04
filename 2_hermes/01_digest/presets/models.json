@@ -1,0 +1,9 @@
+{
+  "_": "Какая модель исполняет какую роль. Только названия — ключей здесь нет. Пустая роль исполняется основной моделью. Правила — playbooks/06_models.md.",
+  "roles": {
+    "editor":  {"provider": "", "model": ""},
+    "scout":   {"provider": "", "model": ""},
+    "checker": {"provider": "", "model": "", "toolsets": "web,terminal,file"},
+    "cron":    {"provider": "", "model": ""}
+  }
+}
