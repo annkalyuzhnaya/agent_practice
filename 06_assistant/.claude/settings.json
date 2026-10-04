@@ -6,6 +6,7 @@
       "Bash(python tools/versions.py:*)",
       "Bash(python tools/generator.py:*)",
       "Bash(python tools/kb_index.py:*)",
+      "Bash(python tools/tg_bridge.py send --chat me:*)",
       "WebSearch"
     ]
   },

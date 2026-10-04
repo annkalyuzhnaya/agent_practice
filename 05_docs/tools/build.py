@@ -138,6 +138,7 @@ def main():
         shutil.copy2(ROOT / "GUIDE.md", base / "references" / "GUIDE.md")
         if name == "setup":
             shutil.copy2(ROOT / "SETUP.md", base / "references" / "SETUP.md")
+            shutil.copytree(ROOT / "prompts", base / "references" / "prompts")
             shutil.copy2(PAGE, base / "references" / PAGE.name)
             shutil.copytree(ROOT / "presets" / "hub", base / "references" / "presets", ignore=shutil.ignore_patterns(".gitkeep"))
 
@@ -166,6 +167,7 @@ def main():
           "- навыка `skill-creator` — он требует скриптов и CLI.\n\n"
           "Начало: скажите «настрой». Памятка — `GUIDE.md`, установка — `SETUP.md`. Сторонние навыки и лицензии — `THIRD_PARTY.md`.\n")
     shutil.copy2(ROOT / "SETUP.md", PLUGIN / "SETUP.md")
+    shutil.copytree(ROOT / "prompts", PLUGIN / "prompts")
     shutil.copy2(ROOT / "GUIDE.md", PLUGIN / "GUIDE.md")
 
     DIST.parent.mkdir(exist_ok=True)

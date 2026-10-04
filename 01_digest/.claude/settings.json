@@ -13,6 +13,7 @@
       "Bash(python tools/tg_bridge.py whoami)",
       "Bash(python tools/tg_bridge.py pull:*)",
       "Bash(python tools/tg_bridge.py top3 --dry-run:*)",
+      "Bash(python tools/tg_bridge.py send --chat me:*)",
       "WebSearch",
       "WebFetch"
     ],

@@ -16,7 +16,8 @@
       "Bash(python tools/demo.py:*)",
       "Bash(python tools/tg_bridge.py check:*)",
       "Bash(python tools/tg_bridge.py whoami:*)",
-      "Bash(python tools/tg_bridge.py pull:*)"
+      "Bash(python tools/tg_bridge.py pull:*)",
+      "Bash(python tools/tg_bridge.py send --chat me:*)"
     ],
     "deny": [
       "Read(hub/.secrets/**)"

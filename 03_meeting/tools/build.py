@@ -19,7 +19,7 @@ PLAYBOOKS = ROOT / "playbooks"
 PLUGIN = ROOT / "cowork-plugin" / "hq-meeting"
 PACK = ROOT / "pack"
 PAGE = "meetings.html"
-VERSION = "0.1.0"
+VERSION = "1.0.0"
 
 FILES = "Read, Write, Edit, Glob, Grep"
 WEB = "Read, Glob, Grep, WebSearch, WebFetch"
