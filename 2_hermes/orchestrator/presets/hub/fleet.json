@@ -1,0 +1,18 @@
+{
+  "_": "Флот оркестратора — реестр тематических ассистентов Hermes. Формат и поля — в playbooks/20_fleet.md. Ключей API здесь нет: они живут у Hermes на каждой машине. Пути под свою систему поправьте.",
+  "assistants": [
+    {
+      "name": "обозреватель",
+      "role": "digest",
+      "skill": "digest",
+      "where": "local",
+      "path": "D:/Work/agent_practice/2_hermes/01_digest",
+      "host": "",
+      "model": "",
+      "provider": "",
+      "deliver": "hub",
+      "reads": "hub/digest/",
+      "note": "пример локального ассистента; дайджест по темам профиля, поднимать утром"
+    }
+  ]
+}

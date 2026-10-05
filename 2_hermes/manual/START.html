@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Собрать помощника на Hermes руками — старт для новичка</title>
+<style>
+:root{--bg:#f6f5f1;--card:#fff;--ink:#1d1f23;--mut:#5f656f;--line:#dcdad3;--acc:#0b6e69;--accbg:#e0f0ee;
+--warn:#8a5200;--warnbg:#fbf0d9;--code:#efede7;--side:#efede6;--c:#c2410c}
+@media(prefers-color-scheme:dark){:root{--bg:#15171a;--card:#1e2125;--ink:#e8e8e6;--mut:#a0a7b0;--line:#353a41;
+--acc:#56c4bb;--accbg:#173533;--warn:#e8b45c;--warnbg:#3a2e16;--code:#2a2e33;--side:#191c1f;--c:#fb923c}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 "Segoe UI",system-ui,-apple-system,Roboto,sans-serif}
+main{max-width:980px;margin:0 auto;padding:0 16px 64px}
+header{padding:28px 0 8px}
+header small{color:var(--acc);font-weight:600;letter-spacing:.04em;text-transform:uppercase;font-size:12px}
+h1{font-size:30px;line-height:1.2;margin:4px 0 8px}
+header p{margin:0 0 10px;max-width:760px}
+a{color:var(--acc)}
+h2{font-size:23px;margin:40px 0 6px}
+h2 span{color:var(--acc);margin-right:8px}
+p{margin:0 0 10px}
+.sub{color:var(--mut);font-size:15px}
+code{font-family:Consolas,"Cascadia Mono",monospace;font-size:.92em;background:var(--code);padding:1px 5px;border-radius:4px;overflow-wrap:anywhere}
+pre{background:var(--code);border:1px solid var(--line);border-radius:8px;padding:10px 12px;overflow-x:auto;font-family:Consolas,monospace;font-size:13.5px;margin:8px 0}
+.lede{background:var(--accbg);border:1px solid var(--acc);border-radius:12px;padding:14px 16px;margin:16px 0}
+.lede b{color:var(--acc)}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:12px;margin:14px 0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px}
+.card h4{margin:0 0 6px;font-size:16px}
+.card p{font-size:14.5px;color:var(--mut);margin:0}
+.step{display:grid;grid-template-columns:34px 1fr;gap:14px;align-items:start;padding:16px 0;border-top:1px dashed var(--line)}
+.step .n{width:30px;height:30px;border-radius:50%;background:var(--acc);color:var(--card);font-weight:700;display:grid;place-items:center}
+.step h4{margin:3px 0 6px;font-size:16.5px}
+.step p{font-size:14.5px;margin:0 0 6px}
+.warn{background:var(--warnbg);border:1px solid var(--warn);border-radius:10px;padding:12px 14px;margin:14px 0;font-size:14.5px}
+.warn b{color:var(--warn)}
+.tree{font-family:Consolas,monospace;font-size:13px;white-space:pre;line-height:1.55;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px;overflow-x:auto}
+footer{margin-top:40px;color:var(--mut);font-size:13.5px;border-top:1px solid var(--line);padding-top:14px}
+</style></head>
+<body><main>
+
+<header>
+  <small>Трек 5 · Hermes своими руками</small>
+  <h1>Собрать личного помощника на Hermes — руками, без Claude</h1>
+  <p>Пошаговый старт для тех, кто <b>не программист</b>. Claude в этом треке не участвует: всё нужное вы сделаете сами.
+  Получится универсальный помощник, который ведёт ваши задачи и заметки, отвечает на вопросы и готовит черновики.</p>
+  <p class="sub">Первая установка Hermes — 15–30 минут (в основном ждёте загрузку). Сборка помощника по готовым
+  заготовкам — ещё 15–20 минут. Нужны: компьютер с Windows или macOS, интернет и ключ API какой-нибудь модели.</p>
+</header>
+
+<div class="lede">
+  <b>Главное.</b> Это страница-введение. Полное руководство со всеми командами и объяснениями — в файле
+  <a href="MANUAL.md">MANUAL.md</a> рядом с этой страницей (откройте его Блокнотом или прямо здесь, ссылкой).
+  Ниже — общая карта пути, чтобы вы понимали, что вас ждёт.
+</div>
+
+<h2><span>1</span>Два окна и три слова</h2>
+<p class="sub">Всю дорогу вы переключаетесь между двумя окнами — запомните их названия, в шагах они встречаются постоянно.</p>
+<div class="cards">
+  <div class="card"><h4>Окно команд</h4><p>Чёрное/синее окно, где команды печатают текстом и жмут Enter. На Windows —
+  <b>PowerShell</b>, на macOS — <b>Терминал</b>. В нём ставят Hermes и дают команды.</p></div>
+  <div class="card"><h4>Окно Hermes</h4><p><b>Веб-панель Hermes</b> — страница в браузере с вкладками (Chat, Keys,
+  Models). В нём вводят ключ модели и разговаривают с помощником. Это <b>не</b> окно команд.</p></div>
+</div>
+<div class="cards">
+  <div class="card"><h4>Папка</h4><p>Та же, что в проводнике. У помощника будет своя папка, внутри — файлы
+  с правилами и ваша «память».</p></div>
+  <div class="card"><h4>Текстовый файл</h4><p>Файлы <code>.md</code> и <code>.json</code> — это просто текст.
+  Открываются Блокнотом. Ни Word, ни особых программ не нужно.</p></div>
+</div>
+
+<h2><span>2</span>Путь из семи шагов</h2>
+<p class="sub">Каждый шаг подробно расписан в <a href="MANUAL.md">MANUAL.md</a> — там сказано, в каком окне и в какой
+папке что делать. Здесь только суть, чтобы видеть целое.</p>
+
+<div class="step"><div class="n">1</div><div>
+  <h4>Открыть окно команд</h4>
+  <p>Windows: «Пуск» → наберите <code>PowerShell</code> → откройте. macOS: Cmd+Пробел → <code>Терминал</code>.
+  Проверка — вставьте <code>echo привет</code>, окно отвечает «привет». Это окно не закрывайте.</p>
+</div></div>
+
+<div class="step"><div class="n">2</div><div>
+  <h4>Установить Hermes</h4>
+  <p>В окне команд одна строка:</p>
+  <pre>irm https://hermes-agent.nousresearch.com/install.ps1 | iex</pre>
+  <p>(macOS: <code>curl -fsSL https://hermes-agent.nousresearch.com/install.sh | sh</code>). Ждите 5–15 минут.
+  Затем закройте окно команд и откройте <b>новое такое же</b> (Пуск → PowerShell), в нём проверьте
+  <code>hermes --version</code> — покажет номер версии.</p>
+</div></div>
+
+<div class="step"><div class="n">3</div><div>
+  <h4>Создать папку и скопировать заготовки</h4>
+  <p>В проводнике создайте папку, например <code>my-assistant</code>. Скопируйте в неё <b>всё содержимое</b> папки
+  <code>templates/</code> рядом с этим руководством: файл <code>AGENTS.md</code>, папку <code>hub</code>
+  и папку <code>.hermes</code>. В MANUAL.md тут же — как узнать «путь» к этой папке (пригодится в шаге 6).</p>
+</div></div>
+
+<div class="step"><div class="n">4</div><div>
+  <h4>Вписать, кто вы</h4>
+  <p>В папке <code>my-assistant</code> зайдите в папку <code>hub</code>, откройте файл <code>profile.md</code>
+  Блокнотом, впишите имя, чем заняты, на «ты» или «вы». Сохраните. Так помощник станет вашим.</p>
+</div></div>
+
+<div class="step"><div class="n">5</div><div>
+  <h4>Открыть окно Hermes и подключить модель</h4>
+  <p>В окне команд дайте <code>hermes dashboard</code> — откроется <b>окно Hermes</b> в браузере. На вкладке
+  <b>Keys</b> вставьте ключ API вашего провайдера, на вкладке <b>Models</b> выберите модель. Ключ вводится только
+  в окно Hermes, не в чат. Окно команд при этом не закрывайте.</p>
+</div></div>
+
+<div class="step"><div class="n">6</div><div>
+  <h4>Указать Hermes вашу папку</h4>
+  <p>В окне команд (вместо <code>ВАШ_ПУТЬ</code> — путь к вашей папке из шага 3):</p>
+  <pre>hermes config set terminal.cwd "ВАШ_ПУТЬ"</pre>
+  <p>Например <code>hermes config set terminal.cwd "D:/my-assistant"</code>. Затем переоткройте окно Hermes
+  (<code>hermes dashboard</code>) — теперь оно работает в вашей папке и прочитает <code>AGENTS.md</code>.</p>
+</div></div>
+
+<div class="step"><div class="n">7</div><div>
+  <h4>Первый разговор</h4>
+  <p>В окне Hermes на вкладке <b>Chat</b> напишите «Привет! Представься». Затем «Запиши задачу…», «Запомни, что…»,
+  «Какие у меня задачи?». Помощник отвечает и сохраняет всё в папку <code>hub/</code>. Базовый помощник готов.</p>
+</div></div>
+
+<div class="warn">
+  <b>Важно для Windows.</b> Запускайте установщик Hermes в отдельном окне PowerShell из «Пуска», а не во встроенном
+  терминале другой программы, — иначе установка может оборваться на «Downloading Python». И помните: только что
+  установленный <code>hermes</code> виден лишь в <b>новом</b> окне команд.
+</div>
+
+<h2><span>3</span>Что лежит в заготовках</h2>
+<p class="sub">Папка <code>templates/</code> — это скелет помощника. Вот что вы копируете к себе:</p>
+<div class="tree">templates/
+├─ AGENTS.md              — описание помощника (Hermes читает его в начале разговора)
+├─ .hermes/
+│  └─ skills/assistant/   — навык помощника: SKILL.md и references/protocol.md
+└─ hub/                   — «память» помощника
+   ├─ profile.md          — кто вы (это вы и заполняете)
+   ├─ tasks.md            — задачи (помощник ведёт сам)
+   ├─ journal.md          — бортжурнал
+   ├─ models.json         — какая модель на какую роль (необязательно)
+   ├─ notes/              — заметки
+   └─ drafts/             — черновики</div>
+
+<h2><span>4</span>Когда базовый помощник готов</h2>
+<p class="sub">Всё ниже — по желанию. Базовый помощник из семи шагов уже работает.</p>
+<div class="cards">
+  <div class="card"><h4>Включить навык (Git)</h4><p>Необязательно: помощник работает и так, по <code>AGENTS.md</code>.
+  Для самого Hermes Git <b>не нужен</b> — только чтобы подключить навык из папки. Как — в MANUAL.md, «Включить навык».</p></div>
+  <div class="card"><h4>Поиск в интернете</h4><p>Вкладка Keys → ключ Tavily / Exa / Firecrawl / Brave.</p></div>
+  <div class="card"><h4>Работа по расписанию</h4><p>Шлюз в автозапуск: <code>hermes gateway install --start-now --start-on-login</code>, затем раздел Cron.</p></div>
+  <div class="card"><h4>Telegram</h4><p>Вкладка Channels → Telegram → Quick setup. Бот — второе окно помощника.</p></div>
+  <div class="card"><h4>Сменить характер</h4><p>Правьте <code>AGENTS.md</code> Блокнотом словами. Нужен узкий тематический ассистент — это трек 3, там помогает Claude.</p></div>
+</div>
+
+<footer>
+  Полное руководство со всеми объяснениями и разделом «Если что-то пошло не так» — <a href="MANUAL.md">MANUAL.md</a>.
+  Проверено на Windows 11 с Hermes Agent 0.21.5 (октябрь 2026). Hermes быстро меняется — при расхождениях смотрите
+  <code>hermes --help</code> и <code>hermes doctor</code>.
+</footer>
+
+</main></body></html>
