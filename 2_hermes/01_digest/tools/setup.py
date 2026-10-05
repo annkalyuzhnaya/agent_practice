@@ -1,6 +1,7 @@
 """Рабочая папка Обозревателя: создаёт hub/ внутри папки кейса из заготовок presets/hub/ и показывает состояние.
 
-  python tools/setup.py           развернуть (существующие файлы не перезаписываются)
+  python tools/setup.py           развернуть (существующие файлы не перезаписываются); скопированную папку кейса
+                                  отметить как проект git — без этого Hermes не подключает навыки .hermes/skills/
   python tools/setup.py status    только показать состояние
 
 Дальше настройку ведёт агент в чате Hermes по playbooks/02_setup.md; инструкция для человека — SETUP.md.
@@ -8,6 +9,7 @@
 """
 import re
 import shutil
+import subprocess
 import sys
 from datetime import date
 
@@ -41,6 +43,38 @@ def deploy():
         shutil.copy2(MODELS, dl.HUB / "models.json")
         made.append("hub/models.json")
     return made
+
+
+def project_root():
+    """Ближайшая папка с .git вверх от папки кейса: только из неё Hermes берёт навыки .hermes/skills/."""
+    return next((p for p in (dl.ROOT, *dl.ROOT.parents) if (p / ".git").exists()), None)
+
+
+def make_project():
+    """Скопированная папка кейса — не проект git, и навыки из неё Hermes не подключит: отметить её как проект."""
+    if project_root() or not shutil.which("git"):
+        return []
+    try:
+        subprocess.run(["git", "init", "-q"], cwd=dl.ROOT, check=True, capture_output=True, timeout=60)
+    except (OSError, subprocess.SubprocessError):
+        return []
+    made = [".git/ (git init: без него Hermes не видит навыки папки)"]
+    ignore = dl.ROOT / ".gitignore"
+    if not ignore.exists():
+        ignore.write_text("hub/\n.cache/\n__pycache__/\n", encoding="utf-8", newline="\n")
+        made.append(".gitignore (hub/ — личные данные, в git не попадают)")
+    return made
+
+
+def skills_note():
+    root = project_root()
+    if root == dl.ROOT:
+        return "папка кейса — проект git; доверие подтверждается один раз: hermes skills trust (затем новый чат)"
+    if root:
+        return (f"Hermes ищет навыки в корне проекта git — {root}, а не в папке кейса: скопируйте папку кейса "
+                "в отдельное место (SETUP.md, шаг 3). Пока работают правила из AGENTS.md")
+    return ("папка кейса — не проект git, навыки не подключатся: выполните в ней git init, затем hermes skills trust "
+            "(SETUP.md, шаг 3). Пока работают правила из AGENTS.md")
 
 
 def steps():
@@ -83,6 +117,7 @@ def status():
     print(f"Выпусков: {len(issues)}" + (f" (последний {max(p.stem for p in issues)})" if issues else "") + f"; в памяти «уже видел»: {len(rows)}")
     print("Hermes: " + ("команда hermes найдена — модели под роли: python tools/hermes.py status" if shutil.which("hermes")
                         else "команда hermes не найдена — установка: SETUP.md, шаг 1"))
+    print("Навыки кейса: " + skills_note())
     found = steps()
     if found:
         marks = {"сделано": "[x]", "отложено": "[~]", "недоступно в этой среде": "[-]"}
@@ -104,7 +139,7 @@ def main():
     if sys.argv[1:] == ["status"]:
         status()
         return
-    made = deploy()
+    made = deploy() + make_project()
     print(f"Создано: {len(made)}" + (":" if made else " (всё уже на месте)"))
     for item in made:
         print("  " + item)
