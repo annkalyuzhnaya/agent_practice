@@ -89,22 +89,24 @@ def cmd_status(_):
 
 def cmd_config(_):
     r = roles()
-    print("Настройки Hermes под роли. Где менять: приложение — Settings; веб-панель (hermes dashboard) — вкладка Config;")
-    print("или командами ниже. Ключи провайдеров вводит владелец: Settings → Providers / вкладка API Keys.\n")
+    print("Настройки Hermes под роли. Где менять: приложение — Settings; веб-панель (hermes dashboard) — основная модель")
+    print("на вкладке Models, остальное на вкладке Config; или командами ниже. Ключи провайдеров вводит владелец:")
+    print("Settings → Providers / вкладка Keys.\n")
     lines = [("terminal.cwd", str(dl.ROOT))]
     for key, prefix in (("editor", "model"), ("scout", "delegation"), ("cron", "cron")):
         role = r[key]
         if not role.get("model"):
             continue
         if prefix == "model":
-            lines += [("model", role["model"])] + ([("provider", role["provider"])] if role.get("provider") else [])
+            lines += [("model.default", role["model"])] + ([("model.provider", role["provider"])] if role.get("provider") else [])
         else:
             lines += [(f"{prefix}.model", role["model"])] + ([(f"{prefix}.provider", role["provider"])] if role.get("provider") else [])
     for name, value in lines:
         print(f"hermes config set {name} {q(value)}")
     print("\nterminal.cwd — папка кейса: с ней бот Telegram и задания работают как Обозреватель.")
     print("Проверяющий в настройки не вписывается: его модель берётся из hub/models.json при запуске check.")
-    print("Точные названия полей вашей версии: hermes config --help (или форма Config в веб-панели).")
+    print("Точные названия полей вашей версии: hermes config show (или форма Config в веб-панели). Hermes сохраняет и")
+    print("незнакомое поле — если в ответ на команду он пишет «not a recognized config key», поле названо неверно.")
 
 
 def cmd_cron(args):

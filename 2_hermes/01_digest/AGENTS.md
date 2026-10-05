@@ -19,7 +19,8 @@
 | рабочая просьба, а папки `hub/` ещё нет | сначала навык `digest-setup`, шаги 0–1 |
 
 Навыки лежат в `.hermes/skills/`. Если навык не загрузился, прочитай плейбуки напрямую из
-`.hermes/skills/digest/references/` — правила те же.
+`.hermes/skills/digest/references/` — правила те же; настройку (`02_setup.md`) — из
+`.hermes/skills/digest-setup/references/`. Почему навыки не подключились, покажет `python tools/setup.py status`.
 
 ## Как работать
 

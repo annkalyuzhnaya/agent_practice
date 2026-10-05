@@ -9,8 +9,9 @@
 
 - **Приложение Hermes Desktop:** раздел Messaging → карточка Quick setup для Telegram → «Create with QR». Приложение
   само создаёт бота, определяет номер владельца и перезапускает шлюз.
-- **Веб-панель** (`hermes dashboard`): вкладка Channels → Telegram; ключи — вкладка API Keys
-  (`TELEGRAM_BOT_TOKEN`, `TELEGRAM_ALLOWED_USERS`, `TELEGRAM_HOME_CHANNEL`).
+- **Веб-панель** (`hermes dashboard`): вкладка Channels → Telegram → Quick setup → «Create with QR» (или Manual
+  setup); те же значения видны на вкладке Keys (`TELEGRAM_BOT_TOKEN`, `TELEGRAM_ALLOWED_USERS`,
+  `TELEGRAM_HOME_CHANNEL`).
 - **Терминал:** `hermes gateway setup`.
 
 После подключения попроси человека написать боту любое слово и отправить `/sethome` — этот чат станет адресом

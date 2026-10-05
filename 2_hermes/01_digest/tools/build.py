@@ -9,7 +9,8 @@
   .hermes/skills/<навык>/references/      плейбуки, на которые навык ссылается
   .hermes/skills/<навык пака>/            копии из pack/skills/ (их кладёт python skills_pack/sync.py из корня курса)
 
-Навыки папки Hermes подключает после разового подтверждения доверия: hermes skills trust (см. SETUP.md).
+Навыки папки Hermes подключает, если папка кейса — корень проекта git (в скопированной папке: git init) и доверие
+подтверждено один раз: hermes skills trust (см. SETUP.md, шаг 3).
 Только стандартная библиотека Python.
 """
 import shutil
@@ -75,7 +76,8 @@ AGENTS_MD = """# Обозреватель — дайджест по темам �
 | рабочая просьба, а папки `hub/` ещё нет | сначала навык `digest-setup`, шаги 0–1 |
 
 Навыки лежат в `.hermes/skills/`. Если навык не загрузился, прочитай плейбуки напрямую из
-`.hermes/skills/digest/references/` — правила те же.
+`.hermes/skills/digest/references/` — правила те же; настройку (`02_setup.md`) — из
+`.hermes/skills/digest-setup/references/`. Почему навыки не подключились, покажет `python tools/setup.py status`.
 
 ## Как работать
 
@@ -162,7 +164,7 @@ def main():
     names = sorted({p.relative_to(SKILLS_DIR).parts[0] for p in pack})
     print(f"AGENTS.md и навыки: {', '.join(SKILLS)} → .hermes/skills/ (файлов: {len(files)})")
     print("Навыки пака: " + (", ".join(names) if names else "нет — python skills_pack/sync.py из корня курса"))
-    print("Hermes подключит навыки папки после разового подтверждения: hermes skills trust")
+    print("Hermes подключит навыки, когда папка кейса — корень проекта git (git init) и доверие подтверждено: hermes skills trust")
 
 
 if __name__ == "__main__":
