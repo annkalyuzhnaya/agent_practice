@@ -192,6 +192,28 @@ details.full{border:1px solid var(--line);border-radius:10px;background:var(--ca
 details.full summary{cursor:pointer;font-weight:600}
 details.full pre{margin:10px 0 2px;white-space:pre-wrap;overflow-wrap:anywhere;font:13px/1.5 Consolas,monospace}
 @media print{.shot{break-inside:avoid}}
+
+/* формат «принцип / быстрый старт / что дальше» */
+.q-lead{background:var(--accbg);border-radius:12px;padding:12px 16px;margin:14px 0;font-size:15px}
+.q-flow{display:flex;flex-wrap:wrap;align-items:stretch;gap:8px;margin:14px 0}
+.q-flow .b{flex:1 1 150px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:14.5px}
+.q-flow .b b{display:block;font-size:15px;margin-bottom:2px}
+.q-flow .b span{color:var(--mut)}
+.q-flow .ar{align-self:center;color:var(--acc);font-weight:700;font-size:20px}
+.q-steps{margin:10px 0;padding:0;list-style:none;counter-reset:q;display:grid;gap:0}
+.q-steps>li{counter-increment:q;position:relative;padding:12px 0 12px 46px;border-top:1px dashed var(--line);font-size:15px}
+.q-steps>li::before{content:counter(q);position:absolute;left:0;top:11px;width:30px;height:30px;border-radius:50%;background:var(--acc);color:var(--card);font-weight:700;display:grid;place-items:center}
+.q-steps>li>b:first-child{display:block;font-size:16.5px;margin-bottom:4px}
+.q-steps p{margin:0 0 6px}
+.q-steps pre{background:var(--code);border:1px solid var(--line);border-radius:8px;padding:10px 12px;font-family:Consolas,monospace;font-size:13.5px;margin:8px 0;white-space:pre-wrap;overflow-x:auto}
+.q-warn{background:var(--warnbg);border:1px solid var(--warn);border-radius:10px;padding:10px 14px;margin:12px 0;font-size:14.5px}
+.q-warn b{color:var(--warn)}
+details.q-more{background:var(--card);border:1px solid var(--line);border-radius:10px;margin:10px 0}
+details.q-more>summary{cursor:pointer;padding:11px 14px;font-weight:600;font-size:16px}
+details.q-more>summary:hover{color:var(--acc)}
+details.q-more[open]>summary{border-bottom:1px solid var(--line)}
+details.q-more>.q-body{padding:4px 14px 14px}
+details.q-more>.q-body>h3:first-child{margin-top:12px}
 </style></head><body><main>
 <!-- меню практики -->
 <style>.pnav{display:flex;flex-wrap:wrap;align-items:center;gap:4px 6px;white-space:nowrap;padding:10px 0 2px;font-size:13.5px;scrollbar-width:thin}.pnav a{color:var(--mut);text-decoration:none;padding:2px 8px;border-radius:99px;flex:none}.pnav a:hover{color:var(--acc);background:var(--accbg)}.pnav a.home{color:var(--acc);font-weight:600;padding-left:0}.pnav .w{font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.04em;margin-left:10px}.pnav span.cur{color:var(--ink);font-weight:600;padding:2px 8px;border-radius:99px;background:var(--accbg);flex:none}.pnav .g{display:inline-flex;align-items:center;gap:4px 6px;flex:none}.pnav.copy{white-space:normal;color:var(--mut)}@media(max-width:640px){.pnav{flex-wrap:nowrap;overflow-x:auto}}</style>
@@ -200,16 +222,33 @@ details.full pre{margin:10px 0 2px;white-space:pre-wrap;overflow-wrap:anywhere;f
 <!-- /меню практики -->
 
 <header>
-<small>Кейс 1 для Hermes · руководство новичка</small>
-<h1>Обозреватель в Hermes: настройка Hermes через сам Hermes</h1>
-<p>Hermes Agent — открытая программа-агент, которая работает на вашем компьютере и обращается к моделям по ключу API: подписка Claude для ежедневной работы не нужна. Обозреватель — это Hermes, открытый в папке кейса: он читает за вас открытые источники и приносит до десяти свежих публикаций со ссылками, оценкой важности и пояснением, чем каждая полезна именно вам. Команды в консоли вы не набираете: установку по готовому запросу выполняет Claude, а дальше Hermes настраивает себя сам — по слову «настрой» он опрашивает вас и доводит настройку до конца. Ваши действия: скопировать папку, вставить запрос, ввести ключ провайдера в окне Hermes и отвечать на вопросы.</p>
+<small>Трек Hermes · Обозреватель</small>
+<h1>Обозреватель в Hermes: дайджест на любых моделях</h1>
+<p>Hermes Agent работает на вашем компьютере и обращается к моделям по ключу API — подписка Claude не нужна. Обозреватель
+читает открытые источники по вашим 3–5 темам и приносит до десяти свежих публикаций: оценка, суть, «почему важно именно
+вам», ссылка и ТОП-3.</p>
 </header>
 
 <nav id="nav">
-<a href="#what">1. Что умеет</a><a href="#install">2. Установка</a><a href="#model">3. Провайдер, модель, ключ</a><a href="#wizard">4. Настройка</a><a href="#opt">5. Подключения</a><a href="#use">6. Как пользоваться</a><a href="#help">7. Если что-то не так</a>
+<a href="#p-principle">1. Принцип</a><a href="#p-start">2. Быстрый старт</a><a href="#p-next">3. Что дальше</a><a href="#p-more">4. Подробнее</a>
 </nav>
 
-<h2 id="what"><span>1</span>Что умеет Обозреватель</h2>
+<h2 id="p-principle"><span>1</span>Принцип</h2>
+<div class="q-flow">
+<div class="b"><b>Профиль</b><span>роль, задачи на месяц, 3–5 тем, источники — <code>hub/profile.md</code></span></div>
+<div class="ar">→</div>
+<div class="b"><b>Разведчики</b><span>дочерние агенты (<code>delegate_task</code>) параллельно по темам — на модели подешевле</span></div>
+<div class="ar">→</div>
+<div class="b"><b>Редактор</b><span>основная модель: убирает повторы, ставит оценки 1–5, пишет «почему важно вам», ТОП-3</span></div>
+<div class="ar">→</div>
+<div class="b"><b>Проверяющий</b><span>отдельный запуск Hermes на другой модели: <code>python tools/hermes.py check</code></span></div>
+<div class="ar">→</div>
+<div class="b"><b>Выпуск</b><span><code>hub/digest/</code> + память «уже видел»; ТОП-3 в Telegram, страница <code>hub/page/digest.html</code></span></div>
+</div>
+<p class="sub"><b>Модель под роль:</b> какая модель у редактора, разведчиков, проверяющего и расписания, записано в
+<code>hub/models.json</code> — меняете вы словами <span class="say">настрой модели</span>. Правила ролей — в
+<code>playbooks/01_digest.md</code> и <code>playbooks/06_models.md</code>, учебные данные — в <code>demo/</code>. Как
+выглядят вход и результат — на странице <a href="../../С_чем_работаем.html">«С чем будем работать?»</a>.</p>
 <p>Вы пишете одно слово — «дайджест». Дальше работают три роли: разведчики ищут публикации по каждой теме, редактор убирает повторы и расставляет оценки, независимый проверяющий сверяет выпуск с источниками. Вам приходит готовый выпуск. Какая модель исполняет какую роль, решаете вы.</p>
 <div class="fn">
 <div class="card"><h4>Выпуск дайджеста<small>главное</small></h4><dl><dt>Вы даёте</dt><dd>Темы в профиле — один раз</dd><dt>Получаете</dt><dd>До 10 публикаций: оценка 1–5, суть, «почему важно именно вам», ссылка; сверху — ТОП-3</dd></dl><p class="sub">Например: <span class="say">дайджест за 3 дня</span></p></div>
@@ -221,7 +260,84 @@ details.full pre{margin:10px 0 2px;white-space:pre-wrap;overflow-wrap:anywhere;f
 </div>
 <p class="sub">Ещё Обозреватель умеет готовить выпуск по расписанию, присылать ТОП-3 в Telegram и принимать ссылки с телефона. Это включается отдельно — раздел <a href="#opt">«Подключения»</a>.</p>
 
-<h3 id="places">Где что происходит: чат, папка, страница</h3>
+<h2 id="p-start"><span>2</span>Быстрый старт</h2>
+<p class="sub">Установка Hermes и ключ модели — по <a href="../START.html">общей инструкции трека Hermes</a> (на
+занятии адрес, модель и ключ выдаст ведущий). Не хотите вводить команды — готовый запрос, по которому Claude сам
+установит Hermes и подключит эту папку, лежит в «Подробнее»: <a href="#steps">«Установка с Claude»</a>.</p>
+<ol class="q-steps">
+<li><b>Скопируйте папку <code>2_hermes/01_digest</code> в постоянное место — вне <code>agent_practice</code></b>
+<p>Например, <code>D:\Hermes\Обозреватель</code>. Hermes ищет навыки проекта в ближайшей папке с <code>.git</code>:
+внутри скачанной практики это <code>agent_practice</code>, а там навыков нет. После настройки папку не переименовывайте
+и не переносите: на её путь настроены расписание и бот.</p></li>
+<li><b>Сделайте её рабочей папкой Hermes</b>
+<pre>hermes config set terminal.cwd "D:/Hermes/Обозреватель"</pre>
+<p>Или в окне Hermes: <b>Chat</b> → список <b>Workspace</b> → <b>Other path…</b> → путь к папке, затем <b>New chat</b>.</p>
+<p class="sub">Навыки папки — по желанию, чтобы агент чётче держал роль (<code>AGENTS.md</code> работает и без них). В
+самой папке кейса:</p>
+<pre>git init
+hermes skills trust "D:/Hermes/Обозреватель"</pre>
+<p class="sub">Проверка: <code>hermes skills list</code> покажет навыки <code>digest</code> и <code>digest-setup</code>.</p></li>
+<li><b>New chat → напишите <span class="say">настрой</span></b>
+<p>Обязательных шагов два, около пяти минут: 0 — рабочая папка <code>hub/</code> и проверка среды, 1 — профиль (роль и
+задачи на месяц, 3–5 тем, что не интересно, источники, период). Дальше по желанию: модели под роли, пробный выпуск,
+страница, расписание, Telegram — на каждом можно ответить <span class="say">пропустить</span>. Вопросы приходят списком
+вариантов: ↑ / ↓ и Enter.</p>
+<p>Хотите сначала посмотреть — на первом вопросе выберите «сначала учебный пример»: 10 вымышленных публикаций с
+ловушками и автоматическая приёмка. Агент сделал шаг и ждёт — <span class="say">продолжи настройку</span> или
+<a href="#full">полный запрос — всё за один разговор</a>.</p></li>
+<li><b>Напишите <span class="say">дайджест</span></b>
+<p>Выпуск собирается заметно дольше обычного ответа: разведчики ищут по каждой теме, затем отдельный запуск Hermes на
+модели проверяющего сверяет выпуск. Пока ждёте — в чате видны строки Tool calls (что агент делает сейчас), а в
+<code>hub/profile.md</code> можно посмотреть, что он записал о вас.</p></li>
+<li><b>Отметьте публикации</b>
+<p><span class="say">в базу 2</span>, <span class="say">в задачи 1, срок до пятницы</span>,
+<span class="say">не интересно 4</span> — номер позиции в последнем выпуске. Следующий выпуск станет точнее.</p></li>
+</ol>
+<div class="q-warn"><b>Ключи — только в окне Hermes.</b> Ключ модели, поисковика, токен бота в чат не пишите: агент
+назовёт вкладку (обычно <b>Keys</b>), куда его ввести, и попросит написать <span class="say">готово</span>. Отвечает
+«я Hermes, чем помочь» и не знает про дайджест — рабочая папка не та: шаг 2, затем New chat.</div>
+
+<h2 id="p-next"><span>3</span>Что дальше</h2>
+<div class="tw"><table>
+<tr><th>Скажите</th><th>Что будет</th></tr>
+<tr><td><span class="say">дайджест за 3 дня</span>, <span class="say">только по теме: …</span></td><td>выпуск за другой период или по одной теме</td></tr>
+<tr><td><span class="say">посмотри это: ссылка</span>, <span class="say">добавь в очередь: ссылка</span></td><td>оценка сейчас — или в ближайшем выпуске на общих основаниях</td></tr>
+<tr><td><span class="say">что ты отсеял и почему</span>, <span class="say">почему у второй оценка 4?</span></td><td>объяснение по рубрике и вашему профилю</td></tr>
+<tr><td><span class="say">карточка для коллег</span></td><td>файл-карточка выпуска и короткий текст; пересылаете вы сами</td></tr>
+<tr><td><span class="say">почисти темы</span></td><td>сводка ваших отметок и предложения — решаете вы</td></tr>
+<tr><td><span class="say">какие модели</span>, <span class="say">поменяй модель разведчика на …</span></td><td>какая роль на какой модели; запишет выбор и скажет, что поменять в настройках</td></tr>
+</table></div>
+
+<h3>На своих данных</h3>
+<p>Подготовьте: 3–5 тем по приоритету, что точно не интересно, источники, которым доверяете (можно не знать — агент
+предложит 5–7 открытых по вашим темам, выберете номерами), период выпуска — 7 дней, 1 день или 30 дней. Посмотреть
+профиль — <span class="say">покажи мой профиль</span>, заполнить заново — <span class="say">настрой профиль</span>,
+поправить по одному — <span class="say">добавь тему: …</span>, <span class="say">не интересно: …</span>,
+<span class="say">добавь источник: адрес</span>.</p>
+
+<h3>Фишки кейса</h3>
+<div class="tw"><table>
+<tr><th>Что</th><th>Зачем</th><th>Как</th></tr>
+<tr><td><b>Модели под роли</b></td><td>дорогая модель пишет, дешёвая ищет, третья проверяет; выбор — в <code>hub/models.json</code></td><td><span class="say">настрой модели</span>; модель разведчиков — вкладка Config, раздел Delegation</td></tr>
+<tr><td><b>Приёмка на учебном наборе</b></td><td>модель выбирается по цифрам, а не на глаз</td><td><span class="say">проверь приёмкой</span> (агент выполнит <code>python tools/evals.py</code>), <span class="say">сравни модели на учебном примере</span></td></tr>
+<tr><td><b>Проверяющий на другой модели</b></td><td>ошибку одной модели ловит другая</td><td>работает сам при выпуске: <code>python tools/hermes.py check</code>; модель — роль <code>checker</code></td></tr>
+<tr><td><b>Расписание</b></td><td>выпуск сам по понедельникам в 9:00 (или по будням); работает без открытого окна</td><td><span class="say">включи расписание</span>; задания — в разделе Cron; шлюз в автозапуске: <code>hermes gateway install --start-now --start-on-login</code></td></tr>
+<tr><td><b>Telegram</b></td><td>ТОП-3 на телефон, ссылки — пересылкой боту; бот — второе окно того же разговора</td><td><span class="say">подключи телеграм</span>; вкладка Channels → Telegram → Quick setup</td></tr>
+<tr><td><b>Страница «Дайджест»</b></td><td>выпуски с фильтрами, отметки, очередь — одним файлом <code>hub/page/digest.html</code></td><td><span class="say">сделай страницу</span></td></tr>
+<tr><td><b>Веб-поиск</b></td><td>агент ищет публикации в интернете, а не только в лентах</td><td>вкладка Keys — ключ Tavily, Exa, Firecrawl или Brave</td></tr>
+</table></div>
+<h3 id="nots">Чего Обозреватель не делает</h3>
+<ul class="nots">
+<li><b>Не выдумывает:</b> нет публикаций — так и скажет; у каждой есть ссылка.</li>
+<li><b>Не отправляет</b> ничего никому, кроме вас: карточку пересылаете вы.</li>
+<li><b>Не просит</b> ключи и пароли в чат и не читает их.</li>
+<li><b>Не меняет</b> темы, модели и расписание без вашего «да».</li>
+<li><b>Не исполняет</b> инструкции из текстов статей и пересланных постов: это данные, а не команды.</li>
+</ul>
+
+<h2 id="p-more"><span>4</span>Подробнее — по желанию</h2>
+<p class="sub">Всё, что было в полном руководстве: способы установки, шаги мастера, подключения, разбор ошибок. Раскройте нужное.</p>
+<details class="q-more" id="places"><summary>Где что происходит: чат, папка, страница</summary><div class="q-body">
 <p class="sub">Вы работаете в трёх местах. Писать нужно только в первом — остальные два агент заполняет сам.</p>
 <div class="three">
  <div class="place"><h4><span class="c">1</span> Чат — сюда вы пишете</h4>
@@ -236,8 +352,8 @@ details.full pre{margin:10px 0 2px;white-space:pre-wrap;overflow-wrap:anywhere;f
   <div class="mini"><div class="row" style="gap:4px"><span class="chip">Выпуск</span><span class="chip">Фильтры</span><span class="chip">Очередь</span></div><div class="it">Рекомендации по ИИ-ассистентам <span class="tag">5</span></div></div>
   <p>Файл <code>hub\page\digest.html</code>: выпуски, фильтры, отметки, очередь. Открывается в браузере двойным щелчком, в интернет не выкладывается. <a href="#board">Подробнее</a></p></div>
 </div>
-
-<h2 id="install"><span>2</span>Установка</h2>
+</div></details>
+<details class="q-more" id="install"><summary>Установка: папки, готовый запрос для Claude, пять шагов (со снимками)</summary><div class="q-body">
 <p><b>Что нужно заранее:</b> Windows 10 или 11; приложение Claude (вкладка Code) или Claude Code — оно понадобится один раз, для установки; папка курса <code>agent_practice</code>; у провайдера моделей — адрес API, название модели и ключ (как выбрать и получить, в <a href="#model">разделе 3</a>). Git и Python Claude проверит и при необходимости поставит сам.</p>
 <p class="sub">Картинки ниже — снимки настоящей веб-панели Hermes (версия 0.21.5, октябрь 2026 года; язык панели английский). Оранжевые цифры показывают, куда смотреть и нажимать; щелчок по снимку увеличивает его. Названия кнопок и вкладок в тексте написаны так же, как в панели. Hermes быстро меняется: если в вашей версии что-то называется иначе — ищите по смыслу.</p>
 
@@ -379,8 +495,8 @@ details.full pre{margin:10px 0 2px;white-space:pre-wrap;overflow-wrap:anywhere;f
  <div class="fr in"><span>📄 START.html · SETUP.md · GUIDE.md · LEVELS.md</span><span>Это руководство; установка для опытных; памятка по фразам; задания уровня 4</span></div>
 </div>
 <p class="sub">Ключей в папке кейса нет: Hermes хранит их у себя, в домашней папке <code>%LOCALAPPDATA%\hermes</code>.</p>
-
-<h2 id="model"><span>3</span>Провайдер, модель и ключ API</h2>
+</div></details>
+<details class="q-more" id="model"><summary>Провайдер, модель и ключ API: выбор, подключение, ошибки, расход (со снимками)</summary><div class="q-body">
 <p>Hermes сам ничего не «думает» — он пересылает разговор модели и исполняет её решения. Модель живёт у <b>провайдера</b>: это сервис, который по вашему <b>ключу API</b> принимает запросы и списывает деньги за фактический расход (за токены — кусочки текста, прочитанные и написанные моделью). Вам нужно три вещи: провайдер, название модели у него и ключ.</p>
 
 <h3 id="prov">Как выбрать провайдера</h3>
@@ -501,8 +617,8 @@ details.full pre{margin:10px 0 2px;white-space:pre-wrap;overflow-wrap:anywhere;f
 <tr><td><b>Как снизить</b></td><td>Разведчикам и расписанию — модель подешевле (<span class="say">настрой модели</span>); ленты источников читаются скриптом без модели; лимит на ключ в кабинете провайдера.</td></tr>
 <tr><td><b>Сменить модель разговора</b></td><td>Блок MODEL справа от чата — для текущего разговора; вкладка MODELS → MAIN MODEL → CHANGE — по умолчанию для новых.</td></tr>
 </table></div>
-
-<h2 id="wizard"><span>4</span>Настройка: Hermes настраивает себя сам</h2>
+</div></details>
+<details class="q-more" id="wizard"><summary>Настройка «настрой»: шаги мастера и полный запрос (со снимком)</summary><div class="q-body">
 <p>Напишите в новый чат одно слово: <span class="say">настрой</span>. Агент ведёт настройку сквозным опросом от начала до конца: сам выполняет команды и проверки, а вас спрашивает только о том, чего не знает, — по одному вопросу, с нумерованными вариантами. Обязательных шагов два (папка <code>hub</code> и профиль, около пяти минут); на остальных можно ответить «пропустить».</p>
 
 <div class="step w"><div class="n">1</div>
@@ -572,8 +688,8 @@ python tools/setup.py status и продолжай с первого незав�
 
 В конце покажи чек-лист: что сделано, что отложено и почему, и три фразы на каждый день.</pre>
 </details>
-
-<h2 id="opt"><span>5</span>Подключения и фоновая работа</h2>
+</div></details>
+<details class="q-more" id="opt"><summary>Подключения: веб-поиск, фоновая работа, расписание, Telegram (со снимками)</summary><div class="q-body">
 <p>После двух обязательных шагов Обозреватель уже отвечает в чате. Каждое подключение ниже добавляет возможность; всё включается по одному, в любой момент — словом в чате, агент подскажет остальное.</p>
 <div class="tw"><table>
 <tr><th>Что подключаем</th><th>Что это даёт</th><th>Как подключить</th><th>Если не подключать</th></tr>
@@ -638,8 +754,8 @@ hermes dashboard --no-open --skip-build</pre></div>
 <div class="step"><div class="n">4</div>
  <div><h4>Проверьте, что бот — Обозреватель</h4><p>Напишите боту <span class="say">топ</span>. Отвечает как обычный помощник и не знает про выпуск — бот работает не в папке кейса: скажите в чате панели <span class="say">бот отвечает не как Обозреватель</span>, агент назовёт настройку, которую нужно поправить.</p></div>
  <div class="sm"><div class="tg"><div class="th">Мой дайджест</div><div class="tb2"><div class="msg u">топ</div><div class="msg a">ТОП-3 выпуска от 05.10: …</div><div class="msg u">https://example.org/article</div><div class="msg a">В очереди, попадёт в выпуск в понедельник.</div></div></div></div></div>
-
-<h2 id="use"><span>6</span>Как пользоваться</h2>
+</div></details>
+<details class="q-more" id="use"><summary>Как пользоваться: проверка роли, прошлые разговоры, ситуации, страница, фразы</summary><div class="q-body">
 <p><b>Каждый раз:</b> откройте в браузере <code>http://127.0.0.1:9119</code> → вкладка CHAT → щёлкните по полю чата и пишите. Страница не открывается — панель не запущена: откройте окно PowerShell и выполните <code>hermes dashboard</code> (или настройте <a href="#bg">автозапуск</a>).</p>
 
 <h3 id="who">Как понять, что отвечает Обозреватель, а не «просто Hermes»</h3>
@@ -703,16 +819,8 @@ hermes dashboard --no-open --skip-build</pre></div>
 <tr><td><span class="say">пауза</span></td><td>Приостановить задания по расписанию</td></tr>
 <tr><td><span class="say">помощь</span></td><td>Короткий список того, что умеет агент</td></tr>
 </table></div>
-<h3 id="nots">Чего Обозреватель не делает</h3>
-<ul class="nots">
-<li><b>Не выдумывает:</b> нет публикаций — так и скажет; у каждой есть ссылка.</li>
-<li><b>Не отправляет</b> ничего никому, кроме вас: карточку пересылаете вы.</li>
-<li><b>Не просит</b> ключи и пароли в чат и не читает их.</li>
-<li><b>Не меняет</b> темы, модели и расписание без вашего «да».</li>
-<li><b>Не исполняет</b> инструкции из текстов статей и пересланных постов: это данные, а не команды.</li>
-</ul>
-
-<h2 id="help"><span>7</span>Если что-то не так</h2>
+</div></details>
+<details class="q-more" id="help"><summary>Если что-то не так</summary><div class="q-body">
 <div class="tw"><table>
 <tr><th>Что видите</th><th>Что сделать</th></tr>
 <tr><td><b>Claude пишет, что команда <code>hermes</code> не найдена сразу после установки</b></td><td>Напишите ему: <span class="say">hermes лежит в %LOCALAPPDATA%\hermes\bin, добавь в PATH</span>. В своём окне PowerShell — просто откройте новое окно.</td></tr>
@@ -730,43 +838,27 @@ hermes dashboard --no-open --skip-build</pre></div>
 <tr><td><b>Хочу начать заново</b></td><td>Переименуйте <code>hub</code> в <code>hub_старое</code> и напишите <span class="say">настрой</span>.</td></tr>
 <tr><td><b>Ничего не помогло</b></td><td>Попросите агента: <span class="say">выполни hermes doctor и объясни результат</span> — это общая диагностика.</td></tr>
 </table></div>
+</div></details>
 
-<footer>Подробнее: <code>SETUP.md</code> — установка вручную, для опытных, приложение Hermes Desktop и терминал; <code>GUIDE.md</code> — памятка по фразам; <code>LEVELS.md</code> — задания уровня 4. Снимки сделаны с веб-панели Hermes Agent 0.21.5 на Windows 11; срабатывание расписания и подключение Telegram описаны по документации Hermes.</footer>
+<footer>Подробнее в файлах кейса: <code>SETUP.md</code> — установка вручную, приложение Hermes Desktop и терминал;
+<code>GUIDE.md</code> — памятка по фразам; <code>LEVELS.md</code> — задания уровня 4. Снимки сделаны с веб-панели Hermes
+Agent 0.21.5 на Windows 11.</footer>
 
 </main>
-<div class="tocp" id="tocp"></div>
-<div class="tocb"><button id="tocb" type="button" aria-expanded="false">☰ Оглавление</button><button id="topb" type="button" title="В начало">↑</button></div>
 <script>
 (function(){
-  var panel=document.getElementById('tocp'),btn=document.getElementById('tocb'),nav=document.getElementById('nav');
-  var heads=[].slice.call(document.querySelectorAll('main h2[id],main h3[id]')),html='';
-  heads.forEach(function(h){
-    var t=h.tagName==='H2'?h.querySelector('span').textContent+'. '+h.textContent.slice(h.querySelector('span').textContent.length):h.textContent;
-    html+='<a href="#'+h.id+'" class="'+h.tagName.toLowerCase()+'">'+t.replace(/</g,'&lt;')+'</a>';
-  });
-  panel.innerHTML=html;
-  function toggle(open){panel.classList.toggle('open',open);btn.setAttribute('aria-expanded',open)}
-  btn.addEventListener('click',function(){toggle(!panel.classList.contains('open'))});
-  document.getElementById('topb').addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
+  /* ссылка на раздел внутри свёрнутого блока — раскрыть блок и прокрутить */
+  function openTo(id){
+    var t=id&&document.getElementById(id); if(!t)return false;
+    for(var d=t.closest('details');d;d=d.parentElement&&d.parentElement.closest('details'))d.open=true;
+    t.scrollIntoView({behavior:'smooth',block:'start'}); return true;
+  }
   document.addEventListener('click',function(e){
     var a=e.target.closest?e.target.closest('a[href^="#"]'):null;
-    if(!a){if(!e.target.closest('.tocb')&&!e.target.closest('.tocp'))toggle(false);return}
-    var t=document.getElementById(a.getAttribute('href').slice(1)); if(!t)return;
-    e.preventDefault(); toggle(false); t.scrollIntoView({behavior:'smooth',block:'start'});
+    if(a&&openTo(decodeURIComponent(a.getAttribute('href').slice(1)))){e.preventDefault();history.replaceState(null,'',a.getAttribute('href'))}
   });
-  document.addEventListener('keydown',function(e){if(e.key==='Escape')toggle(false)});
-  var h2=heads.filter(function(h){return h.tagName==='H2'});
-  function spy(){
-    var cur=null,sub=null;
-    h2.forEach(function(h){if(h.getBoundingClientRect().top<140)cur=h.id});
-    heads.forEach(function(h){if(h.getBoundingClientRect().top<140)sub=h.id});
-    [].forEach.call(nav.querySelectorAll('a'),function(a){
-      var on=a.getAttribute('href')==='#'+cur;
-      if(on&&!a.classList.contains('on')&&nav.scrollWidth>nav.clientWidth)nav.scrollLeft=a.offsetLeft-nav.offsetLeft-16;
-      a.classList.toggle('on',on)});
-    [].forEach.call(panel.querySelectorAll('a'),function(a){a.classList.toggle('on',a.getAttribute('href')==='#'+sub)});
-  }
-  window.addEventListener('scroll',spy,{passive:true}); spy();
+  if(location.hash)setTimeout(function(){openTo(decodeURIComponent(location.hash.slice(1)))},50);
+  /* снимок по щелчку — крупнее */
   document.addEventListener('click',function(e){
     var s=e.target.closest?e.target.closest('.shot'):null,z=document.querySelector('.shot.zoom');
     if(z&&z!==s)z.classList.remove('zoom');
