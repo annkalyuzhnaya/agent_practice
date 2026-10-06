@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Личные агенты — практика</title>
+<style>
+:root{--bg:#f6f5f1;--card:#fff;--ink:#1d1f23;--mut:#5f656f;--line:#dcdad3;--acc:#0b6e69;--accbg:#e0f0ee;
+--code:#efede7;--side:#efede6;--hm:#6d3fb0;--hmbg:#efe7fa}
+@media(prefers-color-scheme:dark){:root{--bg:#15171a;--card:#1e2125;--ink:#e8e8e6;--mut:#a0a7b0;--line:#353a41;
+--acc:#56c4bb;--accbg:#173533;--code:#2a2e33;--side:#191c1f;--hm:#b99af0;--hmbg:#2a2238}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 "Segoe UI",system-ui,-apple-system,Roboto,sans-serif}
+main{max-width:1000px;margin:0 auto;padding:0 16px 64px}
+header{padding:28px 0 8px}
+header small{color:var(--acc);font-weight:600;letter-spacing:.04em;text-transform:uppercase;font-size:12px}
+h1{font-size:30px;line-height:1.2;margin:4px 0 8px}
+header p{margin:0 0 10px;max-width:760px}
+h2{font-size:23px;margin:40px 0 4px}
+h2 small{font-size:14px;font-weight:400;color:var(--mut);margin-left:6px}
+p{margin:0 0 10px}
+.sub{color:var(--mut);font-size:15px;max-width:760px}
+a{color:var(--acc)}
+code{font-family:Consolas,"Cascadia Mono",monospace;font-size:.92em;background:var(--code);padding:1px 5px;border-radius:4px;overflow-wrap:anywhere}
+/* как устроено */
+.parts{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr));gap:12px;margin:14px 0}
+.part{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.part h4{margin:0 0 4px;font-size:15.5px}
+.part p{margin:0;font-size:14.5px;color:var(--mut)}
+.part code{color:var(--ink)}
+/* кейсы */
+.cases{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr));gap:12px;margin:14px 0}
+.case{display:flex;flex-direction:column;gap:6px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;text-decoration:none;color:var(--ink);transition:border-color .15s}
+.case:hover{border-color:var(--acc)}
+.case .n{font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--acc)}
+.case h3{margin:0;font-size:18px}
+.case p{margin:0;font-size:14.5px;color:var(--mut);flex:1}
+.case .go{font-size:14px;font-weight:600;color:var(--acc)}
+.case.wide{border:2px solid var(--acc)}
+.hermes .case .n,.hermes .case .go{color:var(--hm)}
+.hermes .case:hover{border-color:var(--hm)}
+.hermes h2{color:var(--hm)}
+.note{background:var(--accbg);border-radius:10px;padding:10px 14px;font-size:14.5px;margin:12px 0}
+.hermes .note{background:var(--hmbg)}
+footer{margin-top:44px;color:var(--mut);font-size:13.5px;border-top:1px solid var(--line);padding-top:14px}
+footer p{margin:0 0 6px}
+</style></head>
+<body><main>
+
+<header>
+<small>Практика «Личные агенты»</small>
+<h1>С чего начать</h1>
+<p>Это входная страница практики. Выберите кейс — откроется его руководство. Вернуться сюда и перейти к другому кейсу
+можно из строки меню вверху любого руководства.</p>
+<p class="sub">Руководства открываются в браузере и ничего не устанавливают. Всё, что вы будете делать, происходит
+в папке кейса: её открывают в Claude Code или в Hermes.</p>
+</header>
+
+<h2>Как устроен любой кейс</h2>
+<p class="sub">Кейс — это папка. Агент становится «Обозревателем» или «Входящими» не от настроек программы, а потому,
+что в начале разговора читает правила из этой папки.</p>
+<div class="parts">
+<div class="part"><h4>Папка кейса = проект</h4><p>Её открывают в Claude Code (или в Hermes). Агент работает только в ней.</p></div>
+<div class="part"><h4>Правила</h4><p><code>CLAUDE.md</code> (в Hermes — <code>AGENTS.md</code>) и папка <code>playbooks/</code>: кто такой агент, что делает, чего не делает без вашего «да».</p></div>
+<div class="part"><h4>Ваши данные — <code>hub/</code></h4><p>Появляется при настройке: профиль, результаты, память, задачи. Её ведёт агент; беречь стоит именно её.</p></div>
+<div class="part"><h4>Учебные данные — <code>demo/</code></h4><p>Готовый пример входных материалов и результата: можно посмотреть, с чем работает агент, ещё до настройки.</p></div>
+</div>
+
+<h2>Мир Claude <small>агент работает на Claude</small></h2>
+<p class="sub">Пять тематических агентов — выбираете одного. Личный ассистент объединяет всех пятерых.</p>
+<div class="cases">
+<a class="case" href="1_claude/01_digest/START.html"><span class="n">Кейс 1</span><h3>Обозреватель</h3>
+<p>Дайджест по вашим темам: до 10 публикаций с оценкой и «почему важно вам», ТОП-3.</p><span class="go">Открыть руководство →</span></a>
+<a class="case" href="1_claude/02_kb/START.html"><span class="n">Кейс 2</span><h3>База знаний</h3>
+<p>Ответы строго по вашим материалам со ссылкой на источник, заметки, журнал противоречий.</p><span class="go">Открыть руководство →</span></a>
+<a class="case" href="1_claude/03_meeting/START.html"><span class="n">Кейс 3</span><h3>Встреча</h3>
+<p>Бриф до встречи; мемо, задачи и черновик письма после.</p><span class="go">Открыть руководство →</span></a>
+<a class="case" href="1_claude/04_inbox/START.html"><span class="n">Кейс 4</span><h3>Входящие</h3>
+<p>Разбор писем и обращений, черновики ответов, задачи. Сам ничего не отправляет.</p><span class="go">Открыть руководство →</span></a>
+<a class="case" href="1_claude/05_docs/START.html"><span class="n">Кейс 5</span><h3>Документ-инженер</h3>
+<p>Документы Word и Excel по шаблону, точечные правки с проверкой, версии.</p><span class="go">Открыть руководство →</span></a>
+<a class="case wide" href="1_claude/06_assistant/START.html"><span class="n">Все пять вместе</span><h3>Личный ассистент</h3>
+<p>Пять агентов под одним оркестратором: сценарий «Мой день», общая доска, рутины.</p><span class="go">Открыть руководство →</span></a>
+</div>
+
+<section class="hermes">
+<h2>Мир Hermes <small>агент работает на любой модели по ключу API</small></h2>
+<p class="sub">Hermes Agent — открытая программа-агент на вашем компьютере. Подписка Claude для ежедневной работы не нужна:
+вы платите провайдеру модели за фактический расход.</p>
+<div class="cases">
+<a class="case" href="2_hermes/01_digest/START.html"><span class="n">Тематический ассистент</span><h3>Обозреватель в Hermes</h3>
+<p>Тот же Обозреватель, собранный для Hermes: модель под каждую роль, расписание, Telegram.</p><span class="go">Открыть руководство →</span></a>
+<a class="case" href="2_hermes/orchestrator/README.md"><span class="n">Оркестратор</span><h3>Помощник над флотом Hermes</h3>
+<p>Claude-дирижёр: раздаёт задачи ассистентам Hermes, в том числе удалённым, и сводит их в один план дня.</p><span class="go">Открыть описание →</span></a>
+<a class="case" href="2_hermes/manual/START.html"><span class="n">Своими руками</span><h3>Универсальный помощник</h3>
+<p>Сборка помощника на Hermes без Claude — пошагово, для тех, кто не программирует.</p><span class="go">Открыть руководство →</span></a>
+</div>
+<p class="note">Нужен другой тематический ассистент для Hermes (База знаний, Встреча, Входящие, Документ-инженер или свой)?
+Откройте папку <code>2_hermes</code> в Claude Code и напишите «собери ассистента для Hermes» — Claude соберёт его
+по образцу Обозревателя.</p>
+</section>
+
+<footer>
+<p>Скопировали папку кейса отдельно от практики — её руководство работает само, а ссылки на соседние кейсы в меню
+ведут в никуда: возвращайтесь к этой странице в исходной папке.</p>
+<p>Для авторов практики: <code>skills_pack/</code> и скрипты <code>sync.py</code>, <code>tools/build.py</code> — служебные,
+собирают навыки и правила в папки кейсов. Участнику открывать их не нужно. Карта для авторов — <a href="README.md">README.md</a>.</p>
+</footer>
+
+</main></body></html>
