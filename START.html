@@ -14,32 +14,42 @@ header{padding:28px 0 8px}
 header small{color:var(--acc);font-weight:600;letter-spacing:.04em;text-transform:uppercase;font-size:12px}
 h1{font-size:30px;line-height:1.2;margin:4px 0 8px}
 header p{margin:0 0 10px;max-width:760px}
-h2{font-size:23px;margin:40px 0 4px}
-h2 small{font-size:14px;font-weight:400;color:var(--mut);margin-left:6px}
+h2{font-size:23px;margin:40px 0 6px}
+h3.world{font-size:15px;text-transform:uppercase;letter-spacing:.05em;color:var(--acc);margin:22px 0 0}
+.hermes h3.world{color:var(--hm)}
 p{margin:0 0 10px}
 .sub{color:var(--mut);font-size:15px;max-width:760px}
 a{color:var(--acc)}
 code{font-family:Consolas,"Cascadia Mono",monospace;font-size:.92em;background:var(--code);padding:1px 5px;border-radius:4px;overflow-wrap:anywhere}
-/* как устроено */
-.parts{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr));gap:12px;margin:14px 0}
-.part{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
-.part h4{margin:0 0 4px;font-size:15.5px}
-.part p{margin:0;font-size:14.5px;color:var(--mut)}
-.part code{color:var(--ink)}
+/* первое */
+.first{display:block;background:var(--accbg);border:1px solid var(--acc);border-radius:12px;padding:12px 16px;margin:16px 0 0;text-decoration:none;color:var(--ink)}
+.first b{color:var(--acc);font-size:17px}
+.first span{display:block;color:var(--mut);font-size:14.5px}
+.first:hover b{text-decoration:underline}
+/* треки */
+.tracks{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:12px;margin:14px 0}
+.track{display:flex;flex-direction:column;gap:6px;background:var(--card);border:2px solid var(--acc);border-radius:14px;padding:16px 18px;text-decoration:none;color:var(--ink)}
+.track .n{font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--acc)}
+.track h3{margin:0;font-size:22px}
+.track p{margin:0;font-size:15px;color:var(--mut);flex:1}
+.track .go{font-size:15px;font-weight:600;color:var(--acc)}
+.track.hm{border-color:var(--hm)}
+.track.hm .n,.track.hm .go{color:var(--hm)}
+.track:hover{background:var(--accbg)}
+.track.hm:hover{background:var(--hmbg)}
+/* занятие */
+.plan{margin:10px 0;padding:0;list-style:none;counter-reset:s;display:grid;gap:8px}
+.plan li{counter-increment:s;position:relative;padding:10px 14px 10px 50px;background:var(--card);border:1px solid var(--line);border-radius:10px;font-size:15px}
+.plan li::before{content:counter(s);position:absolute;left:14px;top:9px;width:26px;height:26px;border-radius:50%;background:var(--acc);color:var(--card);font-weight:700;display:grid;place-items:center;font-size:14px}
 /* кейсы */
-.cases{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr));gap:12px;margin:14px 0}
-.case{display:flex;flex-direction:column;gap:6px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;text-decoration:none;color:var(--ink);transition:border-color .15s}
+.cases{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,290px),1fr));gap:10px;margin:10px 0}
+.case{display:flex;flex-direction:column;gap:4px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;text-decoration:none;color:var(--ink);transition:border-color .15s}
 .case:hover{border-color:var(--acc)}
 .case .n{font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--acc)}
-.case h3{margin:0;font-size:18px}
-.case p{margin:0;font-size:14.5px;color:var(--mut);flex:1}
-.case .go{font-size:14px;font-weight:600;color:var(--acc)}
-.case.wide{border:2px solid var(--acc)}
-.hermes .case .n,.hermes .case .go{color:var(--hm)}
+.case h4{margin:0;font-size:17px}
+.case p{margin:0;font-size:14px;color:var(--mut);flex:1}
+.hermes .case .n{color:var(--hm)}
 .hermes .case:hover{border-color:var(--hm)}
-.hermes h2{color:var(--hm)}
-.note{background:var(--accbg);border-radius:10px;padding:10px 14px;font-size:14.5px;margin:12px 0}
-.hermes .note{background:var(--hmbg)}
 footer{margin-top:44px;color:var(--mut);font-size:13.5px;border-top:1px solid var(--line);padding-top:14px}
 footer p{margin:0 0 6px}
 </style></head>
@@ -48,59 +58,69 @@ footer p{margin:0 0 6px}
 <header>
 <small>Практика «Личные агенты»</small>
 <h1>С чего начать</h1>
-<p>Это входная страница практики. Выберите кейс — откроется его руководство. Вернуться сюда и перейти к другому кейсу
-можно из строки меню вверху любого руководства.</p>
-<p class="sub">Руководства открываются в браузере и ничего не устанавливают. Всё, что вы будете делать, происходит
-в папке кейса: её открывают в Claude Code или в Hermes.</p>
+<p>Два трека: агент на <b>Claude</b> или агент на <b>Hermes</b> (любые модели по ключу API). В каждом — одна общая
+инструкция, по которой можно собрать любого агента из списка или своего.</p>
+<p class="sub">Руководства открываются в браузере и ничего не устанавливают. Работа идёт в папке агента: её открывают
+в Claude Code или в Hermes.</p>
 </header>
 
-<h2>Как устроен любой кейс</h2>
-<p class="sub">Кейс — это папка. Агент становится «Обозревателем» или «Входящими» не от настроек программы, а потому,
-что в начале разговора читает правила из этой папки.</p>
-<div class="parts">
-<div class="part"><h4>Папка кейса = проект</h4><p>Её открывают в Claude Code (или в Hermes). Агент работает только в ней.</p></div>
-<div class="part"><h4>Правила</h4><p><code>CLAUDE.md</code> (в Hermes — <code>AGENTS.md</code>) и папка <code>playbooks/</code>: кто такой агент, что делает, чего не делает без вашего «да».</p></div>
-<div class="part"><h4>Ваши данные — <code>hub/</code></h4><p>Появляется при настройке: профиль, результаты, память, задачи. Её ведёт агент; беречь стоит именно её.</p></div>
-<div class="part"><h4>Учебные данные — <code>demo/</code></h4><p>Готовый пример входных материалов и результата: можно посмотреть, с чем работает агент, ещё до настройки.</p></div>
+<a class="first" href="С_чем_работаем.html"><b>Сначала: с чем будем работать?</b>
+<span>Что лежит в папке агента, какие учебные файлы он получает и что из них делает.</span></a>
+
+<h2>Выберите трек</h2>
+<div class="tracks">
+<a class="track" href="1_claude/START.html"><span class="n">Трек Claude</span><h3>Агент на Claude</h3>
+<p>Пять тематических агентов, личный ассистент над всеми пятью или свой агент. Работает в Claude Code.</p>
+<span class="go">Общая инструкция →</span></a>
+<a class="track hm" href="2_hermes/START.html"><span class="n">Трек Hermes</span><h3>Агент на Hermes</h3>
+<p>Готовый Обозреватель, универсальный помощник, роли из кейсов Claude или свой; оркестратор над несколькими ассистентами.</p>
+<span class="go">Общая инструкция →</span></a>
 </div>
 
-<h2>Мир Claude <small>агент работает на Claude</small></h2>
-<p class="sub">Пять тематических агентов — выбираете одного. Личный ассистент объединяет всех пятерых.</p>
+<h2>Как пройдёт занятие</h2>
+<ol class="plan">
+<li><b>Показ.</b> Ведущий открывает папку агента и учебные файлы: что читает агент и что у него получается.</li>
+<li><b>Вместе.</b> Ведущий проходит общую инструкцию трека на экране, вы повторяете у себя.</li>
+<li><b>Сами.</b> Кейс из списка или свой агент — по той же инструкции.</li>
+<li><b>Соседу.</b> Показываете друг другу, что получилось; ведущие проходят по рядам.</li>
+<li><b>Фишки.</b> Ведущий показывает то, до чего сами вряд ли дойдёте: Telegram, расписание, Tavily, Obsidian, Gmail, модели под роли.</li>
+</ol>
+
+<h2>Руководства по кейсам</h2>
+<p class="sub">Подробно по каждому агенту: все способы установки, снимки окон, разбор ошибок. Переходить между ними —
+строкой меню вверху любого руководства.</p>
+
+<h3 class="world">Мир Claude</h3>
 <div class="cases">
-<a class="case" href="1_claude/01_digest/START.html"><span class="n">Кейс 1</span><h3>Обозреватель</h3>
-<p>Дайджест по вашим темам: до 10 публикаций с оценкой и «почему важно вам», ТОП-3.</p><span class="go">Открыть руководство →</span></a>
-<a class="case" href="1_claude/02_kb/START.html"><span class="n">Кейс 2</span><h3>База знаний</h3>
-<p>Ответы строго по вашим материалам со ссылкой на источник, заметки, журнал противоречий.</p><span class="go">Открыть руководство →</span></a>
-<a class="case" href="1_claude/03_meeting/START.html"><span class="n">Кейс 3</span><h3>Встреча</h3>
-<p>Бриф до встречи; мемо, задачи и черновик письма после.</p><span class="go">Открыть руководство →</span></a>
-<a class="case" href="1_claude/04_inbox/START.html"><span class="n">Кейс 4</span><h3>Входящие</h3>
-<p>Разбор писем и обращений, черновики ответов, задачи. Сам ничего не отправляет.</p><span class="go">Открыть руководство →</span></a>
-<a class="case" href="1_claude/05_docs/START.html"><span class="n">Кейс 5</span><h3>Документ-инженер</h3>
-<p>Документы Word и Excel по шаблону, точечные правки с проверкой, версии.</p><span class="go">Открыть руководство →</span></a>
-<a class="case wide" href="1_claude/06_assistant/START.html"><span class="n">Все пять вместе</span><h3>Личный ассистент</h3>
-<p>Пять агентов под одним оркестратором: сценарий «Мой день», общая доска, рутины.</p><span class="go">Открыть руководство →</span></a>
+<a class="case" href="1_claude/01_digest/START.html"><span class="n">Кейс 1</span><h4>Обозреватель</h4>
+<p>Дайджест по вашим темам: до 10 публикаций с оценкой и «почему важно вам», ТОП-3.</p></a>
+<a class="case" href="1_claude/02_kb/START.html"><span class="n">Кейс 2</span><h4>База знаний</h4>
+<p>Ответы строго по вашим материалам со ссылкой на источник, заметки, журнал противоречий.</p></a>
+<a class="case" href="1_claude/03_meeting/START.html"><span class="n">Кейс 3</span><h4>Встреча</h4>
+<p>Бриф до встречи; мемо, задачи и черновик письма после.</p></a>
+<a class="case" href="1_claude/04_inbox/START.html"><span class="n">Кейс 4</span><h4>Входящие</h4>
+<p>Разбор писем и обращений, черновики ответов, задачи. Сам ничего не отправляет.</p></a>
+<a class="case" href="1_claude/05_docs/START.html"><span class="n">Кейс 5</span><h4>Документ-инженер</h4>
+<p>Документы Word и Excel по шаблону, точечные правки с проверкой, версии.</p></a>
+<a class="case" href="1_claude/06_assistant/START.html"><span class="n">Все пять вместе</span><h4>Личный ассистент</h4>
+<p>Пять агентов под одним оркестратором: «Мой день», общая доска, рутины.</p></a>
 </div>
 
 <section class="hermes">
-<h2>Мир Hermes <small>агент работает на любой модели по ключу API</small></h2>
-<p class="sub">Hermes Agent — открытая программа-агент на вашем компьютере. Подписка Claude для ежедневной работы не нужна:
-вы платите провайдеру модели за фактический расход.</p>
+<h3 class="world">Мир Hermes</h3>
 <div class="cases">
-<a class="case" href="2_hermes/01_digest/START.html"><span class="n">Тематический ассистент</span><h3>Обозреватель в Hermes</h3>
-<p>Тот же Обозреватель, собранный для Hermes: модель под каждую роль, расписание, Telegram.</p><span class="go">Открыть руководство →</span></a>
-<a class="case" href="2_hermes/orchestrator/README.md"><span class="n">Оркестратор</span><h3>Помощник над флотом Hermes</h3>
-<p>Claude-дирижёр: раздаёт задачи ассистентам Hermes, в том числе удалённым, и сводит их в один план дня.</p><span class="go">Открыть описание →</span></a>
-<a class="case" href="2_hermes/manual/START.html"><span class="n">Своими руками</span><h3>Универсальный помощник</h3>
-<p>Сборка помощника на Hermes без Claude — пошагово, для тех, кто не программирует.</p><span class="go">Открыть руководство →</span></a>
+<a class="case" href="2_hermes/01_digest/START.html"><span class="n">Тематический</span><h4>Обозреватель в Hermes</h4>
+<p>Тот же Обозреватель на любых моделях: модель под роль, расписание, Telegram.</p></a>
+<a class="case" href="2_hermes/manual/START.html"><span class="n">Своими руками</span><h4>Универсальный помощник</h4>
+<p>Задачи, заметки, черновики. Собирается руками, без Claude.</p></a>
+<a class="case" href="2_hermes/orchestrator/START.html"><span class="n">Оркестратор</span><h4>Помощник над флотом Hermes</h4>
+<p>Claude раздаёт задачи ассистентам Hermes и сводит их в один план дня.</p></a>
 </div>
-<p class="note">Нужен другой тематический ассистент для Hermes (База знаний, Встреча, Входящие, Документ-инженер или свой)?
-Откройте папку <code>2_hermes</code> в Claude Code и напишите «собери ассистента для Hermes» — Claude соберёт его
-по образцу Обозревателя.</p>
 </section>
 
 <footer>
-<p>Скопировали папку кейса отдельно от практики — её руководство работает само, а ссылки на соседние кейсы в меню
-ведут в никуда: возвращайтесь к этой странице в исходной папке.</p>
+<p>Скопировали папку агента отдельно от практики — её руководство работает само, а вместо меню других кейсов оно
+подскажет вернуться к этой странице.</p>
 <p>Для авторов практики: <code>skills_pack/</code> и скрипты <code>sync.py</code>, <code>tools/build.py</code> — служебные,
 собирают навыки и правила в папки кейсов. Участнику открывать их не нужно. Карта для авторов — <a href="README.md">README.md</a>.</p>
 </footer>

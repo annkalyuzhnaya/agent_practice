@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Трек Claude — общая инструкция</title>
+<style>
+:root{--bg:#f6f5f1;--card:#fff;--ink:#1d1f23;--mut:#5f656f;--line:#dcdad3;--acc:#0b6e69;--accbg:#e0f0ee;
+--warn:#8a5200;--warnbg:#fbf0d9;--code:#efede7;--side:#efede6}
+@media(prefers-color-scheme:dark){:root{--bg:#15171a;--card:#1e2125;--ink:#e8e8e6;--mut:#a0a7b0;--line:#353a41;
+--acc:#56c4bb;--accbg:#173533;--warn:#e8b45c;--warnbg:#3a2e16;--code:#2a2e33;--side:#191c1f}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 "Segoe UI",system-ui,-apple-system,Roboto,sans-serif}
+main{max-width:1000px;margin:0 auto;padding:0 16px 64px}
+header{padding:20px 0 8px}
+header small{color:var(--acc);font-weight:600;letter-spacing:.04em;text-transform:uppercase;font-size:12px}
+h1{font-size:30px;line-height:1.2;margin:4px 0 8px}
+header p{margin:0 0 10px;max-width:780px}
+h2{font-size:23px;margin:40px 0 6px}
+h2 span{color:var(--acc);margin-right:8px}
+p{margin:0 0 10px}
+.sub{color:var(--mut);font-size:15px;max-width:780px}
+main a{color:var(--acc)}
+code{font-family:Consolas,"Cascadia Mono",monospace;font-size:.92em;background:var(--code);padding:1px 5px;border-radius:4px;overflow-wrap:anywhere}
+pre{background:var(--code);border:1px solid var(--line);border-radius:8px;padding:10px 12px;overflow-x:auto;font-family:Consolas,monospace;font-size:13.5px;margin:8px 0;white-space:pre-wrap}
+.say{display:inline-block;background:var(--accbg);border:1px solid var(--acc);border-radius:8px;padding:0 8px;font-weight:600;overflow-wrap:anywhere}
+/* схема */
+.flow{display:flex;flex-wrap:wrap;align-items:stretch;gap:8px;margin:14px 0}
+.flow .b{flex:1 1 150px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:14.5px}
+.flow .b b{display:block;font-size:15px;margin-bottom:2px}
+.flow .b span{color:var(--mut)}
+.flow .ar{align-self:center;color:var(--acc);font-weight:700;font-size:20px}
+/* таблицы */
+.tw{overflow-x:auto;margin:12px 0}
+table{width:100%;border-collapse:collapse;font-size:14.5px;background:var(--card);border:1px solid var(--line)}
+td,th{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--mut);background:var(--side)}
+tr:last-child td{border-bottom:0}
+td b a{text-decoration:none}
+/* шаги */
+.step{display:grid;grid-template-columns:34px minmax(0,1fr);gap:14px;align-items:start;padding:14px 0;border-top:1px dashed var(--line)}
+.step .n{width:30px;height:30px;border-radius:50%;background:var(--acc);color:var(--card);font-weight:700;display:grid;place-items:center}
+.step h4{margin:3px 0 6px;font-size:16.5px}
+.step p{font-size:15px;margin:0 0 6px}
+.warn{background:var(--warnbg);border:1px solid var(--warn);border-radius:10px;padding:10px 14px;margin:12px 0;font-size:14.5px}
+.warn b{color:var(--warn)}
+.tip{background:var(--accbg);border-radius:10px;padding:10px 14px;margin:12px 0;font-size:14.5px}
+/* карточки */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:12px;margin:14px 0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.card h4{margin:0 0 4px;font-size:16px}
+.card p{margin:0 0 6px;font-size:14.5px;color:var(--mut)}
+.card p:last-child{margin:0}
+/* свёрнутое */
+details{background:var(--card);border:1px solid var(--line);border-radius:10px;margin:10px 0}
+summary{cursor:pointer;padding:10px 14px;font-weight:600}
+details>div{padding:0 14px 12px}
+footer{margin-top:40px;color:var(--mut);font-size:13.5px;border-top:1px solid var(--line);padding-top:14px}
+</style></head>
+<body><main>
+<!-- меню практики -->
+<style>.pnav{display:flex;flex-wrap:wrap;align-items:center;gap:4px 6px;white-space:nowrap;padding:10px 0 2px;font-size:13.5px;scrollbar-width:thin}.pnav a{color:var(--mut);text-decoration:none;padding:2px 8px;border-radius:99px;flex:none}.pnav a:hover{color:var(--acc);background:var(--accbg)}.pnav a.home{color:var(--acc);font-weight:600;padding-left:0}.pnav .w{font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.04em;margin-left:10px}.pnav span.cur{color:var(--ink);font-weight:600;padding:2px 8px;border-radius:99px;background:var(--accbg);flex:none}.pnav .g{display:inline-flex;align-items:center;gap:4px 6px;flex:none}.pnav.copy{white-space:normal;color:var(--mut)}@media(max-width:640px){.pnav{flex-wrap:nowrap;overflow-x:auto}}</style>
+<div class="pnav" data-at="/1_claude/START.html"><a class="home" href="../START.html">← Все кейсы</a><a href="../С_чем_работаем.html">С чем работаем</a><span class="g"><span class="cur w">Claude</span><a href="../1_claude/01_digest/START.html">Обозреватель</a><a href="../1_claude/02_kb/START.html">База знаний</a><a href="../1_claude/03_meeting/START.html">Встреча</a><a href="../1_claude/04_inbox/START.html">Входящие</a><a href="../1_claude/05_docs/START.html">Документ-инженер</a><a href="../1_claude/06_assistant/START.html">Ассистент</a></span><span class="g"><a class="w" href="../2_hermes/START.html">Hermes</a><a href="../2_hermes/01_digest/START.html">Обозреватель</a><a href="../2_hermes/orchestrator/START.html">Оркестратор</a><a href="../2_hermes/manual/START.html">Своими руками</a></span></div>
+<script>(function(){var n=document.currentScript.previousElementSibling,p=decodeURIComponent(location.pathname).replace(/\\/g,'/');if(p.slice(-n.dataset.at.length)!==n.dataset.at){n.className='pnav copy';n.textContent='Это руководство из скопированной папки. Меню всех кейсов — в файле START.html в корне папки практики agent_practice.'}})();</script>
+<!-- /меню практики -->
+
+<header>
+<small>Трек Claude · общая инструкция</small>
+<h1>Агент на Claude: от папки до первого результата</h1>
+<p>Одна инструкция для любого кейса — Обозреватель, База знаний, Встреча, Входящие, Документ-инженер, Личный ассистент —
+и для своего агента. Шаги одинаковые; отличается только то, что вы скажете агенту после настройки.</p>
+<p class="sub">Подробное руководство по каждому кейсу (снимки окон, все варианты, разбор ошибок) — по ссылкам в
+таблице ниже. Здесь — короткий путь.</p>
+</header>
+
+<h2><span>1</span>Принцип за минуту</h2>
+<p class="sub">Кейс — это папка. Claude становится нужным агентом, потому что в начале разговора читает правила из этой
+папки. Всё, что агент узнал о вас и сделал, он складывает в папку <code>hub/</code> внутри неё же.</p>
+<div class="flow">
+<div class="b"><b>Папка кейса</b><span>правила <code>CLAUDE.md</code> и <code>playbooks/</code>, скрипты, учебные данные</span></div>
+<div class="ar">→</div>
+<div class="b"><b>Claude Code</b><span>открыт в этой папке, читает правила</span></div>
+<div class="ar">→</div>
+<div class="b"><b>«настрой»</b><span>агент расспрашивает вас и создаёт <code>hub/</code> с профилем</span></div>
+<div class="ar">→</div>
+<div class="b"><b>Работа</b><span>вы пишете обычной фразой, результат — в чате и в файлах <code>hub/</code></span></div>
+</div>
+<p class="sub">Что лежит в папках и как выглядят исходные файлы — на странице
+<a href="../С_чем_работаем.html">«С чем будем работать?»</a>.</p>
+
+<h2><span>2</span>Выберите кейс</h2>
+<div class="tw"><table>
+<tr><th>Кейс и папка</th><th>Что делает</th><th>Первая фраза после настройки</th></tr>
+<tr><td><b><a href="01_digest/START.html">Обозреватель</a></b><br><code>01_digest</code></td><td>дайджест по вашим темам: до 10 публикаций с оценкой, ТОП-3</td><td><span class="say">дайджест</span></td></tr>
+<tr><td><b><a href="02_kb/START.html">База знаний</a></b><br><code>02_kb</code></td><td>ответы строго по вашим материалам со ссылкой на источник</td><td><span class="say">что у нас решено по срокам согласования?</span></td></tr>
+<tr><td><b><a href="03_meeting/START.html">Встреча</a></b><br><code>03_meeting</code></td><td>бриф до встречи; мемо, задачи и письмо после</td><td><span class="say">подготовь бриф к встрече с …</span></td></tr>
+<tr><td><b><a href="04_inbox/START.html">Входящие</a></b><br><code>04_inbox</code></td><td>разбор писем и сообщений, черновики ответов, задачи</td><td>вставьте письма и напишите <span class="say">разбери</span></td></tr>
+<tr><td><b><a href="05_docs/START.html">Документ-инженер</a></b><br><code>05_docs</code></td><td>документы Word и Excel по шаблону, точечные правки, версии</td><td><span class="say">собери отчёт по шаблону из выгрузки</span></td></tr>
+<tr><td><b><a href="06_assistant/START.html">Личный ассистент</a></b><br><code>06_assistant</code></td><td>все пять ролей сразу и сценарий «Мой день». Проходить кейсы 1–5 заранее не нужно</td><td><span class="say">мой день</span></td></tr>
+<tr><td><b>Свой агент</b></td><td>ваша задача, которой нет в списке</td><td>см. раздел 4</td></tr>
+</table></div>
+<p class="sub">Зачем отдельные кейсы, если есть ассистент: на одном агенте проще понять принцип и настроить его под себя.
+Ассистенту нужно больше настройки и больше расхода.</p>
+
+<h2><span>3</span>Пять шагов — одинаковые для любого кейса</h2>
+
+<div class="step"><div class="n">1</div><div>
+<h4>Скопируйте папку кейса в постоянное место</h4>
+<p>Из <code>agent_practice\1_claude\</code> — например, в <code>D:\Агенты\Входящие</code>. На путь к папке потом будут
+настроены рутины, поэтому после настройки её не переносят.</p>
+</div></div>
+
+<div class="step"><div class="n">2</div><div>
+<h4>Проверьте Python</h4>
+<p>В терминале: <code>python --version</code> — нужен 3.10 или новее. Нет — поставьте с python.org (на Windows галочка
+«Add python.exe to PATH») или попросите Claude на следующем шаге: «проверь Python и установи, если нет».</p>
+</div></div>
+
+<div class="step"><div class="n">3</div><div>
+<h4>Откройте папку в Claude Code</h4>
+<p>Приложение Claude → вкладка <b>Code</b> → новая сессия → выберите скопированную папку. (В терминале — команда
+<code>claude</code> в этой папке.)</p>
+</div></div>
+
+<div class="step"><div class="n">4</div><div>
+<h4>Напишите <span class="say">настрой</span></h4>
+<p>Обязательны два шага — рабочая папка и профиль, около 5 минут. Остальные (пробный запуск, страница, расписание,
+Telegram) можно отложить ответом «Позже» и вернуться словами <span class="say">продолжи настройку</span>.</p>
+<p>Хотите сначала посмотреть, как работает, — выберите учебный пример: агент загрузит вымышленные данные из
+<code>demo/</code>.</p>
+</div></div>
+
+<div class="step"><div class="n">5</div><div>
+<h4>Первая рабочая фраза</h4>
+<p>Из таблицы выше. Первый результат готовится 3–5 минут: агент читает материалы, сверяет, проверяет себя. Пока ждёте —
+откройте в проводнике <code>hub/</code> и посмотрите, что агент записал о вас в <code>profile.md</code>, или откройте
+второй кейс в новой сессии.</p>
+</div></div>
+
+<div class="warn"><b>Разрешения.</b> Claude спрашивает разрешение на команды <code>python tools/…</code> — это скрипты
+кейса, разрешайте. Если увидите «публикацию заблокировал автоматический режим разрешений», переключите режим
+разрешений с автоматического на обычный (в терминале — Shift+Tab) и скажите <span class="say">опубликуй страницу</span>:
+публикация — действие наружу, поэтому её подтверждаете вы.</div>
+
+<h2><span>4</span>Свой агент</h2>
+<div class="cards">
+<div class="card"><h4>На основе похожего кейса</h4>
+<p>Скопируйте кейс, который ближе всего к вашей задаче, откройте его в Claude Code и напишите:</p>
+<pre>Переделай этот кейс под мою задачу: [что агент делает, на каких
+материалах, что отдаёт]. Правила меняй в playbooks/, затем
+пересобери: python tools/build.py</pre>
+<p>Устройство остаётся тем же — меняются правила роли.</p></div>
+<div class="card"><h4>С нуля</h4>
+<p>Создайте пустую папку, откройте её в Claude Code и напишите:</p>
+<pre>Сделай в этой папке агента: [роль], работает с [материалы],
+результат — [что и в каком виде]. Правила запиши в CLAUDE.md,
+мои данные веди в папке hub/. Начни с вопросов ко мне.</pre>
+<p>Это тот же принцип в минимальном виде: правила + папка с данными.</p></div>
+</div>
+
+<h2><span>5</span>Фишки — покажем в конце</h2>
+<p class="sub">Всё это уже описано в кейсах. Подключается по слову в чате; агент сам скажет, что нужно от вас.</p>
+<div class="tw"><table>
+<tr><th>Что</th><th>Зачем</th><th>Скажите агенту</th><th>Где есть</th></tr>
+<tr><td><b>Расписание (рутины)</b></td><td>агент работает сам: утренний выпуск, разбор почты, уход за базой</td><td><span class="say">включи рутины</span></td><td>все кейсы</td></tr>
+<tr><td><b>Свой бот в Telegram</b></td><td>результат на телефон, ссылки и письма — пересылкой боту</td><td><span class="say">подключи телеграм</span> (в Базе знаний — <span class="say">подключи бота</span>)</td><td>все кейсы, только Claude Code</td></tr>
+<tr><td><b>Страница с кнопками</b></td><td>результат и отметки на одной странице claude.ai</td><td><span class="say">сделай страницу</span></td><td>все кейсы</td></tr>
+<tr><td><b>Tavily</b></td><td>свежий поиск по новостям, когда встроенного мало</td><td><span class="say">найди через Tavily …</span></td><td>Обозреватель, Встреча, Ассистент</td></tr>
+<tr><td><b>Obsidian</b></td><td>база знаний как связанные заметки с графом</td><td>откройте <code>hub/</code> как хранилище Obsidian</td><td>База знаний, Ассистент</td></tr>
+<tr><td><b>Gmail</b></td><td>агент сам забирает письма, без вставки в чат</td><td>Настройки Claude → Коннекторы → Gmail, затем <span class="say">подключи почту</span></td><td>Входящие, Ассистент</td></tr>
+<tr><td><b>Проверяющий</b></td><td>второй агент независимо проверяет результат первого</td><td>работает сам: в конце ответа — строка с итогом проверки</td><td>все кейсы, Claude Code</td></tr>
+<tr><td><b>Свой навык</b></td><td>упаковать свой приём работы и проверить его на примерах</td><td><span class="say">сделай навык для …</span></td><td>все кейсы (skill-creator)</td></tr>
+</table></div>
+
+<h2><span>6</span>Подробнее — по желанию</h2>
+
+<details><summary>Другие способы: Cowork и Проект в claude.ai</summary><div>
+<div class="tw"><table>
+<tr><th>Среда</th><th>Что это</th><th>Чего нет</th></tr>
+<tr><td><b>Claude Code</b> (основной путь)</td><td>агент работает с папкой на вашем компьютере</td><td>—</td></tr>
+<tr><td><b>Cowork</b></td><td>агент в приложении Claude; правила приходят плагином из <code>dist/*.plugin</code> кейса</td><td>скриптов Python, субагентов (проходы идут по очереди), своего бота Telegram</td></tr>
+<tr><td><b>Проект в чате claude.ai</b></td><td>инструкция из <code>prompts/</code> кейса вставляется в Проект</td><td>памяти в файлах, страницы, расписания — только «попробовать идею»</td></tr>
+</table></div>
+<p>Как поставить каждый вариант — в руководстве кейса, раздел «Установка».</p>
+</div></details>
+
+<details><summary>Если что-то не так</summary><div>
+<div class="tw"><table>
+<tr><th>Признак</th><th>Что сделать</th></tr>
+<tr><td>Агент не знает, кто он</td><td>сессия открыта не в папке кейса — откройте новую сессию в нужной папке</td></tr>
+<tr><td><code>python</code> не найден</td><td>поставьте Python с галочкой «Add to PATH» и перезапустите приложение Claude</td></tr>
+<tr><td>Настройка остановилась на середине</td><td><span class="say">продолжи настройку</span> — агент начнёт с первого незавершённого шага</td></tr>
+<tr><td>Публикацию страницы заблокировал автоматический режим</td><td>переключите режим разрешений на обычный и скажите <span class="say">опубликуй страницу</span></td></tr>
+<tr><td>Рутина не сработала</td><td>приложение Claude было закрыто или компьютер выключен в это время</td></tr>
+<tr><td>Хочу начать заново</td><td>в руководстве кейса — раздел «Если что-то не так»; ваши данные — только в <code>hub/</code></td></tr>
+</table></div>
+</div></details>
+
+<footer>Хотите те же роли на других моделях, без подписки Claude, — <a href="../2_hermes/START.html">трек Hermes</a>.</footer>
+
+</main></body></html>

@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Трек Hermes — общая инструкция</title>
+<style>
+:root{--bg:#f6f5f1;--card:#fff;--ink:#1d1f23;--mut:#5f656f;--line:#dcdad3;--acc:#6d3fb0;--accbg:#efe7fa;
+--warn:#8a5200;--warnbg:#fbf0d9;--code:#efede7;--side:#efede6}
+@media(prefers-color-scheme:dark){:root{--bg:#15171a;--card:#1e2125;--ink:#e8e8e6;--mut:#a0a7b0;--line:#353a41;
+--acc:#b99af0;--accbg:#2a2238;--warn:#e8b45c;--warnbg:#3a2e16;--code:#2a2e33;--side:#191c1f}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 "Segoe UI",system-ui,-apple-system,Roboto,sans-serif}
+main{max-width:1000px;margin:0 auto;padding:0 16px 64px}
+header{padding:20px 0 8px}
+header small{color:var(--acc);font-weight:600;letter-spacing:.04em;text-transform:uppercase;font-size:12px}
+h1{font-size:30px;line-height:1.2;margin:4px 0 8px}
+header p{margin:0 0 10px;max-width:780px}
+h2{font-size:23px;margin:40px 0 6px}
+h2 span{color:var(--acc);margin-right:8px}
+h3{font-size:18px;margin:24px 0 6px}
+p{margin:0 0 10px}
+.sub{color:var(--mut);font-size:15px;max-width:780px}
+main a{color:var(--acc)}
+code{font-family:Consolas,"Cascadia Mono",monospace;font-size:.92em;background:var(--code);padding:1px 5px;border-radius:4px;overflow-wrap:anywhere}
+pre{background:var(--code);border:1px solid var(--line);border-radius:8px;padding:10px 12px;overflow-x:auto;font-family:Consolas,monospace;font-size:13.5px;margin:8px 0;white-space:pre-wrap}
+.say{display:inline-block;background:var(--accbg);border:1px solid var(--acc);border-radius:8px;padding:0 8px;font-weight:600;overflow-wrap:anywhere}
+.flow{display:flex;flex-wrap:wrap;align-items:stretch;gap:8px;margin:14px 0}
+.flow .b{flex:1 1 150px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:14.5px}
+.flow .b b{display:block;font-size:15px;margin-bottom:2px}
+.flow .b span{color:var(--mut)}
+.flow .ar{align-self:center;color:var(--acc);font-weight:700;font-size:20px}
+.tw{overflow-x:auto;margin:12px 0}
+table{width:100%;border-collapse:collapse;font-size:14.5px;background:var(--card);border:1px solid var(--line)}
+td,th{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--mut);background:var(--side)}
+tr:last-child td{border-bottom:0}
+.step{display:grid;grid-template-columns:34px minmax(0,1fr);gap:14px;align-items:start;padding:14px 0;border-top:1px dashed var(--line)}
+.step .n{width:30px;height:30px;border-radius:50%;background:var(--acc);color:var(--card);font-weight:700;display:grid;place-items:center}
+.step h4{margin:3px 0 6px;font-size:16.5px}
+.step p,.step li{font-size:15px}
+.step p{margin:0 0 6px}
+.step ul{margin:0 0 6px;padding-left:20px}
+.warn{background:var(--warnbg);border:1px solid var(--warn);border-radius:10px;padding:10px 14px;margin:12px 0;font-size:14.5px}
+.warn b{color:var(--warn)}
+.tip{background:var(--accbg);border-radius:10px;padding:10px 14px;margin:12px 0;font-size:14.5px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:12px;margin:14px 0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.card h4{margin:0 0 4px;font-size:16px}
+.card p{margin:0 0 6px;font-size:14.5px;color:var(--mut)}
+.card p:last-child{margin:0}
+details{background:var(--card);border:1px solid var(--line);border-radius:10px;margin:10px 0}
+summary{cursor:pointer;padding:10px 14px;font-weight:600}
+details>div{padding:0 14px 12px}
+footer{margin-top:40px;color:var(--mut);font-size:13.5px;border-top:1px solid var(--line);padding-top:14px}
+</style></head>
+<body><main>
+<!-- меню практики -->
+<style>.pnav{display:flex;flex-wrap:wrap;align-items:center;gap:4px 6px;white-space:nowrap;padding:10px 0 2px;font-size:13.5px;scrollbar-width:thin}.pnav a{color:var(--mut);text-decoration:none;padding:2px 8px;border-radius:99px;flex:none}.pnav a:hover{color:var(--acc);background:var(--accbg)}.pnav a.home{color:var(--acc);font-weight:600;padding-left:0}.pnav .w{font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.04em;margin-left:10px}.pnav span.cur{color:var(--ink);font-weight:600;padding:2px 8px;border-radius:99px;background:var(--accbg);flex:none}.pnav .g{display:inline-flex;align-items:center;gap:4px 6px;flex:none}.pnav.copy{white-space:normal;color:var(--mut)}@media(max-width:640px){.pnav{flex-wrap:nowrap;overflow-x:auto}}</style>
+<div class="pnav" data-at="/2_hermes/START.html"><a class="home" href="../START.html">← Все кейсы</a><a href="../С_чем_работаем.html">С чем работаем</a><span class="g"><a class="w" href="../1_claude/START.html">Claude</a><a href="../1_claude/01_digest/START.html">Обозреватель</a><a href="../1_claude/02_kb/START.html">База знаний</a><a href="../1_claude/03_meeting/START.html">Встреча</a><a href="../1_claude/04_inbox/START.html">Входящие</a><a href="../1_claude/05_docs/START.html">Документ-инженер</a><a href="../1_claude/06_assistant/START.html">Ассистент</a></span><span class="g"><span class="cur w">Hermes</span><a href="../2_hermes/01_digest/START.html">Обозреватель</a><a href="../2_hermes/orchestrator/START.html">Оркестратор</a><a href="../2_hermes/manual/START.html">Своими руками</a></span></div>
+<script>(function(){var n=document.currentScript.previousElementSibling,p=decodeURIComponent(location.pathname).replace(/\\/g,'/');if(p.slice(-n.dataset.at.length)!==n.dataset.at){n.className='pnav copy';n.textContent='Это руководство из скопированной папки. Меню всех кейсов — в файле START.html в корне папки практики agent_practice.'}})();</script>
+<!-- /меню практики -->
+
+<header>
+<small>Трек Hermes · общая инструкция</small>
+<h1>Агент на Hermes: любые модели по ключу API</h1>
+<p>Одна инструкция для любого ассистента на Hermes: готового Обозревателя, универсального помощника, любой роли из
+кейсов Claude или своего агента. Hermes ставится один раз; дальше каждый ассистент — это своя папка с правилами.</p>
+<p class="sub">Hermes Agent — открытая программа-агент на вашем компьютере. Подписка Claude для ежедневной работы не
+нужна: вы платите провайдеру модели за фактический расход.</p>
+</header>
+
+<h2><span>1</span>Принцип за минуту</h2>
+<p class="sub">Тот же, что в треке Claude, — меняется только программа и формат правил.</p>
+<div class="flow">
+<div class="b"><b>Папка ассистента</b><span>правила <code>AGENTS.md</code> (и навыки <code>.hermes/skills/</code>)</span></div>
+<div class="ar">→</div>
+<div class="b"><b>Hermes</b><span>открыт в этой папке, читает правила</span></div>
+<div class="ar">→</div>
+<div class="b"><b>Модель по ключу</b><span>любой провайдер; можно разные модели на разные роли</span></div>
+<div class="ar">→</div>
+<div class="b"><b>Ваши данные</b><span>в <code>hub/</code> — того же формата, что у кейсов Claude</span></div>
+</div>
+<p class="sub">Что лежит в папках и как выглядят исходные файлы — на странице
+<a href="../С_чем_работаем.html">«С чем будем работать?»</a>.</p>
+
+<h2><span>2</span>Поставить Hermes и подключить модель — один раз</h2>
+
+<div class="step"><div class="n">1</div><div>
+<h4>Установите Hermes</h4>
+<p>Откройте отдельное окно PowerShell из «Пуска» (не терминал внутри другой программы) и вставьте:</p>
+<pre>irm https://hermes-agent.nousresearch.com/install.ps1 | iex</pre>
+<p>macOS — в Терминале: <code>curl -fsSL https://hermes-agent.nousresearch.com/install.sh | sh</code>. Установка идёт
+5–15 минут. Затем <b>откройте новое окно</b> и проверьте: <code>hermes --version</code>.</p>
+</div></div>
+
+<div class="step"><div class="n">2</div><div>
+<h4>Откройте окно Hermes</h4>
+<p><code>hermes dashboard</code> — откроется веб-панель <code>http://127.0.0.1:9119</code>. Пока окно команд открыто,
+панель работает.</p>
+</div></div>
+
+<div class="step"><div class="n">3</div><div>
+<h4>Введите ключ модели</h4>
+<p><b>На занятии адрес, модель и ключ выдаст ведущий.</b> Ключ вводится только в окне Hermes, не в чат:</p>
+<ul>
+<li>провайдер из списка Hermes — вкладка <b>Keys</b> → раздел LLM Providers → карточка провайдера → ключ → Save;</li>
+<li>свой адрес, совместимый с OpenAI, — три команды и ключ в переменной по имени сайта
+(<code>routerai.ru</code> → <code>ROUTERAI_API_KEY</code>): Keys → внизу Add a custom key.</li>
+</ul>
+<pre>hermes config set model.provider custom
+hermes config set model.base_url "&lt;адрес API&gt;"
+hermes config set model.default "&lt;модель&gt;"</pre>
+<p>Проверка: вкладка <b>Chat</b> → New chat → <span class="say">привет</span>. Ответила — всё подключено.
+Ошибки 401 / 402 / 404 и как выбрать своего провайдера — <a href="01_digest/START.html#model">руководство Обозревателя, раздел 3</a>.</p>
+</div></div>
+
+<details><summary>Не хочу вводить команды — поручить установку Claude</summary><div>
+<p>Откройте папку ассистента (шаг 3 ниже) в Claude Code и вставьте:</p>
+<pre>Установи Hermes Agent на этот компьютер и подключи к нему эту папку. Все команды выполняй сам.
+1. Проверь hermes --version; нет — установи: irm https://hermes-agent.nousresearch.com/install.ps1 | iex
+   (если обрывается на «Downloading Python» — запусти в отдельном окне PowerShell).
+2. Если эта папка лежит внутри другого проекта git — спроси меня, куда её скопировать, скопируй и работай в копии.
+3. hermes config set terminal.cwd "&lt;полный путь к папке&gt;".
+4. Спроси у меня адрес API и модель и пропиши их (model.provider custom, model.base_url, model.default).
+5. Ключ не спрашивай и не читай: назови имя переменной, куда я введу его на вкладке Keys.
+6. Запусти веб-панель: hermes dashboard --no-open — и проверь, что http://127.0.0.1:9119 отвечает.
+В конце — короткий отчёт: что сделано, что осталось мне.</pre>
+<p>Для Обозревателя есть готовый подробный запрос — <a href="01_digest/START.html#install">в его руководстве, раздел 2</a>.</p>
+</div></details>
+
+<h2><span>3</span>Выберите ассистента</h2>
+<div class="cards">
+<div class="card"><h4>Обозреватель</h4><p>Готовый кейс: дайджест по темам, модели под роли, расписание, Telegram.</p>
+<p>Папка <code>2_hermes/01_digest</code> · <a href="01_digest/START.html">руководство</a></p></div>
+<div class="card"><h4>Универсальный помощник</h4><p>Задачи, заметки, черновики, вопросы. Собирается руками из готовых заготовок, без Claude.</p>
+<p>Папка <code>2_hermes/manual/templates</code> · <a href="manual/START.html">руководство</a></p></div>
+<div class="card"><h4>Роль из кейса Claude или свой — с Claude</h4><p>Claude переносит правила кейса в формат Hermes целиком: навыки, проверяющий, скрипты.</p>
+<p>Откройте папку <code>2_hermes</code> в Claude Code: <span class="say">собери ассистента для Hermes</span></p></div>
+<div class="card"><h4>Роль из кейса Claude — сами</h4><p>Подключить правила любого кейса Claude к своему ассистенту одной строкой в <code>AGENTS.md</code>.</p>
+<p><a href="#claude-rules">Раздел 5</a></p></div>
+</div>
+
+<h2><span>4</span>Подключите папку и начните</h2>
+
+<div class="step"><div class="n">1</div><div>
+<h4>Скопируйте папку ассистента в постоянное место — вне <code>agent_practice</code></h4>
+<p>Например, <code>D:\Hermes\Обозреватель</code>. Внутри скачанной практики Hermes ищет навыки не в папке ассистента,
+а в корне всей практики — и не находит.</p>
+</div></div>
+
+<div class="step"><div class="n">2</div><div>
+<h4>Сделайте её рабочей папкой Hermes</h4>
+<pre>hermes config set terminal.cwd "D:/Hermes/Обозреватель"</pre>
+<p>Или в окне Hermes: Chat → список <b>Workspace</b> слева → Other path… → путь к папке. Затем New chat.</p>
+</div></div>
+
+<div class="step"><div class="n">3</div><div>
+<h4>Напишите <span class="say">настрой</span></h4>
+<p>Ассистент прочитает <code>AGENTS.md</code>, расспросит вас и создаст <code>hub/</code>. Проверка, что папка
+подхватилась: на <span class="say">кто ты?</span> он называет свою роль, а не отвечает как обычная модель.</p>
+</div></div>
+
+<details><summary>Навыки папки (по желанию): чтобы ассистент чётче держал роль</summary><div>
+<p>Правила из <code>AGENTS.md</code> работают и без этого. Навыки из <code>.hermes/skills/</code> Hermes подключает,
+если папка — проект git и вы ей доверяете. В папке ассистента:</p>
+<pre>git init
+hermes skills trust "D:/Hermes/Обозреватель"</pre>
+<p>Проверка: <code>hermes skills list</code> — навыки папки с пометкой <code>project</code>. <code>git init</code> делайте
+в самой папке ассистента, даже если рядом есть другой проект git.</p>
+</div></details>
+
+<h2 id="claude-rules"><span>5</span>Подключить правила кейса Claude</h2>
+<p class="sub">Правила ролей уже написаны и проверены в треке Claude. Любому ассистенту Hermes — например, универсальному
+помощнику — можно добавить роль оттуда без Claude и без сборки.</p>
+
+<div class="step"><div class="n">1</div><div>
+<h4>Скопируйте два файла правил</h4>
+<p>В папке ассистента создайте папку <code>правила</code> и скопируйте в неё из
+<code>agent_practice\1_claude\&lt;кейс&gt;\playbooks\</code>:</p>
+<ul>
+<li><code>00_protocol.md</code> — общие правила кейса и карта папки <code>hub/</code>;</li>
+<li>плейбук роли: <code>01_digest.md</code>, <code>02_kb.md</code>, <code>03_meeting.md</code>, <code>04_inbox.md</code>
+или <code>05_docs.md</code>.</li>
+</ul>
+</div></div>
+
+<div class="step"><div class="n">2</div><div>
+<h4>Допишите в конец <code>AGENTS.md</code> (Блокнотом)</h4>
+<pre>## Дополнительная роль: Входящие
+Когда я прошу разобрать письма или сообщения — прочитай правила/00_protocol.md
+и правила/04_inbox.md и действуй по ним.
+Эти правила написаны для Claude. Субагентов у тебя нет — выполняй роли сам,
+отдельными проходами. Формы с вариантами заменяй вопросом с нумерованными
+вариантами. Если правило требует скрипта из tools/, которого здесь нет, —
+сделай шаг вручную или прямо скажи, что он недоступен.</pre>
+<p>Название роли, слова-поводы и имя плейбука замените на свои.</p>
+</div></div>
+
+<div class="step"><div class="n">3</div><div>
+<h4>Новый чат — и попробуйте</h4>
+<p>Например, вставьте письмо и напишите <span class="say">разбери</span>. Учебные данные кейса лежат в
+<code>1_claude/&lt;кейс&gt;/demo/</code> — их можно скопировать в <code>hub/</code> ассистента.</p>
+</div></div>
+
+<div class="tip">Так переносятся правила, но не скрипты и не независимый проверяющий: это упрощённый способ «попробовать
+роль». Полный перенос со всеми механизмами делает Claude по <code>BUILD.md</code> — третья карточка в разделе 3.</div>
+
+<h2><span>6</span>Фишки — покажем в конце</h2>
+<div class="tw"><table>
+<tr><th>Что</th><th>Зачем</th><th>Как</th></tr>
+<tr><td><b>Модель под роль</b></td><td>дорогая модель пишет, дешёвая ищет, третья проверяет</td><td><span class="say">настрой модели</span> (Обозреватель); выбор в <code>hub/models.json</code></td></tr>
+<tr><td><b>Приёмка на учебном наборе</b></td><td>выбор модели проверяется цифрами, а не на глаз</td><td><code>python tools/evals.py</code> (Обозреватель)</td></tr>
+<tr><td><b>Проверяющий на другой модели</b></td><td>ошибку одной модели ловит другая</td><td>работает сам при выпуске (Обозреватель)</td></tr>
+<tr><td><b>Расписание</b></td><td>ассистент работает без открытого окна</td><td><span class="say">включи расписание</span>; раздел <b>Cron</b>; шлюз в автозапуске: <code>hermes gateway install --start-now --start-on-login</code></td></tr>
+<tr><td><b>Telegram</b></td><td>бот — второе окно того же разговора</td><td>вкладка <b>Channels</b> → Telegram → Quick setup</td></tr>
+<tr><td><b>Веб-поиск</b></td><td>ассистент ищет в интернете</td><td>вкладка <b>Keys</b> — ключ Tavily, Exa, Firecrawl или Brave</td></tr>
+<tr><td><b>Оркестратор над флотом</b></td><td>один «мой день» по нескольким ассистентам Hermes, в том числе на другом компьютере</td><td><a href="orchestrator/README.md">папка <code>orchestrator</code></a>; флот — например, Обозреватель + универсальный помощник</td></tr>
+</table></div>
+
+<h2><span>7</span>Если что-то не так</h2>
+<details><summary>Частые ситуации</summary><div>
+<div class="tw"><table>
+<tr><th>Признак</th><th>Что сделать</th></tr>
+<tr><td><code>hermes</code> не найден сразу после установки</td><td>откройте новое окно команд</td></tr>
+<tr><td>Установка обрывается на «Downloading Python»</td><td>запустите установщик в отдельном окне PowerShell из «Пуска»</td></tr>
+<tr><td>«Hermes ищет навыки в ближайшей папке с .git — это agent_practice»</td><td>папка ассистента лежит внутри скачанной практики: скопируйте её наружу (раздел 4, шаг 1)</td></tr>
+<tr><td>Ассистент отвечает как обычная модель</td><td>рабочая папка — не его: раздел 4, шаг 2, затем New chat</td></tr>
+<tr><td>Ошибка 401 / 402 / 404</td><td>ключ не найден или неверен / нет денег на балансе / нет такой модели у провайдера</td></tr>
+<tr><td>Веб-панель перестала открываться</td><td>закрыто окно, из которого запущен <code>hermes dashboard</code>, — запустите снова</td></tr>
+<tr><td>Общая проверка</td><td><code>hermes doctor</code></td></tr>
+</table></div>
+</div></details>
+
+<footer>Проверено на Windows 11 с Hermes Agent 0.21.5 (октябрь 2026). Hermes быстро меняется: если раздел называется
+иначе — ищите по смыслу или <code>hermes --help</code>. Те же роли на Claude — <a href="../1_claude/START.html">трек Claude</a>.</footer>
+
+</main></body></html>
