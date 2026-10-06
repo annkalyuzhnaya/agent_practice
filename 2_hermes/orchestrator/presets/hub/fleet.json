@@ -6,13 +6,26 @@
       "role": "digest",
       "skill": "digest",
       "where": "local",
-      "path": "D:/Work/agent_practice/2_hermes/01_digest",
+      "path": "D:/Hermes/Обозреватель",
       "host": "",
       "model": "",
       "provider": "",
       "deliver": "hub",
       "reads": "hub/digest/",
-      "note": "пример локального ассистента; дайджест по темам профиля, поднимать утром"
+      "note": "пример локального ассистента (трек 3, папка 2_hermes/01_digest, скопированная вне agent_practice); дайджест по темам профиля, поднимать утром"
+    },
+    {
+      "name": "помощник",
+      "role": "assistant",
+      "skill": "assistant",
+      "where": "local",
+      "path": "D:/Hermes/Помощник",
+      "host": "",
+      "model": "",
+      "provider": "",
+      "deliver": "hub",
+      "reads": "hub/",
+      "note": "универсальный помощник (трек 5, заготовки 2_hermes/manual/templates); задачи и заметки на сегодня — hub/tasks.md, hub/notes/"
     }
   ]
 }

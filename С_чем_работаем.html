@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>С чем будем работать</title>
+<style>
+:root{--bg:#f6f5f1;--card:#fff;--ink:#1d1f23;--mut:#5f656f;--line:#dcdad3;--acc:#0b6e69;--accbg:#e0f0ee;
+--code:#efede7;--side:#efede6;--you:#0b6e69;--youbg:#e0f0ee;--ag:#6d3fb0;--agbg:#efe7fa;--hub:#a15c00;--hubbg:#fbf0d9;
+--sv:#7a7f87;--svbg:#ecebe6}
+@media(prefers-color-scheme:dark){:root{--bg:#15171a;--card:#1e2125;--ink:#e8e8e6;--mut:#a0a7b0;--line:#353a41;
+--acc:#56c4bb;--accbg:#173533;--code:#2a2e33;--side:#191c1f;--you:#56c4bb;--youbg:#173533;--ag:#b99af0;--agbg:#2a2238;
+--hub:#e8b45c;--hubbg:#3a2e16;--sv:#8c929b;--svbg:#26292e}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 "Segoe UI",system-ui,-apple-system,Roboto,sans-serif}
+main{max-width:1000px;margin:0 auto;padding:0 16px 64px}
+.top{padding:14px 0 0;font-size:13.5px}
+.top a{color:var(--acc);font-weight:600;text-decoration:none}
+header{padding:14px 0 8px}
+header small{color:var(--acc);font-weight:600;letter-spacing:.04em;text-transform:uppercase;font-size:12px}
+h1{font-size:30px;line-height:1.2;margin:4px 0 8px}
+header p{margin:0 0 10px;max-width:780px}
+h2{font-size:23px;margin:40px 0 6px}
+h2 span{color:var(--acc);margin-right:8px}
+p{margin:0 0 10px}
+.sub{color:var(--mut);font-size:15px;max-width:780px}
+main a{color:var(--acc)}
+code{font-family:Consolas,"Cascadia Mono",monospace;font-size:.92em;background:var(--code);padding:1px 5px;border-radius:4px;overflow-wrap:anywhere}
+/* дерево папки */
+.legend{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;font-size:13.5px}
+.tag{display:inline-block;border-radius:99px;padding:1px 9px;font-weight:600;font-size:12.5px;white-space:nowrap}
+.you{background:var(--youbg);color:var(--you)}.ag{background:var(--agbg);color:var(--ag)}
+.hub{background:var(--hubbg);color:var(--hub)}.sv{background:var(--svbg);color:var(--sv)}
+.tree{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:6px 0;margin:12px 0}
+.row{display:grid;grid-template-columns:minmax(150px,230px) auto minmax(0,1fr);gap:4px 12px;align-items:baseline;padding:6px 14px;border-bottom:1px solid var(--line)}
+.row:last-child{border-bottom:0}
+.row .f{font-family:Consolas,"Cascadia Mono",monospace;font-size:14px;overflow-wrap:anywhere}
+.row .d{font-size:14.5px;color:var(--mut)}
+.row.in .f{padding-left:18px}
+@media(max-width:640px){.row{grid-template-columns:1fr auto}.row .d{grid-column:1/-1}}
+/* вход → результат */
+.io{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:14px 0}
+@media(max-width:760px){.io{grid-template-columns:1fr}}
+.pane{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden;display:flex;flex-direction:column}
+.pane h4{margin:0;padding:8px 12px;font-size:14px;background:var(--side);border-bottom:1px solid var(--line)}
+.pane h4 small{display:block;font-weight:400;color:var(--mut);font-family:Consolas,monospace;font-size:12px;overflow-wrap:anywhere}
+.pane pre{margin:0;padding:10px 12px;font-family:Consolas,"Cascadia Mono",monospace;font-size:12.5px;line-height:1.5;white-space:pre-wrap;overflow-wrap:anywhere;flex:1}
+.pane p{margin:0;padding:8px 12px;font-size:13.5px;color:var(--mut);border-top:1px solid var(--line)}
+/* таблицы */
+.tw{overflow-x:auto;margin:12px 0}
+table{width:100%;border-collapse:collapse;font-size:14.5px;background:var(--card);border:1px solid var(--line)}
+td,th{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--mut);background:var(--side)}
+tr:last-child td{border-bottom:0}
+td a{overflow-wrap:anywhere}
+.tip{background:var(--accbg);border-radius:10px;padding:10px 14px;margin:12px 0;font-size:14.5px}
+footer{margin-top:40px;color:var(--mut);font-size:13.5px;border-top:1px solid var(--line);padding-top:14px}
+</style></head>
+<body><main>
+
+<div class="top"><a href="START.html">← Все кейсы</a></div>
+
+<header>
+<small>Практика «Личные агенты» · до начала</small>
+<h1>С чем будем работать?</h1>
+<p>Агент — это не отдельная программа и не настройка в меню. Это папка с текстовыми файлами: правилами, которые
+читает модель, и данными, с которыми она работает. Здесь показано, что лежит в такой папке, какие учебные материалы
+дают агенту и что получается на выходе.</p>
+<p class="sub">Файлы <code>.md</code> — обычный текст с разметкой; в браузере они открываются как текст, Блокнотом —
+тоже. Все люди, организации и цифры в учебных данных вымышлены.</p>
+</header>
+
+<h2><span>1</span>Что лежит в папке кейса</h2>
+<p class="sub">На примере Обозревателя (<code>1_claude/01_digest</code>). У всех кейсов набор одинаковый — меняется только
+содержание правил.</p>
+<div class="legend"><span class="tag you">читаете вы</span><span class="tag ag">читает агент</span>
+<span class="tag hub">ваши данные</span><span class="tag sv">служебное — не трогать</span></div>
+<div class="tree">
+<div class="row"><span class="f">START.html</span><span class="tag you">вы</span><span class="d">руководство новичка — открывается двойным щелчком</span></div>
+<div class="row"><span class="f">SETUP.md · GUIDE.md · LEVELS.md</span><span class="tag you">вы</span><span class="d">установка подробно · фразы на каждый день · куда расти</span></div>
+<div class="row"><span class="f">CLAUDE.md</span><span class="tag ag">агент</span><span class="d">главный файл правил: кто такой агент, что делать на какие слова, чего нельзя. Claude читает его в начале каждого разговора</span></div>
+<div class="row"><span class="f">playbooks/</span><span class="tag ag">агент</span><span class="d">подробные правила по шагам: как готовить выпуск, как настраиваться, как вести страницу и расписание</span></div>
+<div class="row"><span class="f">tools/</span><span class="tag ag">агент</span><span class="d">скрипты на Python: агент сам их запускает — читать ленты, проверять результат, загружать учебные данные</span></div>
+<div class="row"><span class="f">demo/</span><span class="tag ag">агент</span><span class="d">учебные данные и эталон результата (раздел 2) — на них можно попробовать до своих данных</span></div>
+<div class="row"><span class="f">presets/</span><span class="tag ag">агент</span><span class="d">пустые заготовки, из которых при настройке появляется <code>hub/</code></span></div>
+<div class="row"><span class="f">hub/</span><span class="tag hub">ваши данные</span><span class="d">появляется при настройке: профиль, результаты, память, задачи (раздел 3). Беречь стоит именно её</span></div>
+<div class="row"><span class="f">.claude/ · pack/ · cowork-plugin/ · dist/</span><span class="tag sv">служебное</span><span class="d">собирается скриптом из <code>playbooks/</code>: навыки, субагенты, плагин для Cowork. Руками не правят</span></div>
+</div>
+<div class="tip"><b>В Hermes то же самое</b>, другие только имена: правила — <code>AGENTS.md</code> вместо <code>CLAUDE.md</code>,
+навыки — <code>.hermes/skills/</code> вместо <code>.claude/</code>. Папка <code>hub/</code> того же формата: её можно
+перенести между Claude и Hermes копированием.</div>
+
+<h2><span>2</span>От входа к результату</h2>
+<p class="sub">Три файла Обозревателя: что агент знает о вас, что ему дали прочитать и что он из этого сделал.</p>
+<div class="io">
+<div class="pane"><h4>Что знает о вас<small>demo/профиль_образец.md</small></h4>
+<pre>## Кто я
+- Роль: руководитель направления
+  цифровых сервисов
+- Чем занято направление в ближайший
+  месяц: пилот ИИ-агентов в проектном
+  офисе; программа обучения; правила
+  использования ИИ-ассистентов
+
+## Темы (по приоритету)
+1. ИИ-агенты в работе руководителя
+2. Обучение сотрудников
+3. Регулирование и безопасность ИИ
+
+Не интересно: криптовалюты; гаджеты</pre>
+<p>Своё агент заполнит по вашим ответам на «настрой».</p></div>
+<div class="pane"><h4>Что дали прочитать<small>demo/digest_10источников.md</small></h4>
+<pre>## S01. Проектный офис сократил рутину
+на 6 часов в неделю: итоги пилота
+- Источник: журнал «Цифровой офис»
+- Дата: 2026-09-29
+
+14 руководителей проектов работали
+с тремя агентами… Агент контроля
+сроков первые две недели давал ложные
+тревоги, пока в правила не добавили
+календарь отпусков…
+
+(ещё 9 публикаций: три важные,
+две средние, один повтор, один
+пересказ и три «мусорные»)</pre>
+<p>Учебный набор с ловушками — по нему агента проверяют автоматически.</p></div>
+<div class="pane"><h4>Что получилось<small>demo/пример_результата/digest/2026-10-02.md</small></h4>
+<pre>Просмотрено: 10. В выпуске: 5.
+Отсеяно: 4. Уже было раньше: 1.
+
+## ТОП-3
+1. Опубликован проект рекомендаций
+   по ИИ-ассистентам — замечания до
+   20 октября; задаёт рамку для ваших
+   внутренних правил.
+2. Проектный офис сократил рутину
+   на 6 часов в неделю — готовый
+   образец для вашего пилота.
+3. …</pre>
+<p>Каждая позиция — с оценкой 1–5, «почему важно вам» и ссылкой.</p></div>
+</div>
+
+<h2><span>3</span>Учебные данные каждого кейса</h2>
+<p class="sub">Вход — то, что агент получает на учебном прогоне. Эталон — как должен выглядеть хороший результат: с ним
+можно сравнить свой.</p>
+<div class="tw"><table>
+<tr><th>Кейс</th><th>Вход</th><th>Эталон результата</th></tr>
+<tr><td><b>Обозреватель</b></td>
+<td><a href="1_claude/01_digest/demo/профиль_образец.md">профиль</a>, <a href="1_claude/01_digest/demo/digest_10источников.md">10 публикаций</a> с ловушками, <a href="1_claude/01_digest/demo/feeds/demo_лента.xml">RSS-лента</a></td>
+<td><a href="1_claude/01_digest/demo/пример_результата/digest/2026-10-02.md">выпуск с ТОП-3</a>, <a href="1_claude/01_digest/demo/пример_результата/отчёт_проверяющего.md">отчёт проверяющего</a></td></tr>
+<tr><td><b>База знаний</b></td>
+<td>10 заметок: <a href="1_claude/02_kb/demo/hub/kb/справки/demo_регламент-согласования-документов.md">регламент</a>, <a href="1_claude/02_kb/demo/hub/kb/решения/demo_протокол-совещания-2026-09-29.md">протоколы</a>, решения, контрагент; <a href="1_claude/02_kb/demo/hub/memory/demo_glossary.md">словарь сокращений</a></td>
+<td><a href="1_claude/02_kb/demo/пример_результата/ответы_на_вопросы.md">ответы со ссылками</a>, <a href="1_claude/02_kb/demo/пример_результата/hub/kb/_противоречия.md">журнал противоречий</a></td></tr>
+<tr><td><b>Встреча</b></td>
+<td><a href="1_claude/03_meeting/demo/hub/inbox/new/demo_2026-10-05_встреча_вводные.md">вводные к встрече</a>, письма участников, <a href="1_claude/03_meeting/demo/hub/meetings/demo_2026-09-10_северный-контур_мемо.md">мемо прошлой встречи</a>, справка о контрагенте</td>
+<td><a href="1_claude/03_meeting/demo/пример_результата/2026-10-07_северный-контур_бриф.md">бриф</a>, <a href="1_claude/03_meeting/demo/пример_результата/2026-10-07_северный-контур_мемо.md">мемо</a>, <a href="1_claude/03_meeting/demo/пример_результата/2026-10-07_северный-контур_фоллоуап.md">письмо после встречи</a></td></tr>
+<tr><td><b>Входящие</b></td>
+<td><a href="1_claude/04_inbox/demo/hub/inbox/new/demo_входящий_поток.md">12 писем и сообщений</a>; память: <a href="1_claude/04_inbox/demo/hub/memory/demo_люди.md">люди</a>, сокращения, шаблоны ответов</td>
+<td><a href="1_claude/04_inbox/demo/пример_результата/inbox/triage/2026-10-05.md">таблица разбора по срочности</a>, 5 черновиков ответов, задачи</td></tr>
+<tr><td><b>Документ-инженер</b></td>
+<td>в <code>demo/hub/docs/in/</code>: регламент <code>.docx</code>, правка коллеги, выгрузка <code>.xlsx</code>; шаблоны отчёта и сводки</td>
+<td>отчёт за сентябрь <code>.docx</code>, <a href="1_claude/05_docs/demo/пример_результата/2026-10-04_сравнение_demo_reglament_v2-v3.html">страница сравнения версий</a>, <a href="1_claude/05_docs/demo/пример_результата/registry.md">реестр документов</a></td></tr>
+<tr><td><b>Личный ассистент</b></td>
+<td><a href="1_claude/06_assistant/demo/hub/inbox/new/demo_входящие.md">входящие</a>, <a href="1_claude/06_assistant/demo/hub/kb/demo_протокол_совещания_24-09.md">протокол</a> и справка о контрагенте</td>
+<td><a href="1_claude/06_assistant/demo/пример_результата/plan/2026-10-01.md">план дня</a>, дайджест, разбор, бриф, черновики</td></tr>
+</table></div>
+<p class="sub">Учебные данные загружает сам агент: на шаге настройки выберите учебный пример. Убрать их потом — словами
+«убери учебные примеры».</p>
+
+<h2><span>4</span>Что появится в <code>hub/</code> после настройки</h2>
+<p class="sub">Папку ведёт агент; руками в ней делать ничего не нужно, но заглядывать полезно — так видно, что агент
+запомнил и сделал.</p>
+<div class="tw"><table>
+<tr><th>Файл или папка</th><th>Что в нём</th></tr>
+<tr><td><code>profile.md</code></td><td>кто вы, чем заняты в ближайший месяц, темы, рабочие часы, личные правила — по вашим ответам</td></tr>
+<tr><td><code>setup.md</code></td><td>ход настройки: какие шаги сделаны, какие отложены и почему</td></tr>
+<tr><td><code>journal.md</code></td><td>журнал: что агент сделал и когда — по строке на действие</td></tr>
+<tr><td><code>tasks.md</code></td><td>задачи, которые агент нашёл или вы поручили</td></tr>
+<tr><td><code>routines.md</code> · <code>accounts.md</code> · <code>artifacts.md</code></td><td>расписание, подключения (бот, почта), опубликованные страницы</td></tr>
+<tr><td>папка роли: <code>digest/</code>, <code>kb/</code>, <code>meetings/</code>, <code>inbox/</code>, <code>docs/</code></td><td>результаты работы: выпуски, заметки базы, брифы, разборы, документы и их версии</td></tr>
+<tr><td><code>.secrets/</code></td><td>токен бота, если подключите. Агенту читать эту папку запрещено правилами</td></tr>
+</table></div>
+<p class="sub">Как выглядит заполненная <code>hub/</code> — в <code>demo/пример_результата/</code> любого кейса.</p>
+
+<footer>Дальше: <a href="START.html">выбрать кейс</a> · <a href="1_claude/START.html">общая инструкция трека Claude</a> ·
+<a href="2_hermes/START.html">общая инструкция трека Hermes</a></footer>
+
+</main></body></html>

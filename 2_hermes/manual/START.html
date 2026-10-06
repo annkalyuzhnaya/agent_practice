@@ -27,7 +27,7 @@ pre{background:var(--code);border:1px solid var(--line);border-radius:8px;paddin
 .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px}
 .card h4{margin:0 0 6px;font-size:16px}
 .card p{font-size:14.5px;color:var(--mut);margin:0}
-.step{display:grid;grid-template-columns:34px 1fr;gap:14px;align-items:start;padding:16px 0;border-top:1px dashed var(--line)}
+.step{display:grid;grid-template-columns:34px minmax(0,1fr);gap:14px;align-items:start;padding:16px 0;border-top:1px dashed var(--line)}
 .step .n{width:30px;height:30px;border-radius:50%;background:var(--acc);color:var(--card);font-weight:700;display:grid;place-items:center}
 .step h4{margin:3px 0 6px;font-size:16.5px}
 .step p{font-size:14.5px;margin:0 0 6px}
@@ -37,6 +37,11 @@ pre{background:var(--code);border:1px solid var(--line);border-radius:8px;paddin
 footer{margin-top:40px;color:var(--mut);font-size:13.5px;border-top:1px solid var(--line);padding-top:14px}
 </style></head>
 <body><main>
+<!-- меню практики -->
+<style>.pnav{display:flex;flex-wrap:wrap;align-items:center;gap:4px 6px;white-space:nowrap;padding:10px 0 2px;font-size:13.5px;scrollbar-width:thin}.pnav a{color:var(--mut);text-decoration:none;padding:2px 8px;border-radius:99px;flex:none}.pnav a:hover{color:var(--acc);background:var(--accbg)}.pnav a.home{color:var(--acc);font-weight:600;padding-left:0}.pnav .w{font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.04em;margin-left:10px}.pnav span.cur{color:var(--ink);font-weight:600;padding:2px 8px;border-radius:99px;background:var(--accbg);flex:none}.pnav .g{display:inline-flex;align-items:center;gap:4px 6px;flex:none}.pnav.copy{white-space:normal;color:var(--mut)}@media(max-width:640px){.pnav{flex-wrap:nowrap;overflow-x:auto}}</style>
+<div class="pnav" data-at="/2_hermes/manual/START.html"><a class="home" href="../../START.html">← Все кейсы</a><a href="../../С_чем_работаем.html">С чем работаем</a><span class="g"><a class="w" href="../../1_claude/START.html">Claude</a><a href="../../1_claude/01_digest/START.html">Обозреватель</a><a href="../../1_claude/02_kb/START.html">База знаний</a><a href="../../1_claude/03_meeting/START.html">Встреча</a><a href="../../1_claude/04_inbox/START.html">Входящие</a><a href="../../1_claude/05_docs/START.html">Документ-инженер</a><a href="../../1_claude/06_assistant/START.html">Ассистент</a></span><span class="g"><a class="w" href="../../2_hermes/START.html">Hermes</a><a href="../../2_hermes/01_digest/START.html">Обозреватель</a><a href="../../2_hermes/orchestrator/START.html">Оркестратор</a><span class="cur">Своими руками</span></span></div>
+<script>(function(){var n=document.currentScript.previousElementSibling,p=decodeURIComponent(location.pathname).replace(/\\/g,'/');if(p.slice(-n.dataset.at.length)!==n.dataset.at){n.className='pnav copy';n.textContent='Это руководство из скопированной папки. Меню всех кейсов — в файле START.html в корне папки практики agent_practice.'}})();</script>
+<!-- /меню практики -->
 
 <header>
   <small>Трек 5 · Hermes своими руками</small>
