@@ -35,6 +35,34 @@ pre{background:var(--code);border:1px solid var(--line);border-radius:8px;paddin
 .warn b{color:var(--warn)}
 .tree{font-family:Consolas,monospace;font-size:13px;white-space:pre;line-height:1.55;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px;overflow-x:auto}
 footer{margin-top:40px;color:var(--mut);font-size:13.5px;border-top:1px solid var(--line);padding-top:14px}
+nav{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line);padding:10px 0;margin:14px 0 4px;display:flex;gap:6px;overflow-x:auto}
+nav a{font-size:14px;text-decoration:none;color:var(--ink);padding:4px 10px;border:1px solid var(--line);border-radius:99px;background:var(--card);white-space:nowrap;flex:none}
+nav a:hover{border-color:var(--acc);color:var(--acc)}
+h2{scroll-margin-top:64px}
+h3{font-size:18px;margin:26px 0 6px}
+.say{display:inline-block;background:var(--accbg);border:1px solid var(--acc);border-radius:8px;padding:0 8px;font-weight:600;overflow-wrap:anywhere}
+.tw{overflow-x:auto;margin:12px 0}
+table{width:100%;border-collapse:collapse;font-size:14.5px;background:var(--card);border:1px solid var(--line)}
+td,th{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--mut);background:var(--side)}
+tr:last-child td{border-bottom:0}
+.q-flow{display:flex;flex-wrap:wrap;align-items:stretch;gap:8px;margin:14px 0}
+.q-flow .b{flex:1 1 150px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:14.5px}
+.q-flow .b b{display:block;font-size:15px;margin-bottom:2px}
+.q-flow .b span{color:var(--mut)}
+.q-flow .ar{align-self:center;color:var(--acc);font-weight:700;font-size:20px}
+.q-steps{margin:10px 0;padding:0;list-style:none;counter-reset:q}
+.q-steps>li{counter-increment:q;position:relative;padding:12px 0 12px 46px;border-top:1px dashed var(--line);font-size:15px}
+.q-steps>li::before{content:counter(q);position:absolute;left:0;top:11px;width:30px;height:30px;border-radius:50%;background:var(--acc);color:var(--card);font-weight:700;display:grid;place-items:center}
+.q-steps>li>b:first-child{display:block;font-size:16.5px;margin-bottom:4px}
+.q-steps p{margin:0 0 6px}
+.q-warn{background:var(--warnbg);border:1px solid var(--warn);border-radius:10px;padding:10px 14px;margin:12px 0;font-size:14.5px}
+.q-warn b{color:var(--warn)}
+details.q-more{background:var(--card);border:1px solid var(--line);border-radius:10px;margin:10px 0}
+details.q-more>summary{cursor:pointer;padding:11px 14px;font-weight:600;font-size:16px}
+details.q-more>summary:hover{color:var(--acc)}
+details.q-more[open]>summary{border-bottom:1px solid var(--line)}
+details.q-more>.q-body{padding:4px 14px 14px}
 </style></head>
 <body><main>
 <!-- меню практики -->
@@ -44,96 +72,101 @@ footer{margin-top:40px;color:var(--mut);font-size:13.5px;border-top:1px solid va
 <!-- /меню практики -->
 
 <header>
-  <small>Трек 5 · Hermes своими руками</small>
-  <h1>Собрать личного помощника на Hermes — руками, без Claude</h1>
-  <p>Пошаговый старт для тех, кто <b>не программист</b>. Claude в этом треке не участвует: всё нужное вы сделаете сами.
-  Получится универсальный помощник, который ведёт ваши задачи и заметки, отвечает на вопросы и готовит черновики.</p>
-  <p class="sub">Первая установка Hermes — 15–30 минут (в основном ждёте загрузку). Сборка помощника по готовым
-  заготовкам — ещё 15–20 минут. Нужны: компьютер с Windows или macOS, интернет и ключ API какой-нибудь модели.</p>
+  <small>Трек Hermes · своими руками</small>
+  <h1>Универсальный помощник на Hermes — руками, без Claude</h1>
+  <p>Для тех, кто <b>не программирует</b>. Вы сами ставите Hermes, копируете готовые заготовки и получаете помощника,
+  который ведёт задачи и заметки, отвечает на вопросы и готовит черновики. Claude в этом треке не участвует.</p>
+  <p class="sub">Установка Hermes — 15–30 минут (в основном ждёте загрузку), сборка помощника — ещё 15–20 минут.
+  Нужны компьютер с Windows или macOS, интернет и ключ API модели.</p>
 </header>
 
-<div class="lede">
-  <b>Главное.</b> Это страница-введение. Полное руководство со всеми командами и объяснениями — в файле
-  <a href="MANUAL.md">MANUAL.md</a> рядом с этой страницей (откройте его Блокнотом или прямо здесь, ссылкой).
-  Ниже — общая карта пути, чтобы вы понимали, что вас ждёт.
-</div>
+<nav id="nav">
+<a href="#p-principle">1. Принцип</a><a href="#p-start">2. Быстрый старт</a><a href="#p-next">3. Что дальше</a><a href="#p-more">4. Подробнее</a>
+</nav>
 
-<h2><span>1</span>Два окна и три слова</h2>
-<p class="sub">Всю дорогу вы переключаетесь между двумя окнами — запомните их названия, в шагах они встречаются постоянно.</p>
+<h2 id="p-principle"><span>1</span>Принцип</h2>
+<div class="q-flow">
+<div class="b"><b>Папка помощника</b><span>заготовки из <code>templates/</code>: правила <code>AGENTS.md</code> и память <code>hub/</code></span></div>
+<div class="ar">→</div>
+<div class="b"><b>Hermes</b><span>открыт в этой папке и читает <code>AGENTS.md</code> в начале разговора</span></div>
+<div class="ar">→</div>
+<div class="b"><b>Модель по ключу</b><span>любой провайдер; ключ вводится в окне Hermes</span></div>
+<div class="ar">→</div>
+<div class="b"><b>Память</b><span>задачи, заметки, черновики — файлы в <code>hub/</code></span></div>
+</div>
+<p class="sub">Тот же принцип, что у всех агентов практики (<a href="../../С_чем_работаем.html">«С чем будем работать?»</a>),
+только правила здесь — обычный текст, который вы видите и правите сами. Сборки и скриптов нет.</p>
+
+<h3>Два окна и три слова</h3>
+<p class="sub">Всю дорогу вы переключаетесь между двумя окнами — в шагах они встречаются постоянно.</p>
 <div class="cards">
-  <div class="card"><h4>Окно команд</h4><p>Чёрное/синее окно, где команды печатают текстом и жмут Enter. На Windows —
+  <div class="card"><h4>Окно команд</h4><p>Окно, где команды печатают текстом и жмут Enter. На Windows —
   <b>PowerShell</b>, на macOS — <b>Терминал</b>. В нём ставят Hermes и дают команды.</p></div>
   <div class="card"><h4>Окно Hermes</h4><p><b>Веб-панель Hermes</b> — страница в браузере с вкладками (Chat, Keys,
-  Models). В нём вводят ключ модели и разговаривают с помощником. Это <b>не</b> окно команд.</p></div>
-</div>
-<div class="cards">
-  <div class="card"><h4>Папка</h4><p>Та же, что в проводнике. У помощника будет своя папка, внутри — файлы
-  с правилами и ваша «память».</p></div>
-  <div class="card"><h4>Текстовый файл</h4><p>Файлы <code>.md</code> и <code>.json</code> — это просто текст.
-  Открываются Блокнотом. Ни Word, ни особых программ не нужно.</p></div>
+  Models). В нём вводят ключ модели и разговаривают с помощником.</p></div>
+  <div class="card"><h4>Папка</h4><p>Та же, что в проводнике. У помощника своя папка: правила и ваша «память».</p></div>
+  <div class="card"><h4>Текстовый файл</h4><p>Файлы <code>.md</code> и <code>.json</code> — просто текст. Открываются
+  Блокнотом.</p></div>
 </div>
 
-<h2><span>2</span>Путь из семи шагов</h2>
-<p class="sub">Каждый шаг подробно расписан в <a href="MANUAL.md">MANUAL.md</a> — там сказано, в каком окне и в какой
-папке что делать. Здесь только суть, чтобы видеть целое.</p>
+<h2 id="p-start"><span>2</span>Быстрый старт</h2>
+<p class="sub">Каждый шаг подробно, с проверками, — в <a href="MANUAL.md">MANUAL.md</a> рядом с этой страницей.</p>
+<ol class="q-steps">
+<li><b>Откройте окно команд</b>
+<p>Windows: «Пуск» → наберите <code>PowerShell</code> → откройте. macOS: Cmd+Пробел → <code>Терминал</code>.</p></li>
+<li><b>Установите Hermes</b>
+<pre>irm https://hermes-agent.nousresearch.com/install.ps1 | iex</pre>
+<p>macOS: <code>curl -fsSL https://hermes-agent.nousresearch.com/install.sh | sh</code>. Ждите 5–15 минут, затем откройте
+<b>новое</b> окно команд и проверьте <code>hermes --version</code>.</p></li>
+<li><b>Создайте папку и скопируйте в неё заготовки</b>
+<p>Например <code>D:\Hermes\Помощник</code> — вне папки практики. Скопируйте туда всё содержимое <code>templates/</code>:
+<code>AGENTS.md</code>, папки <code>hub</code> и <code>.hermes</code>.</p></li>
+<li><b>Впишите, кто вы</b>
+<p>Откройте <code>hub/profile.md</code> Блокнотом: имя, чем заняты, на «ты» или «вы». Сохраните.</p></li>
+<li><b>Подключите модель</b>
+<p><code>hermes dashboard</code> — откроется окно Hermes. Вкладка <b>Keys</b> — ключ провайдера, вкладка <b>Models</b> —
+модель. На занятии адрес, модель и ключ выдаст ведущий; подробнее — <a href="../START.html">общая инструкция трека Hermes</a>.</p></li>
+<li><b>Укажите Hermes вашу папку</b>
+<pre>hermes config set terminal.cwd "D:/Hermes/Помощник"</pre>
+<p>Путь — ваш. Затем переоткройте окно Hermes (<code>hermes dashboard</code>).</p></li>
+<li><b>Первый разговор</b>
+<p>Вкладка <b>Chat</b>: <span class="say">Привет! Представься</span>, затем <span class="say">запиши задачу: позвонить в банк в четверг</span>
+и <span class="say">какие у меня задачи?</span>. Загляните в <code>hub/tasks.md</code> — задача там. Базовый помощник готов.</p></li>
+</ol>
+<div class="q-warn"><b>Windows.</b> Запускайте установщик в отдельном окне PowerShell из «Пуска», а не в терминале другой
+программы, — иначе установка обрывается на «Downloading Python». Только что установленный <code>hermes</code> виден лишь
+в <b>новом</b> окне команд.</div>
 
-<div class="step"><div class="n">1</div><div>
-  <h4>Открыть окно команд</h4>
-  <p>Windows: «Пуск» → наберите <code>PowerShell</code> → откройте. macOS: Cmd+Пробел → <code>Терминал</code>.
-  Проверка — вставьте <code>echo привет</code>, окно отвечает «привет». Это окно не закрывайте.</p>
-</div></div>
+<h2 id="p-next"><span>3</span>Что дальше</h2>
+<div class="tw"><table>
+<tr><th>Скажите</th><th>Что будет</th></tr>
+<tr><td><span class="say">настрой</span></td><td>помощник расспросит, кто вы и чем заняты, и заполнит <code>hub/profile.md</code></td></tr>
+<tr><td><span class="say">запиши задачу…</span>, <span class="say">напомни…</span></td><td>строка в <code>hub/tasks.md</code></td></tr>
+<tr><td><span class="say">запомни, что…</span></td><td>заметка в <code>hub/notes/</code> с датой в имени</td></tr>
+<tr><td><span class="say">что у меня по задачам</span>, <span class="say">мои заметки по…</span></td><td>перескажет записанное</td></tr>
+<tr><td><span class="say">напиши письмо…</span>, <span class="say">составь текст…</span></td><td>черновик в чате; по просьбе — файл в <code>hub/drafts/</code></td></tr>
+<tr><td><span class="say">найди…</span>, <span class="say">что нового про…</span></td><td>ответ со ссылками, если подключён веб-поиск</td></tr>
+</table></div>
 
-<div class="step"><div class="n">2</div><div>
-  <h4>Установить Hermes</h4>
-  <p>В окне команд одна строка:</p>
-  <pre>irm https://hermes-agent.nousresearch.com/install.ps1 | iex</pre>
-  <p>(macOS: <code>curl -fsSL https://hermes-agent.nousresearch.com/install.sh | sh</code>). Ждите 5–15 минут.
-  Затем закройте окно команд и откройте <b>новое такое же</b> (Пуск → PowerShell), в нём проверьте
-  <code>hermes --version</code> — покажет номер версии.</p>
-</div></div>
+<h3>Сделать помощника своим</h3>
+<p>Правила — в <code>AGENTS.md</code>: откройте Блокнотом и правьте словами, например «отвечай коротко» или «по понедельникам
+напоминай о плане недели». Что вы о себе рассказали — в <code>hub/profile.md</code>.</p>
 
-<div class="step"><div class="n">3</div><div>
-  <h4>Создать папку и скопировать заготовки</h4>
-  <p>В проводнике создайте папку, например <code>my-assistant</code>. Скопируйте в неё <b>всё содержимое</b> папки
-  <code>templates/</code> рядом с этим руководством: файл <code>AGENTS.md</code>, папку <code>hub</code>
-  и папку <code>.hermes</code>. В MANUAL.md тут же — как узнать «путь» к этой папке (пригодится в шаге 6).</p>
-</div></div>
+<h3>Фишки</h3>
+<div class="tw"><table>
+<tr><th>Что</th><th>Зачем</th><th>Как</th></tr>
+<tr><td><b>Роль из кейса Claude</b></td><td>помощник учится разбирать почту, готовить к встречам, отвечать по базе</td><td>два файла правил и абзац в <code>AGENTS.md</code> — <a href="../START.html#claude-rules">общая инструкция, раздел 5</a></td></tr>
+<tr><td><b>Веб-поиск</b></td><td>ответы со ссылками на свежие источники</td><td>вкладка <b>Keys</b> — ключ Tavily, Exa, Firecrawl или Brave</td></tr>
+<tr><td><b>Расписание</b></td><td>например, каждое утро список задач на день</td><td>шлюз в автозапуск: <code>hermes gateway install --start-now --start-on-login</code>, затем раздел <b>Cron</b></td></tr>
+<tr><td><b>Telegram</b></td><td>бот — второе окно того же помощника</td><td>вкладка <b>Channels</b> → Telegram → Quick setup</td></tr>
+<tr><td><b>Навык папки</b></td><td>помощник чётче держит роль</td><td>Git + <code>hermes skills trust</code> — MANUAL.md, «Включить навык»</td></tr>
+<tr><td><b>Во флоте оркестратора</b></td><td>задачи помощника попадают в общий «мой день» вместе с Обозревателем</td><td><a href="../orchestrator/START.html">оркестратор над флотом Hermes</a></td></tr>
+</table></div>
 
-<div class="step"><div class="n">4</div><div>
-  <h4>Вписать, кто вы</h4>
-  <p>В папке <code>my-assistant</code> зайдите в папку <code>hub</code>, откройте файл <code>profile.md</code>
-  Блокнотом, впишите имя, чем заняты, на «ты» или «вы». Сохраните. Так помощник станет вашим.</p>
-</div></div>
+<h2 id="p-more"><span>4</span>Подробнее — по желанию</h2>
 
-<div class="step"><div class="n">5</div><div>
-  <h4>Открыть окно Hermes и подключить модель</h4>
-  <p>В окне команд дайте <code>hermes dashboard</code> — откроется <b>окно Hermes</b> в браузере. На вкладке
-  <b>Keys</b> вставьте ключ API вашего провайдера, на вкладке <b>Models</b> выберите модель. Ключ вводится только
-  в окно Hermes, не в чат. Окно команд при этом не закрывайте.</p>
-</div></div>
-
-<div class="step"><div class="n">6</div><div>
-  <h4>Указать Hermes вашу папку</h4>
-  <p>В окне команд (вместо <code>ВАШ_ПУТЬ</code> — путь к вашей папке из шага 3):</p>
-  <pre>hermes config set terminal.cwd "ВАШ_ПУТЬ"</pre>
-  <p>Например <code>hermes config set terminal.cwd "D:/my-assistant"</code>. Затем переоткройте окно Hermes
-  (<code>hermes dashboard</code>) — теперь оно работает в вашей папке и прочитает <code>AGENTS.md</code>.</p>
-</div></div>
-
-<div class="step"><div class="n">7</div><div>
-  <h4>Первый разговор</h4>
-  <p>В окне Hermes на вкладке <b>Chat</b> напишите «Привет! Представься». Затем «Запиши задачу…», «Запомни, что…»,
-  «Какие у меня задачи?». Помощник отвечает и сохраняет всё в папку <code>hub/</code>. Базовый помощник готов.</p>
-</div></div>
-
-<div class="warn">
-  <b>Важно для Windows.</b> Запускайте установщик Hermes в отдельном окне PowerShell из «Пуска», а не во встроенном
-  терминале другой программы, — иначе установка может оборваться на «Downloading Python». И помните: только что
-  установленный <code>hermes</code> виден лишь в <b>новом</b> окне команд.
-</div>
-
-<h2><span>3</span>Что лежит в заготовках</h2>
-<p class="sub">Папка <code>templates/</code> — это скелет помощника. Вот что вы копируете к себе:</p>
+<details class="q-more" id="tree"><summary>Что лежит в заготовках</summary><div class="q-body">
+<p class="sub">Папка <code>templates/</code> — скелет помощника. Вот что вы копируете к себе:</p>
 <div class="tree">templates/
 ├─ AGENTS.md              — описание помощника (Hermes читает его в начале разговора)
 ├─ .hermes/
@@ -145,22 +178,41 @@ footer{margin-top:40px;color:var(--mut);font-size:13.5px;border-top:1px solid va
    ├─ models.json         — какая модель на какую роль (необязательно)
    ├─ notes/              — заметки
    └─ drafts/             — черновики</div>
+</div></details>
 
-<h2><span>4</span>Когда базовый помощник готов</h2>
-<p class="sub">Всё ниже — по желанию. Базовый помощник из семи шагов уже работает.</p>
-<div class="cards">
-  <div class="card"><h4>Включить навык (Git)</h4><p>Необязательно: помощник работает и так, по <code>AGENTS.md</code>.
-  Для самого Hermes Git <b>не нужен</b> — только чтобы подключить навык из папки. Как — в MANUAL.md, «Включить навык».</p></div>
-  <div class="card"><h4>Поиск в интернете</h4><p>Вкладка Keys → ключ Tavily / Exa / Firecrawl / Brave.</p></div>
-  <div class="card"><h4>Работа по расписанию</h4><p>Шлюз в автозапуск: <code>hermes gateway install --start-now --start-on-login</code>, затем раздел Cron.</p></div>
-  <div class="card"><h4>Telegram</h4><p>Вкладка Channels → Telegram → Quick setup. Бот — второе окно помощника.</p></div>
-  <div class="card"><h4>Сменить характер</h4><p>Правьте <code>AGENTS.md</code> Блокнотом словами. Нужен узкий тематический ассистент — это трек 3, там помогает Claude.</p></div>
-</div>
+<details class="q-more" id="help"><summary>Если что-то пошло не так</summary><div class="q-body">
+<div class="tw"><table>
+<tr><th>Признак</th><th>Что сделать</th></tr>
+<tr><td><code>hermes</code> «не является командой» сразу после установки</td><td>закройте окно команд и откройте новое</td></tr>
+<tr><td>Установка оборвалась на «Downloading Python»</td><td>запустите установщик в отдельном окне PowerShell из «Пуска»</td></tr>
+<tr><td>Помощник отвечает как обычная модель</td><td>окно Hermes работает не в вашей папке — повторите шаг 6 и переоткройте окно Hermes</td></tr>
+<tr><td>Ошибка 401 / 402</td><td>ключ на вкладке Keys неверный или не сохранён / на балансе у провайдера нет денег</td></tr>
+<tr><td>Окно Hermes перестало открываться</td><td>закрыто окно команд, из которого запущен <code>hermes dashboard</code>, — запустите снова</td></tr>
+<tr><td>«Not inside a git checkout»</td><td>сначала <code>git -C "ВАШ_ПУТЬ" init</code>, потом <code>hermes skills trust "ВАШ_ПУТЬ"</code></td></tr>
+<tr><td>Общая проверка</td><td><code>hermes doctor</code></td></tr>
+</table></div>
+<p class="sub">Полный список и как узнать путь к папке — в <a href="MANUAL.md">MANUAL.md</a>.</p>
+</div></details>
 
 <footer>
-  Полное руководство со всеми объяснениями и разделом «Если что-то пошло не так» — <a href="MANUAL.md">MANUAL.md</a>.
-  Проверено на Windows 11 с Hermes Agent 0.21.5 (октябрь 2026). Hermes быстро меняется — при расхождениях смотрите
-  <code>hermes --help</code> и <code>hermes doctor</code>.
+  Полное руководство со всеми командами, проверками и объяснениями — <a href="MANUAL.md">MANUAL.md</a>.
+  Проверено на Windows 11 с Hermes Agent 0.21.5 (октябрь 2026).
 </footer>
 
-</main></body></html>
+</main>
+<script>
+(function(){
+  /* ссылка на раздел внутри свёрнутого блока — раскрыть блок и прокрутить */
+  function openTo(id){
+    var t=id&&document.getElementById(id); if(!t)return false;
+    for(var d=t.closest('details');d;d=d.parentElement&&d.parentElement.closest('details'))d.open=true;
+    t.scrollIntoView({behavior:'smooth',block:'start'}); return true;
+  }
+  document.addEventListener('click',function(e){
+    var a=e.target.closest?e.target.closest('a[href^="#"]'):null;
+    if(a&&openTo(decodeURIComponent(a.getAttribute('href').slice(1)))){e.preventDefault();history.replaceState(null,'',a.getAttribute('href'))}
+  });
+  if(location.hash)setTimeout(function(){openTo(decodeURIComponent(location.hash.slice(1)))},50);
+})();
+</script>
+</body></html>
